@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers
+END
+adodb-mssql_n.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mssql_n.inc.php
+END
+adodb-mssqlpo.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mssqlpo.inc.php
+END
+adodb-mysqli.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mysqli.inc.php
+END
+adodb-mssql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mssql.inc.php
+END
+adodb-mysqlpo.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mysqlpo.inc.php
+END
+adodb-mysql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mysql.inc.php
+END
+adodb-mssqlnative.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mssqlnative.inc.php
+END
+adodb-mysqlt.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/drivers/adodb-mysqlt.inc.php
+END

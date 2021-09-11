@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="core"/>
+	<buildpathentry kind="src" path="install"/>
+	<buildpathentry kind="src" path="settings"/>
+	<buildpathentry kind="src" path="template/general/vendors/bootstrap-wysiwyg/examples/php"/>
+	<buildpathentry kind="src" path="template/standart/js/ckeditor/samples/old"/>
+	<buildpathentry kind="lib" path="template/standart/ckeditor_4.6.2_full.zip"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>

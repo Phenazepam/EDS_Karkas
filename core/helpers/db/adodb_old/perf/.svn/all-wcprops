@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/perf
+END
+perf-mssql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/perf/perf-mssql.inc.php
+END
+perf-mysql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/perf/perf-mysql.inc.php
+END
+perf-mssqlnative.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/perf/perf-mssqlnative.inc.php
+END

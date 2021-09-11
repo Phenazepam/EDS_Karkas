@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/datadict
+END
+datadict-mssqlnative.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/datadict/datadict-mssqlnative.inc.php
+END
+datadict-mssql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/datadict/datadict-mssql.inc.php
+END
+datadict-mysql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/iprector/!svn/ver/3/www/bin/modules/Db/adodb/datadict/datadict-mysql.inc.php
+END
