@@ -144,6 +144,35 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),
 
+			//Тип документов
+		    
+		    array(
+		        "title"    => "Типы документов",
+		        "url"      => "doctypes-list",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/doctypes/list.php",
+		        "default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+		    
+		    array(
+		        "title"    => "Тип документов форма",
+		        "url"      => "doctypes-form",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/doctypes/form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    
+		    array(
+		        "title"    => "Тип документов форма удаления",
+		        "url"      => "doctypes-form-delete",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/doctypes/form.delete.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 
 			/**
@@ -251,6 +280,44 @@ class Controller
 		            "user",
 		        ),
 			),
+
+			//Indoc actions
+			array(
+		        "name"   => "oindoc.store.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oindoc",
+		        ),
+		    ),
+		    
+		    array(
+		        "name"   => "oindoc.delete.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oindoc",
+		        ),
+		    ),
+		    
+			//DocType actions
+		    array(
+		        "name"   => "odoctypes.store.do",
+		        "module" => "RedCore\DocTypes\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "odoctypes",
+		        ),
+		    ),
+		    
+		    array(
+		        "name"   => "odoctypes.delete.do",
+		        "module" => "RedCore\DocTypes\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "odoctypes",
+		        ),
+		    ),
 
 		)
 	);

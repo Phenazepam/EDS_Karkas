@@ -33,7 +33,12 @@ array(
         'name' => 'Администрирование',
         'tag' => 'admin',
         'userAccess' => array('1', '2', '19')
-    )
+    ),
+    'dictionary' => array(
+        'name' => 'Справочники',
+        'tag' => 'dictionary',
+        'userAccess' => array('1', '2', '19')
+    ),
 );
 
 ?>

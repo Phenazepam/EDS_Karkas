@@ -12,7 +12,7 @@ use RedCore\Controller;
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/images/icons/favicon.png">
-  <title>БАУИНВЕСТ</title>
+  <title>КАРКАС</title>
 
   <!-- Bootstrap -->
   <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
@@ -98,7 +98,7 @@ use RedCore\Controller;
 
           <!-- sidebar menu -->
           <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-            <div class="menu_section">
+           <!--  <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-dashboard"></i> Основные данные <span class="fa fa-chevron-down"></span></a>
@@ -108,7 +108,7 @@ use RedCore\Controller;
                   </ul>
                 </li>
               </ul>
-            </div>
+            </div> -->
             <!-- <div class="menu_section">
               <h3>Отдел продаж</h3>
               <ul class="nav side-menu">
