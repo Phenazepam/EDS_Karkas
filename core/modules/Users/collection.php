@@ -179,7 +179,9 @@ class Collection extends \RedCore\Base\Collection {
 	}
 
 	public static function CanUserSeeModule($user_id, $module_name){
-
+		if ('1'/* system*/ == $user_id || '2'/* Администратор */ == $user_id ) {
+			return true;
+		}
 		if (empty(self::$mainPageModules[$module_name]['userAccess'])) {
 			return true;
 		}
