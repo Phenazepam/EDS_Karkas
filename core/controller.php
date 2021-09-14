@@ -174,6 +174,32 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),
 
+			// Поиск
+
+			array(
+		        "title"    => "Модуль-Поиск",
+		        "url"      => "searchitems-list",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/list.php",
+				"default"  => false,
+		        "tag"      => array("top", "docs"),
+		    ),
+			array(
+		        "title"    => "Выгрузка",
+		        "url"      => "searchitems-download",
+		        "view"     => "desktop/download/download.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+			array(
+		        "title"    => "Фильтр",
+		        "url"      => "searchitems-form",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+
 
 			/**
 			 * INSTALL
