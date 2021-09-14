@@ -22,6 +22,16 @@ class Sql {
 			FROM
 				eds_karkas__users
 		';
+	public static 
+		$sqlAccessMatrix = '
+			SELECT
+				id,
+				docType,
+				roles,
+                _deleted
+			FROM
+				eds_karkas__accessmatrix
+		';
 	
 
 	

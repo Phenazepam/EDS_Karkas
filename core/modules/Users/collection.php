@@ -16,7 +16,7 @@ use \RedCore\Where as Where;
 use RedCore\Session;
 
 require_once('sql.php');
-require_once('object.php');
+require_once('objectUser.php');
 
 class Collection extends \RedCore\Base\Collection { 
 	
@@ -53,8 +53,13 @@ class Collection extends \RedCore\Base\Collection {
 		if("user" == $obj) {
 			self::$object = "user";
 			self::$sql    = Sql::$sqlUsers;
-			self::$class  = "RedCore\Users\ObjectBase";
+			self::$class  = "RedCore\Users\ObjectUser";
 			self::$mainPageModules = include(__DIR__.'/../../view/desktop/MainPageModules.php');
+		}
+		elseif("accessmatrix" == $obj) {
+			self::$object = "accessmatrix";
+			self::$sql    = Sql::$sqlAccessMatrix;
+			self::$class  = "RedCore\Users\ObjecAccessMatrix";
 		}
 	}
 	
@@ -75,7 +80,8 @@ class Collection extends \RedCore\Base\Collection {
 	public static function getList($where = "") {
 	    return parent::getList($where);
 	}
-	
+
+
 	/**
 	 * @method \RedCore\Base\Collection Auth()
 	 */
@@ -191,6 +197,12 @@ class Collection extends \RedCore\Base\Collection {
 			}
 		}
 		return false;
+	}
+
+	public static function accessmatrixStore($params = ""){
+		var_dump($params)
+		;
+		exit();
 	}
 }
 

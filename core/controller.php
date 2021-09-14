@@ -109,8 +109,17 @@ class Controller
 				"content"  => "desktop/users/form.php",
 				"tag"      => array(),
 				"access"   => array(
-					"role" => array(3, 4),
+					"role" => array(1, 2, 19),
 				),
+			),
+
+			array(
+				"title"    => "Матрица доступа",
+				"url"      => "accessmatrix-list",
+				"view"     => "desktop/page.php",
+				"content"  => "desktop/Users/accessMatrix.view.php",
+				"tag"      => array("top", "admin"),
+				"default"  => false,
 			),
 
 			//Входящие документы
@@ -304,6 +313,14 @@ class Controller
 		        "method" => "logout",
 		        "params" => array(
 		            "user",
+		        ),
+			),
+			array(
+		        "name"   => "accessmatrix.store.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "accessmatrixStore",
+		        "params" => array(
+		            "accessmatrix",
 		        ),
 			),
 
