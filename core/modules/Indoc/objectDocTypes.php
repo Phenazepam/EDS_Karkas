@@ -6,7 +6,7 @@
  * @copyright REDUIT Co.
  */
  
-namespace RedCore\DocTypes;
+namespace RedCore\Indoc;
 
 class ObjectDocTypes extends \RedCore\Base\ObjectBase {
 	
@@ -16,7 +16,7 @@ class ObjectDocTypes extends \RedCore\Base\ObjectBase {
 
 	public function __construct() {
 
-		$this->table = "doc_types";
+		$this->table = "doctypes";
 
 		$this->properties = array(
 

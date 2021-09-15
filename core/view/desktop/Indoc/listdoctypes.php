@@ -1,16 +1,16 @@
 <?php
 
-use \RedCore\DocTypes\Collection as DocTypes;
+use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 
 
-DocTypes::setObject("odoctypes");
+Indoc::setObject("odoctypes");
 
 $where = Where::Cond()
-	->add("_deleted", "=", "0")
-	->parse();
+->add("_deleted", "=", "0")
+->parse();
 
-$items = DocTypes::getList($where);
+$items = Indoc::getList($where);
 
 ?>
 
