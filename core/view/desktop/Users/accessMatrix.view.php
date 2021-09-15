@@ -22,7 +22,7 @@ foreach($accessList as $item){
   $accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
 }
 
-Users::GetDocTypesByUser(array('15', '3'));
+//Users::GetDocTypesByUser(array('15', '3'));
 
 ?>
 
