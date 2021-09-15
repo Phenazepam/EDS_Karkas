@@ -24,5 +24,16 @@ class Sql {
 				eds_karkas__document
 		';
 	
+	 public static
+	   $sqlDocTypes = '
+			SELECT
+				id,
+				title,
+                _updated,
+                _deleted
+			FROM
+				eds_karkas__doctypes
+		';
+	
 
 }

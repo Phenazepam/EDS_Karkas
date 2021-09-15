@@ -1,17 +1,25 @@
 <?php
 
-use \RedCore\Indoc\Collection as Indoc;
+use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 
+Indoc::setObject("odoctypes");
+$where = Where::Cond()
+        ->add("_deleted", "=", "0")
+        ->parse();
+
+$DocTypes_list = Indoc::getList($where);       
+    
 Indoc::setObject("oindoc");
 
 $where = Where::Cond()
         ->add("_deleted", "=", "0")
         ->parse();
 
-    $items = Indoc::getList($where);
+$items = Indoc::getList($where);
 
-    $status_list = Indoc::getStatuslist();
+$status_list = Indoc::getStatuslist();
+
 ?>
 
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
@@ -19,6 +27,7 @@ $where = Where::Cond()
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
 		<tr>
+			<th>Тип документа</th>
 			<th>Имя документа</th>
 			<th>№ Регистрации</th>
 			<th>Дата регистрации</th>
@@ -37,6 +46,7 @@ $where = Where::Cond()
 ?>
 
 	<tr>
+		<td><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?></td>
 		<td><?= $item->object->name_doc ?></td>
 		<td><?= $item->object->reg_number ?></td>
 		<td><?= $item->object->reg_date ?></td>
@@ -59,7 +69,6 @@ $where = Where::Cond()
 	
 <?
 endforeach;	
-
 ?>
 </tbody>
 </table>

@@ -128,7 +128,7 @@ class Controller
 		        "title"    => "Входящие документы",
 		        "url"      => "indocitems-list",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/Indoc/list.php",
+		        "content"  => "desktop/Indoc/listindoc.php",
 				"default"  => false,
 		        "tag"      => array("top", "docs"),
 		    ),
@@ -138,7 +138,7 @@ class Controller
 		        "title"    => "В/Д форма",
 		        "url"      => "indocitems-form-addupdate",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/Indoc/form.addupdate.php",
+		        "content"  => "desktop/Indoc/formindoc.addupdate.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -148,7 +148,7 @@ class Controller
 		        "title"    => "У/Д форма",
 		        "url"      => "indocitems-form-delete",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/Indoc/form.delete.php",
+		        "content"  => "desktop/Indoc/formindoc.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -159,7 +159,7 @@ class Controller
 		        "title"    => "Типы документов",
 		        "url"      => "doctypes-list",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/doctypes/list.php",
+		        "content"  => "desktop/Indoc/listdoctypes.php",
 		        "default"  => false,
 		        "tag"      => array("top", "dictionary"),
 		    ),
@@ -168,7 +168,7 @@ class Controller
 		        "title"    => "Тип документов форма",
 		        "url"      => "doctypes-form",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/doctypes/form.php",
+		        "content"  => "desktop/Indoc/formdoctypes.addupdate.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -178,7 +178,7 @@ class Controller
 		        "title"    => "Тип документов форма удаления",
 		        "url"      => "doctypes-form-delete",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/doctypes/form.delete.php",
+		        "content"  => "desktop/Indoc/formdoctypes.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -346,7 +346,7 @@ class Controller
 			//DocType actions
 		    array(
 		        "name"   => "odoctypes.store.do",
-		        "module" => "RedCore\DocTypes\Collection",
+		        "module" => "RedCore\Indoc\Collection",
 		        "method" => "store",
 		        "params" => array(
 		            "odoctypes",
@@ -355,7 +355,7 @@ class Controller
 		    
 		    array(
 		        "name"   => "odoctypes.delete.do",
-		        "module" => "RedCore\DocTypes\Collection",
+		        "module" => "RedCore\Indoc\Collection",
 		        "method" => "delete",
 		        "params" => array(
 		            "odoctypes",
