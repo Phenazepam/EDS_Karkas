@@ -2,27 +2,26 @@
     
     use RedCore\Forms;
     use RedCore\Request;
-    use RedCore\DocTypes\Collection as DocTypes;
+    use RedCore\Indoc\Collection as Indoc;
 
 
     $html_object = "odoctypes";
     
-    DocTypes::setObject($html_object);
+    Indoc::setObject($html_object);
     
     $lb_params = array(
         "id" => Request::vars("odoctypes_id"),
     );
    
-    $odoctypes_item = DocTypes::loadBy($lb_params);
+    $odoctypes_item = Indoc::loadBy($lb_params);
 
     
     $form = Forms::Create()
         ->add("action", "action", "hidden", "action", $html_object. ".store.do", 6, false)
         ->add("redirect", "redirect", "hidden", "redirect", "doctypes-list", 6, false)
-        
         ->add("id", "id", "hidden", $html_object . "[id]", $odoctypes_item->object->id)
+        
         ->add("title", "Тип документов", "text", $html_object . "[title]", $odoctypes_item->object->title)
-
         ->parse();
     
 ?>

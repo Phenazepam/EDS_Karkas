@@ -2,8 +2,8 @@
     
     use RedCore\Forms;
     use RedCore\Request;
+    use RedCore\Where;
     use RedCore\Indoc\Collection as Indoc;
-    
     
     $html_object = "oindoc";
     
@@ -16,13 +16,25 @@
     $oindoc_item = Indoc::loadBy($lb_params);
     
     $select_params ["list"] = Indoc::getStatuslist();
-    var_dump($oindoc_item->object);
+    
+    $where = Where::Cond()
+        ->add("_deleted", "=", "0")
+        ->parse();
+    Indoc::setObject("odoctypes");
+    $DocTypes = Indoc::getList($where);
+    $DocTypes_list["list"] = array(
+        "0" => "Не выбран",
+    );
+    foreach ($DocTypes as $key => $temp) {
+        $DocTypes_list["list"][$key] = $temp->object->title;
+    }
     
     $form = Forms::Create()
         ->add("action", "action", "hidden", "action", $html_object. ".store.do", 6, false)
         ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
         
         ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
+        ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $oindoc_item->object->params->doctypes, 6, false, $DocTypes_list)
         ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
         ->add("reg_number", "№ Регистрации", "text", $html_object . "[reg_number]", $oindoc_item->object->reg_number)
         ->add("reg_date", "Дата регистрации", "text", $html_object . "[reg_date]", $oindoc_item->object->reg_date)

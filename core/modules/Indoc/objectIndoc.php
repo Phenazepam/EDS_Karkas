@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * @copyright 2021
  * @author Darkas
  * @copyright REDUIT Co.
@@ -28,6 +28,7 @@ class ObjectIndoc extends \RedCore\Base\ObjectBase {
 			"params" => array(
 				"file_title" => "String",
 			    "status_id"  => "Number",
+			    "doctypes" => "Number",
 			),
 			"_updated" => "Timestamp",
 		    "_deleted" => "Number",

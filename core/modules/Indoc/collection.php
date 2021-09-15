@@ -17,7 +17,8 @@ use RedCore\Request;
 
 
 require_once('sql.php');
-require_once('object.php');
+require_once('objectIndoc.php');
+require_once('objectDocTypes.php');
 
 class Collection extends \RedCore\Base\Collection { 
     
@@ -44,6 +45,11 @@ class Collection extends \RedCore\Base\Collection {
 			self::$object = "oindoc";
 			self::$sql    = Sql::$sqlIndoc;
 			self::$class  = "RedCore\Indoc\ObjectIndoc";
+		}
+		elseif ("odoctypes" == $obj){
+		    self::$object = "odoctypes";
+		    self::$sql    = Sql::$sqlDocTypes;
+		    self::$class  = "RedCore\Indoc\ObjectDocTypes";
 		}
 
 	}
@@ -79,6 +85,5 @@ class Collection extends \RedCore\Base\Collection {
 	public static  function getStatuslist() {
 	    return self::$list;
 	}
-	
 }
 ?>
