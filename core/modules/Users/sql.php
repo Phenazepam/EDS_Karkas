@@ -26,7 +26,7 @@ class Sql {
 		$sqlAccessMatrix = '
 			SELECT
 				id,
-				docType,
+				doctype,
 				roles,
                 _deleted
 			FROM

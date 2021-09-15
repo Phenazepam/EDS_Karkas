@@ -14,7 +14,15 @@ $doc_types = DocType::getList($where);
 
 $user_roles = Users::$roles;
 
+Users::setObject("accessmatrix");
+$accessList = Users::getList($where); 
 
+// var_dump($accessList);
+foreach($accessList as $item){
+  $accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
+}
+
+Users::GetDocTypesByUser(array('15', '3'));
 
 ?>
 
@@ -32,7 +40,7 @@ $user_roles = Users::$roles;
 
               <form method="post" enctype="multipart/form-data">
               <input type="hidden" name="action" id="action" value="accessmatrix.store.do">
-              
+              <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             
               <!-- <a class="btn btn-primary" href="/users-form">Добавить <i class="fa fa-plus"></i></a> -->
               <table id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -57,10 +65,14 @@ $user_roles = Users::$roles;
                       <td><?= $doc_type->object->title ?></td>
                       <?php
                       foreach ($user_roles as $user_id => $user_role) :
+                        $checked = '';
+                        if (in_array($user_id, $accessResult[$doctype_id])) {
+                          $checked = 'checked';
+                        }
                       ?>
                         <td>
                           <input type="checkbox" name="accessmatrix[<?=$doctype_id?>_<?=$user_id?>]" 
-                            id="<?=$doctype_id?>_<?=$user_id?>">
+                            id="<?=$doctype_id?>_<?=$user_id?>" <?=$checked?>>
                         </td>
                       <?php
                       endforeach;
@@ -71,7 +83,7 @@ $user_roles = Users::$roles;
                   ?>
                 </tbody>
               </table>
-              <button type="submit">Сохранить изменения</button>
+              
               </form>
             </div>
           </div>

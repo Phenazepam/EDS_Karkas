@@ -5,10 +5,10 @@
  *  * @copyright REDUIT Co.
  *  */
 namespace RedCore\Users;
-class ObjecAccessMatrix extends \RedCore\Base\ObjectBase {
+class ObjectAccessMatrix extends \RedCore\Base\ObjectBase {
 		
 		public static function Create() {
-		    return new ObjecAccessMatrix();
+		    return new ObjectAccessMatrix();
 	}
 	
 	public function __construct() {
@@ -16,8 +16,10 @@ class ObjecAccessMatrix extends \RedCore\Base\ObjectBase {
 			
 			$this->properties = array(
 				"id"         => "Number",
-				"docType"    => "Number",
-				"roles"      => "String",
+				"doctype"    => "Number",
+				"roles"      => array(
+					"access" => "String"
+				),
 			    "_deleted" => "Number",
 		);
 	}

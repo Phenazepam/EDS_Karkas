@@ -11,12 +11,14 @@ namespace RedCore\Users;
 use \RedCore\Logger\Collection as Logger;
 use \RedCore\Users\Collection as Users;
 use \RedCore\Controller as Controller;
+use RedCore\Validator as Vladik;
 use \RedCore\Core as Core;
 use \RedCore\Where as Where;
 use RedCore\Session;
 
 require_once('sql.php');
 require_once('objectUser.php');
+require_once('objectAccessMatrix.php');
 
 class Collection extends \RedCore\Base\Collection { 
 	
@@ -59,7 +61,7 @@ class Collection extends \RedCore\Base\Collection {
 		elseif("accessmatrix" == $obj) {
 			self::$object = "accessmatrix";
 			self::$sql    = Sql::$sqlAccessMatrix;
-			self::$class  = "RedCore\Users\ObjecAccessMatrix";
+			self::$class  = "RedCore\Users\ObjectAccessMatrix";
 		}
 	}
 	
@@ -80,7 +82,6 @@ class Collection extends \RedCore\Base\Collection {
 	public static function getList($where = "") {
 	    return parent::getList($where);
 	}
-
 
 	/**
 	 * @method \RedCore\Base\Collection Auth()
@@ -199,11 +200,71 @@ class Collection extends \RedCore\Base\Collection {
 		return false;
 	}
 
-	public static function accessmatrixStore($params = ""){
-		var_dump($params)
-		;
-		exit();
+	public static function accessmatrixStore($params = array()){
+		// var_dump($params["accessmatrix"]);
+		$items = $params["accessmatrix"];
+		$result = array();
+		foreach($items as $key => $item){
+			$doc_type = explode('_', $key)[0];
+			$role_id = explode('_', $key)[1];
+			$result[$doc_type][] = $role_id;
+		}
+		
+		foreach($result as $key => $item){
+			$id = self::loadBy(array('doctype' => $key))->object->id;
+			if (!is_null($id) && false != $id) {
+				$params["accessmatrix"] = array(
+					'id' => $id,
+					'doctype' => $key,
+					'roles' => array(
+						'access' => json_encode($item)
+					)
+				);
+			}
+			else{
+				$params["accessmatrix"] = array(
+					'doctype' => $key,
+					'roles' => array(
+						'access' => json_encode($item)
+					)
+				);
+			}
+			// var_dump($params);
+			self::store($params);
+		}
+		// exit();
 	}
+
+
+	/**
+	 * @method \RedCore\Users\Collection GetDocTypesByUser()
+	 *
+	 * @return array array with accesses for doctype for current user - key = doctype_id, value - (true/false)
+	 * 
+	 */
+	public static function GetDocTypesByUser($doctypes = array()){
+		
+		self::setObject('user');
+		$user_role = self::getAuthRole();
+
+		self::setObject("accessmatrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		$accessList = self::getList($where);
+		foreach($accessList as $item){
+			$accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
+		}
+
+		foreach($doctypes as $key => $item){
+			$res[$item] = in_array($user_role, $accessResult[$item]) ? true : false;
+		}
+		
+
+		return $res;
+	}
+
+
 }
 
 ?>
