@@ -1,7 +1,7 @@
 <?php
 
 use \RedCore\Users\Collection as Users;
-use \RedCore\DocTypes\Collection as DocType;
+use \RedCore\Indoc\Collection as DocType;
 use \RedCore\Where as Where;
 
 DocType::setObject("odoctypes");
