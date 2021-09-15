@@ -4,6 +4,7 @@
     use RedCore\Request;
     use RedCore\Where;
     use RedCore\Indoc\Collection as Indoc;
+    use RedCore\Users\Collection as Users;
     
     $html_object = "oindoc";
     
@@ -28,6 +29,14 @@
     foreach ($DocTypes as $key => $temp) {
         $DocTypes_list["list"][$key] = $temp->object->title;
     }
+    
+    $DocTypesid_list["listid"] = array();
+    foreach ($DocTypes as $id => $temp){
+        $DocTypesid_list["listid"][$id] = $temp->object->id;
+    }
+    
+    $DocTypesAcceess = Users::GetDocTypesByUser($DocTypesid_list["listid"]);
+    var_dump($DocTypesAcceess);
     
     $form = Forms::Create()
         ->add("action", "action", "hidden", "action", $html_object. ".store.do", 6, false)
