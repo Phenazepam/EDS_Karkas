@@ -259,8 +259,7 @@ class Collection extends \RedCore\Base\Collection {
 		foreach($doctypes as $key => $item){
 			$res[$item] = in_array($user_role, $accessResult[$item]) ? true : false;
 		}
-		
-
+	
 		return $res;
 	}
 
