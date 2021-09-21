@@ -34,6 +34,18 @@ class Sql {
 			FROM
 				eds_karkas__doctypes
 		';
+	 
+	   public static
+	   $sqlDocLog = '
+			SELECT
+				id,
+				action,
+                comment,
+                user_id,
+                _updated,
+			FROM
+				eds_karkas__doclog
+		';
 	
 
 }
