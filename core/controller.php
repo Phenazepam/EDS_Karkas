@@ -122,6 +122,23 @@ class Controller
 				"default"  => false,
 			),
 
+			array(
+				"title"    => "Маршруты документов",
+				"url"      => "doctyperolematrix-list",
+				"view"     => "desktop/page.php",
+				"content"  => "desktop/Users/docTypeRoleMatrix.view.php",
+				"tag"      => array("top", "admin"),
+				"default"  => false,
+			),
+
+			array(
+				"title"    => "popupForChoosingStep",
+				"url"      => "popupForChoosingStep",
+				"view"     => "desktop/Users/ajax/popupForChoosingStep.php",
+				"content"  => "",
+				"tag"      => array(),
+			),
+
 			//Входящие документы
 		    
 			array(
@@ -321,6 +338,14 @@ class Controller
 		        "method" => "accessmatrixStore",
 		        "params" => array(
 		            "accessmatrix",
+		        ),
+			),
+			array(
+		        "name"   => "doctyperolematrix.store.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixStore",
+		        "params" => array(
+		            "doctyperolematrix",
 		        ),
 			),
 

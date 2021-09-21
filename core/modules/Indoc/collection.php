@@ -35,6 +35,13 @@ class Collection extends \RedCore\Base\Collection {
         "7" => "В архиве"
     );
 
+	private static $routeStatuses = array(
+		"1" => "Черновик",
+		"2" => "Согласование",
+		"3" => "Утверждение",
+		"4" => "Принятие",
+	);
+
 	/**
 	 * @method \RedCore\Base\Collection setObject()
 	 */
@@ -84,6 +91,22 @@ class Collection extends \RedCore\Base\Collection {
 	
 	public static  function getStatuslist() {
 	    return self::$list;
+	}
+
+	public static function getRouteStatuses(){
+		return self::$routeStatuses;
+	}
+
+	public static function getDocTypesList(){
+		self::setObject("odoctypes");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		$list = self::getList($where);
+		foreach($list as $key => $item){
+			$res[$key] = $item->object->title;
+		}
+		return $res;
 	}
 }
 ?>

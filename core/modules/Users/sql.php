@@ -32,6 +32,16 @@ class Sql {
 			FROM
 				eds_karkas__accessmatrix
 		';
+	public static 
+		$sqlDocTypeRoleMatrix = '
+			SELECT
+				id,
+				doctype,
+				steps,
+                _deleted
+			FROM
+				eds_karkas__doctyperolematrix
+		';
 	
 
 	

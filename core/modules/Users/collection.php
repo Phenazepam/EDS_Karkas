@@ -19,6 +19,7 @@ use RedCore\Session;
 require_once('sql.php');
 require_once('objectUser.php');
 require_once('objectAccessMatrix.php');
+require_once('objectDocTypeRoleMatrix.php');
 
 class Collection extends \RedCore\Base\Collection { 
 	
@@ -62,6 +63,11 @@ class Collection extends \RedCore\Base\Collection {
 			self::$object = "accessmatrix";
 			self::$sql    = Sql::$sqlAccessMatrix;
 			self::$class  = "RedCore\Users\ObjectAccessMatrix";
+		}
+		elseif("doctyperolematrix" == $obj) {
+			self::$object = "doctyperolematrix";
+			self::$sql    = Sql::$sqlDocTypeRoleMatrix;
+			self::$class  = "RedCore\Users\objectDocTypeRoleMatrix";
 		}
 	}
 	
@@ -233,6 +239,45 @@ class Collection extends \RedCore\Base\Collection {
 			self::store($params);
 		}
 		// exit();
+	}
+
+	public static function ajaxDocTypeRoleMatrixStore($params){
+		// var_dump($params);
+		$tmp = $params["doctyperolematrix"];
+		//self::setObject("doctyperolematrix");
+		$params = array();
+		$old_value = self::loadBy(array("doctype" => $tmp["doctype_id"]));
+		$id = $old_value->object->id;
+		$steps = array();
+		$steps = (array)json_decode($old_value->object->steps->steps);
+		// var_dump($steps);
+		$steps_res = [];
+		foreach($steps as $key => $item){
+			$steps_res[str_replace('""', '', $key)] = $item;
+		}
+		// var_dump($steps_res);
+		$steps_res[$tmp['step']][] = $tmp["role_id"];
+		var_dump($steps_res);
+		if(!is_null($id) && false != $id){
+			$params["doctyperolematrix"] = array(
+				"id" => $old_value->object->id,
+				"doctype" => $tmp["doctype_id"],
+				"steps" => array(
+					"steps" => json_encode((array)$steps_res)
+				)
+			);
+		}
+		else{
+			$params["doctyperolematrix"] = array(
+				"doctype" => $tmp["doctype_id"],
+				"steps" => array(
+					"steps" => json_encode((array)$steps_res)
+				)
+			);
+		}
+		// var_dump($params);
+		self::store($params);
+		exit();
 	}
 
 
