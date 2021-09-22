@@ -308,6 +308,24 @@ class Collection extends \RedCore\Base\Collection {
 		return $res;
 	}
 
+	/**
+	 * @method \RedCore\Users\Collection GetDocTypesByUser()
+	 *
+	 * @return array array with accesses for doctype for current user - key = doctype_id, value - (true/false)
+	 * 
+	 */
+	public static function GetNextStep($doc_type, $current_step, $current_role){
+		self::setObject("doctyperolematrix");
+		$tmp = self::loadBy(array('doctype' => $doc_type));
+
+		$steps = (array)json_decode($tmp->object->steps->steps);
+		// var_dump($steps);
+		$steps_res = [];
+		foreach($steps as $key => $item){
+			$steps_res[str_replace('""', '', $key)] = $item;
+		}
+		var_dump($steps_res);
+	}
 
 }
 
