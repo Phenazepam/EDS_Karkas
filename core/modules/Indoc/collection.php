@@ -15,8 +15,6 @@ use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Users\Collection as Users;
 
-
-
 require_once('sql.php');
 require_once('objectIndoc.php');
 require_once('objectDocTypes.php');
@@ -107,12 +105,31 @@ class Collection extends \RedCore\Base\Collection {
 	        if($title = Files::upload("oindoc", "file")) {
 	            $params["oindoc"]["params"]["file_title"] = $title;
 	        }
-	        if(!is_null($params["oindoc"]["id"])){
+	        if(!empty($params["oindoc"]["id"])){
+	            self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "123", $user_id);
 	        }
-	        self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "123", $user_id);
+	        else{
+	            self::setObject("oindoc");
+	            parent::store($params);
+	            $lastId = Core::$db->InsertId();
+	            self::registerDocLog($lastId, "Черновик создан", "123", $user_id);
+	            return;
+	        }
 			self::setObject("oindoc");
 	    }
 		parent::store($params);
+	}
+	
+	public static function delete($params = array()){
+	    Users::setObject("user");
+	    $user_id = Users::getAuthId();
+	    
+	    if(!is_null($params["oindoc"]["id"])){
+	    }
+	    self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "123", $user_id);
+	    self::setObject("oindoc");
+	
+	parent::delete($params);
 	}
 	
 	public static  function getStatuslist() {
@@ -134,8 +151,8 @@ class Collection extends \RedCore\Base\Collection {
 	    );
 	    
         self::store($params);
-	   // var_dump($params);
-	   // exit();
+	    //var_dump($params);
+	    //exit();
 	}
 }
 ?>
