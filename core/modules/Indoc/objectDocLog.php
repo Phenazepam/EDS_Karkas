@@ -11,7 +11,7 @@ namespace RedCore\Indoc;
 class ObjectDocLog extends \RedCore\Base\ObjectBase {
     
     public static function Create() {
-        return new ObjectDocTypes();
+        return new ObjectDocLog();
     }
     
     public function __construct() {

@@ -99,18 +99,20 @@ class Collection extends \RedCore\Base\Collection {
 	}
 
 	public static function store($params = array()) {
-	    Users::setObject("user");
-	    $user_id = Users::getAuthId();
+	    
 	    if("oindoc" == key($params)) {
+			Users::setObject("user");
+	    	$user_id = Users::getAuthId();
+
 	        if($title = Files::upload("oindoc", "file")) {
 	            $params["oindoc"]["params"]["file_title"] = $title;
 	        }
 	        if(!is_null($params["oindoc"]["id"])){
 	        }
 	        self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "123", $user_id);
+			self::setObject("oindoc");
 	    }
 		parent::store($params);
-		
 	}
 	
 	public static  function getStatuslist() {
@@ -131,7 +133,7 @@ class Collection extends \RedCore\Base\Collection {
 	        'user_id' => $user_id,
 	    );
 	    
-        parent::store($params);
+        self::store($params);
 	   // var_dump($params);
 	   // exit();
 	}
