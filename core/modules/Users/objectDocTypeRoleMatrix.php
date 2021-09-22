@@ -17,13 +17,9 @@ class ObjectDocTypeRoleMatrix extends \RedCore\Base\ObjectBase {
 			$this->properties = array(
 				"id"         => "Number",
 				"doctype"    => "Number",
-				"steps"      => array(
-                    "steps" => "String"
-					// "draft" => "String",
-					// "agreement" => "String",
-					// "approval" => "String",
-					// "adoption" => "String"
-				),
+				"step_order" => "Number",
+				"step" 	 	 => "Number",
+				"role" 	 	 => "Number",
 			    "_deleted" => "Number",
 		);
 	}

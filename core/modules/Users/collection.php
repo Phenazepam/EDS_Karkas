@@ -244,40 +244,37 @@ class Collection extends \RedCore\Base\Collection {
 	public static function ajaxDocTypeRoleMatrixStore($params){
 		// var_dump($params);
 		$tmp = $params["doctyperolematrix"];
-		//self::setObject("doctyperolematrix");
-		$params = array();
-		$old_value = self::loadBy(array("doctype" => $tmp["doctype_id"]));
-		$id = $old_value->object->id;
-		$steps = array();
-		$steps = (array)json_decode($old_value->object->steps->steps);
-		// var_dump($steps);
-		$steps_res = [];
-		foreach($steps as $key => $item){
-			$steps_res[str_replace('""', '', $key)] = $item;
-		}
-		// var_dump($steps_res);
-		$steps_res[$tmp['step']][] = $tmp["role_id"];
-		var_dump($steps_res);
-		if(!is_null($id) && false != $id){
-			$params["doctyperolematrix"] = array(
-				"id" => $old_value->object->id,
-				"doctype" => $tmp["doctype_id"],
-				"steps" => array(
-					"steps" => json_encode((array)$steps_res)
-				)
-			);
-		}
-		else{
-			$params["doctyperolematrix"] = array(
-				"doctype" => $tmp["doctype_id"],
-				"steps" => array(
-					"steps" => json_encode((array)$steps_res)
-				)
-			);
-		}
-		// var_dump($params);
+		$doc_type = $tmp["doctype_id"];
+		$step_order = self::getLastStepOrder($doc_type) + 1;
+		$step = $tmp['step'];
+		$role = $tmp["role_id"];
+
+		$params["doctyperolematrix"] = array(
+			'doctype' => $doc_type,
+			'step_order' => $step_order,
+			'step' => $step,
+			'role' => $role
+		);
+
+		self::setObject("doctyperolematrix");
 		self::store($params);
 		exit();
+	}
+	private static function getLastStepOrder($doc_type){
+		$lastStep = 0;
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$tmp = self::getList($where);
+		foreach($tmp as $key => $item){
+			if ($item->object->step_order > $lastStep) {
+				$lastStep = $item->object->step_order;
+			}
+		}
+		return $lastStep;
 	}
 
 
@@ -316,15 +313,31 @@ class Collection extends \RedCore\Base\Collection {
 	 */
 	public static function GetNextStep($doc_type, $current_step, $current_role){
 		self::setObject("doctyperolematrix");
-		$tmp = self::loadBy(array('doctype' => $doc_type));
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
 
-		$steps = (array)json_decode($tmp->object->steps->steps);
-		// var_dump($steps);
-		$steps_res = [];
-		foreach($steps as $key => $item){
-			$steps_res[str_replace('""', '', $key)] = $item;
+		foreach($matrix as $key => $item){
+			$matrix_ready[$item->object->step][$item->object->role] = $item->object->step_order;
+			$matrix_ordered[$item->object->step_order]['step'] = $item->object->step;
+			$matrix_ordered[$item->object->step_order]['role'] = $item->object->role;
 		}
-		var_dump($steps_res);
+		$current_step_order = $matrix_ready[$current_step][$current_role];
+		$i = 1;
+		while(true){
+			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
+				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
+				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
+				break;
+			}
+			else{
+				$i++;
+			}
+		}
+		return $result;
 	}
 
 }

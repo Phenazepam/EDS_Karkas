@@ -37,8 +37,9 @@ class Sql {
 			SELECT
 				id,
 				doctype,
-				steps,
-                _deleted
+				step_order,
+				step,
+				role
 			FROM
 				eds_karkas__doctyperolematrix
 		';

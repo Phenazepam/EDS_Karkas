@@ -16,13 +16,6 @@ $doc_steps = DocType::getRouteStatuses();
 
 $user_roles = Users::$roles;
 
-Users::setObject("accessmatrix");
-$accessList = Users::getList($where); 
-
-// var_dump($accessList);
-foreach($accessList as $item){
-  $accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
-}
 
 Users::setObject("doctyperolematrix");
 $matrix = Users::getList($where); 
@@ -34,15 +27,9 @@ $colorsList = array(
   '4' => 'yellow'
 );
 
-// var_dump($matrix);
-foreach($matrix as $doctype_id => $item){
-  foreach((array)json_decode($item->object->steps->steps) as $step_id => $steps){
-    foreach($steps as $q => $role_id){
-      $matrix_ready[$item->object->doctype][$role_id][] = str_replace('"','',$step_id); 
-    }
-  }
+foreach($matrix as $key => $item){
+  $matrix_ready[$item->object->doctype][$item->object->role][] = $item->object->step;
 }
-
 
 foreach($matrix_ready as $k => $doctypes){
   foreach($doctypes as $h => $roles){
@@ -53,10 +40,8 @@ foreach($matrix_ready as $k => $doctypes){
     }
   }
 }
-// var_dump($count);
-// var_dump($matrix_title);
 
-Users::GetNextStep('22', '1', '4');
+Users::GetNextStep('15', '1', '4');
 ?>
 <script src="/core/view/desktop/Users/js/popupForChoosingStep.js"></script>
 <div class="row">

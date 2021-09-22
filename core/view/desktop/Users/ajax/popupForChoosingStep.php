@@ -3,6 +3,9 @@ use RedCore\Users\Collection as User;
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 
+$stepsList = Indoc::getRouteStatuses();
+$rolesList = User::getRolesList();
+
 User::setObject("doctyperolematrix");
 $doctype_id = $_REQUEST["doctype_id"];
 $role_id = $_REQUEST["role_id"];
@@ -13,21 +16,37 @@ $where = Where::Cond()
     ->add("doctype", "=", $doctype_id)
     ->parse();
 
-$tmp = User::loadBy(array('doctype' => $doctype_id));
-$steps_t = (array)json_decode($tmp->object->steps->steps);
-foreach($steps_t as $key => $value){
-    $steps[str_replace('"','',$key)] = $value;
+$disabled = 'disabled';
+$tmp = User::getList($where);
+foreach($tmp as $i){
+    if ('1' == $i->object->step) {
+        $disabled = '';
+        break;
+    }
 }
-if (!array_key_exists('1', $steps) || is_null($steps)) {
-    $disabled = 'disabled';
+foreach($tmp as $i){
+    $steps_ready[$i->object->step_order] =  $i->object->step_order.'. '.
+        $rolesList[$i->object->role].' - '. $stepsList[$i->object->step];
 }
-// var_dump(($steps));
-// var_dump(array_key_exists('1', $steps));
+ksort($steps_ready);
 
 $title =Indoc::getDocTypesList()[$doctype_id] .' / '. User::getRolesList()[$role_id];
 // var_dump($steps);
 ?>
 <h3><?=$title?></h3>
+<hr>
+<h5>Шаги документа:</h5>
+<div style="text-align: left;">
+    <?php
+        foreach($steps_ready as $item):
+    ?>
+    <p><?=$item?></p>
+    <?php
+        endforeach;
+    ?>
+</div>
+<hr>
+<h5>Добавить новый шаг из списка</h5>
 <form action="/doctyperolematrix-list?action=doctyperolematrix.store.do" 
     method="post" id="popup" name="doctyperolematrix"> 
     <div class="popup_body">
