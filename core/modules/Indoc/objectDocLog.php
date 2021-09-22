@@ -21,10 +21,12 @@ class ObjectDocLog extends \RedCore\Base\ObjectBase {
         $this->properties = array(
             
             "id"         => "Number",
+            "doc_id" => "Number",
             "action"   => "String",
             "comment"   => "String",
             "user_id"   => "Number",
             "_updated" => "Timestamp",
+            "_deleted" => "Number"
         );
         
     }

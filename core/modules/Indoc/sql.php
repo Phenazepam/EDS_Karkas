@@ -39,10 +39,12 @@ class Sql {
 	   $sqlDocLog = '
 			SELECT
 				id,
+                doc_id,
 				action,
                 comment,
                 user_id,
                 _updated,
+                _deleted
 			FROM
 				eds_karkas__doclog
 		';
