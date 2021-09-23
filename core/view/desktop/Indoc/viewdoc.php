@@ -52,7 +52,7 @@ $user_roles = Users::getRolesList();
 									<div class="row">
 										<div class="col">
 											<table border=1 id=""
-												class="table table-striped table-bordered"
+												class="table table-bordered"
 												style="width: 100%">
 												<thead>
 													<tr>
@@ -67,15 +67,15 @@ $user_roles = Users::getRolesList();
 												$trole = $item->object->step_role; // роль для документа
 												$t = Users::GetDocRoute($item->object->params->doctypes);
 												foreach ($t as $key => $value) :
-												    /*if ($value['role'] == $trole && $value['step'] == $tstep) {
-												        echo '-> '.$key. ' '. $user_roles[$value['role']] . ' - ' . $doc_steps[$value['step']].'<br>';
+												    if ($value['role'] == $trole && $value['step'] == $tstep) {
+												        $current = "current";
 												    }
 												    else {
-												        echo $key. ' '. $user_roles[$value['role']] . ' - ' . $doc_steps[$value['step']].'<br>';
-												    } */
+												        $current = "";
+												    } 
 												
 												?>
-													<tr>
+													<tr class = "<?= $current?>">
 														<td><?= $key ?></td>
 														<td><?= $user_roles[$value['role']] ?></td>
 														<td><?= $doc_steps[$value['step']] ?></td>
@@ -128,3 +128,8 @@ $user_roles = Users::getRolesList();
 		</div>
 	</div>
 </div>
+<style>
+.current{
+background-color:lightblue;
+}
+</style>
