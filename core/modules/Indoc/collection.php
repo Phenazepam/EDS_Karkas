@@ -54,12 +54,6 @@ class Collection extends \RedCore\Base\Collection {
         "9" => "Принят",
     );
 
-	private static $routeStatuses = array(
-		"1" => "Черновик",
-		"2" => "Согласование",
-		"3" => "Утверждение",
-		"4" => "Принятие",
-	);
 
 	/**
 	 * @method \RedCore\Base\Collection setObject()
