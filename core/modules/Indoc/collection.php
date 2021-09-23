@@ -124,9 +124,9 @@ class Collection extends \RedCore\Base\Collection {
 	    Users::setObject("user");
 	    $user_id = Users::getAuthId();
 	    
-	    if(!is_null($params["oindoc"]["id"])){
+	    if($params["oindoc"]["id"]){
+	        self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "123", $user_id);
 	    }
-	    self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "123", $user_id);
 	    self::setObject("oindoc");
 	
 	parent::delete($params);

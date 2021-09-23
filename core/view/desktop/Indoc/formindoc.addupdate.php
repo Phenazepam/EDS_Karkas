@@ -53,7 +53,6 @@
         ->add("html", "", "html", "", '<img src="' . IMAGES . SEP . $oindoc_item->object->params->file_title.'">')
         ->add("file", "Файл", "file", $html_object . "[file]")
         ->parse();
-    
 ?>
 
 

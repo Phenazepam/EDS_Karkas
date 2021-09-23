@@ -17,6 +17,8 @@ class Sql {
 				reg_number,
                 reg_date,
                 resolution,
+                step,
+                step_role,
 				params,
                 _updated,
                 _deleted
