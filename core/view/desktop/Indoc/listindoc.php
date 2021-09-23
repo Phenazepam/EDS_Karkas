@@ -59,6 +59,8 @@ $status_list = Indoc::getStatuslist();
                             Действия
             	</button>
         	<div class="dropdown-menu">
+            	<a class="dropdown-item" href="/indocitems-form-view?oindoc_id=<?=$item->object->id?>">Просмотреть</a>
+            <div class="dropdown-divider"></div>
             	<a class="dropdown-item" href="/indocitems-form-addupdate?oindoc_id=<?=$item->object->id?>">Редактировать</a>
             <div class="dropdown-divider"></div>
             	<a class="dropdown-item" href="/indocitems-form-delete?oindoc_id=<?=$item->object->id?>">Удалить</a>

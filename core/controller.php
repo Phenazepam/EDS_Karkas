@@ -169,6 +169,15 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    
+		    array(
+		        "title"    => "Форма просмотра документа",
+		        "url"      => "indocitems-form-view",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/viewdoc.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 			//Тип документов
 		    
