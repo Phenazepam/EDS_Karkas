@@ -306,9 +306,9 @@ class Collection extends \RedCore\Base\Collection {
 	}
 
 	/**
-	 * @method \RedCore\Users\Collection GetDocTypesByUser()
+	 * @method \RedCore\Users\Collection GetNextStep()
 	 *
-	 * @return array array with accesses for doctype for current user - key = doctype_id, value - (true/false)
+	 * @return array [step] => next step, [role] => next role of document route
 	 * 
 	 */
 	public static function GetNextStep($doc_type = -1, $current_step = -1, $current_role = -1) {
@@ -346,6 +346,37 @@ class Collection extends \RedCore\Base\Collection {
 		}
 		return $result;
 	}
+
+	/**
+	 * @method \RedCore\Users\Collection GetDocRoute()
+	 *
+	 * @return array key => step order, values => steps and roles of document route
+	 * 
+	 */
+	public static function GetDocRoute($doc_type = -1) {
+		if (-1 == $doc_type) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$tmpArray = array(
+				'step' => $item->step,
+				'role' => $item->role
+			);
+			$result[$item->step_order] = $tmpArray;
+		}
+
+		ksort($result);
+		return $result;
+	}
+
 
 }
 
