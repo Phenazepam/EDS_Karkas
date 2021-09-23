@@ -17,6 +17,8 @@ class Sql {
 				reg_number,
                 reg_date,
                 resolution,
+                step,
+                step_role,
 				params,
                 _updated,
                 _deleted
@@ -33,6 +35,20 @@ class Sql {
                 _deleted
 			FROM
 				eds_karkas__doctypes
+		';
+	 
+	   public static
+	   $sqlDocLog = '
+			SELECT
+				id,
+                doc_id,
+				action,
+                comment,
+                user_id,
+                _updated,
+                _deleted
+			FROM
+				eds_karkas__doclog
 		';
 	
 

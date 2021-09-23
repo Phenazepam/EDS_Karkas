@@ -67,6 +67,7 @@ $status_list = Indoc::getStatuslist();
         			</td>
 	</tr>
 	
+	
 <?
 endforeach;	
 ?>

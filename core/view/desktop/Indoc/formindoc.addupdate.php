@@ -37,7 +37,7 @@
         $DocTypesResult["list"][$key] = $DocTypes[$key]->object->title;
       }
     }
-
+    
     $form = Forms::Create()
         ->add("action", "action", "hidden", "action", $html_object. ".store.do", 6, false)
         ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
@@ -53,7 +53,6 @@
         ->add("html", "", "html", "", '<img src="' . IMAGES . SEP . $oindoc_item->object->params->file_title.'">')
         ->add("file", "Файл", "file", $html_object . "[file]")
         ->parse();
-    
 ?>
 
 
