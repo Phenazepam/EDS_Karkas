@@ -311,7 +311,9 @@ class Collection extends \RedCore\Base\Collection {
 	 * @return array array with accesses for doctype for current user - key = doctype_id, value - (true/false)
 	 * 
 	 */
-	public static function GetNextStep($doc_type, $current_step, $current_role){
+	public static function GetNextStep($doc_type = -1, $current_step = -1, $current_role = -1) {
+		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+
 		self::setObject("doctyperolematrix");
 		$where = Where::Cond()
 			->add("_deleted", "=", "0")
@@ -320,20 +322,25 @@ class Collection extends \RedCore\Base\Collection {
 			->parse();
 		$matrix = self::getList($where);
 
-		foreach($matrix as $key => $item){
-			$matrix_ready[$item->object->step][$item->object->role] = $item->object->step_order;
-			$matrix_ordered[$item->object->step_order]['step'] = $item->object->step;
-			$matrix_ordered[$item->object->step_order]['role'] = $item->object->role;
+		foreach($matrix as $key => $item) {
+			$item = $item->object;
+			$matrix_ready[$item->step][$item->role] = $item->step_order;
+			$tmpItem = array(
+				"step" => $item->step,
+				"role" => $item->role,
+			);
+			$matrix_ordered[$item->step_order] = $tmpItem;
 		}
 		$current_step_order = $matrix_ready[$current_step][$current_role];
 		$i = 1;
-		while(true){
+
+		while(true) {
 			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
 				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
 				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
 				break;
 			}
-			else{
+			else {
 				$i++;
 			}
 		}
