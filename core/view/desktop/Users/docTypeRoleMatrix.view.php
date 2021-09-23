@@ -41,7 +41,7 @@ foreach($matrix_ready as $k => $doctypes){
   }
 }
 
-Users::GetNextStep('15', '1', '4');
+// var_dump(Users::GetDocRoute('15'));
 ?>
 <script src="/core/view/desktop/Users/js/popupForChoosingStep.js"></script>
 <div class="row">
