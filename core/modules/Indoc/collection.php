@@ -152,8 +152,6 @@ class Collection extends \RedCore\Base\Collection {
 	    );
 	    
         self::store($params);
-	    //var_dump($params);
-	    //exit();
 	}
 }
 ?>

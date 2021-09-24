@@ -14,13 +14,25 @@ $item = Indoc::loadBy($lb_params);
 
 Indoc::setObject("odoctypes");
 
-$where = Where::Cond()->add("_deleted", "=", "0")->parse();
+$where = Where::Cond()
+->add("_deleted", "=", "0")
+->parse();
 
 $DocTypes_list = Indoc::getList($where);
 
 $doc_steps = Indoc::getRouteStatuses();
 
 $user_roles = Users::getRolesList();
+
+Indoc::setObject("odoclog");
+
+$lb_params = array(
+    "id" => Request::vars("oindoc_id")
+);
+$doclog = Indoc::loadBy($lb_params);
+
+var_dump($lb_params);
+
 
 ?>
 <div class="row">
@@ -37,7 +49,7 @@ $user_roles = Users::getRolesList();
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="card-box table-responsive">
-
+						<h2><b>Имя документ:</b> <?= $item->object->name_doc?></h2>
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								<li class="nav-item"><a class="nav-link active" id="home-tab"
 									data-toggle="tab" href="#home" role="tab" aria-controls="home"
@@ -84,7 +96,38 @@ $user_roles = Users::getRolesList();
 												</tbody>
 											</table>
 										</div>
-										<div class="col">sdfsdf</div>
+										<div class="col">
+										<table border=1 id=""
+												class="table table-bordered"
+												style="width: 100%">
+										<thead>
+													<tr>
+														<th>Резолюция</th>
+													</tr>
+													<tr>
+														<th>Действие</th>
+														<th>Пользователь</th>
+														<th>Комментарий</th>
+														<th>Дата и время</th>
+													</tr>
+												</thead>
+												
+												<tbody>
+												<? 
+												    //foreach () :
+												//?>
+												<tr>
+														<td><?= $doclog->object->action ?></td>
+														<td><?= $user_roles[$value['role']] ?></td>
+														<td><?= $doclog->object->comment ?></td>
+														<td><?= $doclog->object->_updated ?></td>
+												</tr>
+												<? 
+												    //endforeach;
+												//?>
+												</tbody>
+										</table>
+										</div>
 									</div>
 									<a class="btn btn-danger" href="/indocitems-list">Отмена</a>
 								</div>
