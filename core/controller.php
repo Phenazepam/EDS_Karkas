@@ -194,9 +194,9 @@ class Controller
 		        "tag"      => array("top", "docs"),
 		    ),
 			array(
-		        "title"    => "Выгрузка",
+		        "title"    => "Выгрузка в Excel",
 		        "url"      => "searchitems-download",
-		        "view"     => "desktop/download/download.php",
+		        "view"     => "desktop/Search/download.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -361,7 +361,6 @@ class Controller
 		            "odoctypes",
 		        ),
 		    ),
-
 		)
 	);
 

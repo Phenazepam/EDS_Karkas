@@ -2,6 +2,7 @@
 
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
+use RedCore\Search\Collection as Search;
 
 Indoc::setObject("odoctypes");
 $where = Where::Cond()
@@ -19,6 +20,10 @@ $where = Where::Cond()
 $items = Indoc::getList($where);
 
 $status_list = Indoc::getStatuslist();
+
+$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Резолюция','Статус');
+
+Search::export($header_array, $items);
 
 ?>
 

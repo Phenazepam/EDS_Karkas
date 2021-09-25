@@ -11,7 +11,7 @@ $filterlist = Search::getStatuslist();
 
 ?>
 
-<a class="btn btn-primary" href="/searchitems-download">Экспорт</a>
+<a class="btn btn-primary" href="/searchitems-download">Выгрузить в Excel</a>
 
 <p>
   <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -53,11 +53,6 @@ $filterlist = Search::getStatuslist();
   <thead>
 
     <tr>
-      <th>Имя</th>
-      <th>Рег. Номер</th>
-      <th>Дата изменения</th>
-      <th>Статус</th>
-
     </tr>
   </thead>
   <tbody>
@@ -70,10 +65,6 @@ $filterlist = Search::getStatuslist();
     ?>
 
       <tr>
-        <td><?= $item->object->name ?></td>
-        <td><?= $item->object->reg_number ?></td>
-        <td><?= $item->object->date_create ?></td>
-        <td><?= $item->object->Status ?></td>
       </tr>
 
 

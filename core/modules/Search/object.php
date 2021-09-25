@@ -15,19 +15,22 @@ class ObjectSearch extends \RedCore\Base\ObjectBase {
 
 	public function __construct() {
 
-		$this->table = "search";
+		$this->table = "document";
 
 		$this->properties = array(
-
-			"id"         => "Number",
-			"name"      => "String",
+		    "id"         => "Number",
+		    "name_doc"   => "String",
 		    "reg_number" => "String",
-			"date_create"   => "Timestamp",
-		    "Status" => "String",
-			"params" => array(
-			    "status_id"  => "Number",
-				
-			),
+		    "reg_date"   => "Timestamp",
+		    "resolution" => "String",
+		    "params" => array(
+		        "file_title" => "String",
+		        "status_id"  => "Number",
+		        "doctypes" => "Number",
+		    ),
+		    "_updated" => "Timestamp",
+		    "_deleted" => "Number",
+			
 			
 		);
 
