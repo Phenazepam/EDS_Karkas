@@ -18,7 +18,17 @@ $where = Where::Cond()
 
 $items = Indoc::getList($where);
 
-$status_list = Indoc::getStatuslist();
+$doc_steps = Indoc::getRouteStatuses();
+
+Indoc::setObject("odoclog");
+
+$log = Where::Cond()
+->add("doc_id", "=", $items->object->id)
+->parse();
+
+$doclog = Indoc::getList($log);
+
+var_dump($doclog->object);
 
 ?>
 
@@ -50,8 +60,8 @@ $status_list = Indoc::getStatuslist();
 		<td><?= $item->object->name_doc ?></td>
 		<td><?= $item->object->reg_number ?></td>
 		<td><?= $item->object->reg_date ?></td>
-		<td><?= $item->object->resolution ?></td>
-		<td><?= $status_list[$item->object->params->status_id] ?></td>
+		<td><?= $doclog->object->action ?></td>
+		<td><?= $doc_steps[$item->object->step] ?></td>
 		<td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
 		<td>
         	<div class="btn-group btn-group-sm">
