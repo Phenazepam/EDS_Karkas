@@ -19,6 +19,7 @@ use RedCore\Session;
 require_once('sql.php');
 require_once('objectUser.php');
 require_once('objectAccessMatrix.php');
+require_once('objectDocTypeRoleMatrix.php');
 
 class Collection extends \RedCore\Base\Collection { 
 	
@@ -62,6 +63,11 @@ class Collection extends \RedCore\Base\Collection {
 			self::$object = "accessmatrix";
 			self::$sql    = Sql::$sqlAccessMatrix;
 			self::$class  = "RedCore\Users\ObjectAccessMatrix";
+		}
+		elseif("doctyperolematrix" == $obj) {
+			self::$object = "doctyperolematrix";
+			self::$sql    = Sql::$sqlDocTypeRoleMatrix;
+			self::$class  = "RedCore\Users\objectDocTypeRoleMatrix";
 		}
 	}
 	
@@ -235,6 +241,42 @@ class Collection extends \RedCore\Base\Collection {
 		// exit();
 	}
 
+	public static function ajaxDocTypeRoleMatrixStore($params){
+		// var_dump($params);
+		$tmp = $params["doctyperolematrix"];
+		$doc_type = $tmp["doctype_id"];
+		$step_order = self::getLastStepOrder($doc_type) + 1;
+		$step = $tmp['step'];
+		$role = $tmp["role_id"];
+
+		$params["doctyperolematrix"] = array(
+			'doctype' => $doc_type,
+			'step_order' => $step_order,
+			'step' => $step,
+			'role' => $role
+		);
+
+		self::setObject("doctyperolematrix");
+		self::store($params);
+		exit();
+	}
+	private static function getLastStepOrder($doc_type){
+		$lastStep = 0;
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$tmp = self::getList($where);
+		foreach($tmp as $key => $item){
+			if ($item->object->step_order > $lastStep) {
+				$lastStep = $item->object->step_order;
+			}
+		}
+		return $lastStep;
+	}
+
 
 	/**
 	 * @method \RedCore\Users\Collection GetDocTypesByUser()
@@ -261,6 +303,78 @@ class Collection extends \RedCore\Base\Collection {
 		}
 	
 		return $res;
+	}
+
+	/**
+	 * @method \RedCore\Users\Collection GetNextStep()
+	 *
+	 * @return array [step] => next step, [role] => next role of document route
+	 * 
+	 */
+	public static function GetNextStep($doc_type = -1, $current_step = -1, $current_role = -1) {
+		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+
+		foreach($matrix as $key => $item) {
+			$item = $item->object;
+			$matrix_ready[$item->step][$item->role] = $item->step_order;
+			$tmpItem = array(
+				"step" => $item->step,
+				"role" => $item->role,
+			);
+			$matrix_ordered[$item->step_order] = $tmpItem;
+		}
+		$current_step_order = $matrix_ready[$current_step][$current_role];
+		$i = 1;
+
+		while(true) {
+			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
+				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
+				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
+				break;
+			}
+			else {
+				$i++;
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * @method \RedCore\Users\Collection GetDocRoute()
+	 *
+	 * @return array key => step order, values => steps and roles of document route
+	 * 
+	 */
+	public static function GetDocRoute($doc_type = -1) {
+		if (-1 == $doc_type) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$tmpArray = array(
+				'step' => $item->step,
+				'role' => $item->role
+			);
+			$result[$item->step_order] = $tmpArray;
+		}
+
+		ksort($result);
+		return $result;
 	}
 
 

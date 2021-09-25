@@ -122,6 +122,23 @@ class Controller
 				"default"  => false,
 			),
 
+			array(
+				"title"    => "Маршруты документов",
+				"url"      => "doctyperolematrix-list",
+				"view"     => "desktop/page.php",
+				"content"  => "desktop/Users/docTypeRoleMatrix.view.php",
+				"tag"      => array("top", "admin"),
+				"default"  => false,
+			),
+
+			array(
+				"title"    => "popupForChoosingStep",
+				"url"      => "popupForChoosingStep",
+				"view"     => "desktop/Users/ajax/popupForChoosingStep.php",
+				"content"  => "",
+				"tag"      => array(),
+			),
+
 			//Входящие документы
 		    
 			array(
@@ -151,6 +168,23 @@ class Controller
 		        "content"  => "desktop/Indoc/formindoc.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Форма просмотра документа",
+		        "url"      => "indocitems-form-view",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/viewdoc.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+
+		    array(
+		        "title"    => "Модальное окно для отправки по маршруту",
+		        "url"      => "popupMovingRoute",
+		        "view"     => "desktop/Indoc/ajax/popupMovingRoute.php",
+		        "content"  => "",
+		        "tag"      => array(),
 		    ),
 
 			//Тип документов
@@ -321,6 +355,14 @@ class Controller
 		        "method" => "accessmatrixStore",
 		        "params" => array(
 		            "accessmatrix",
+		        ),
+			),
+			array(
+		        "name"   => "doctyperolematrix.store.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixStore",
+		        "params" => array(
+		            "doctyperolematrix",
 		        ),
 			),
 

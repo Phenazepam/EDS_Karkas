@@ -12,19 +12,37 @@ $where = Where::Cond()
 
 $doc_types = DocType::getList($where);
 
-$user_roles = Users::$roles;
+$doc_steps = DocType::getRouteStatuses();
 
-Users::setObject("accessmatrix");
-$accessList = Users::getList($where); 
+$user_roles = Users::getRolesList();
 
-// var_dump($accessList);
-foreach($accessList as $item){
-  $accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
+
+Users::setObject("doctyperolematrix");
+$matrix = Users::getList($where); 
+
+$colorsList = array(
+  '1' => 'pink',
+  '2' => 'lightblue',
+  '3' => 'lightgreen',
+  '4' => 'yellow'
+);
+
+foreach($matrix as $key => $item){
+  $matrix_ready[$item->object->doctype][$item->object->role][] = $item->object->step;
 }
-//Users::GetDocTypesByUser(array('15', '3'));
+
+foreach($matrix_ready as $k => $doctypes){
+  foreach($doctypes as $h => $roles){
+    foreach($roles as $q => $step_id){
+      $count[$k][$step_id]++;
+        $matrix_title[$k][$h]["liter"] .= substr($doc_steps[str_replace('"','',$step_id)],0,2).$count[$k][$step_id].' '; 
+        $matrix_title[$k][$h]["color"] = $colorsList[$step_id];
+    }
+  }
+}
 
 ?>
-
+<script src="/core/view/desktop/Users/js/popupForChoosingStep.js"></script>
 <div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
@@ -35,11 +53,11 @@ foreach($accessList as $item){
       <div class="x_content">
         <div class="row">
           <div class="col-sm-12">
+            <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" id="action" value="accessmatrix.store.do">
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             <div class="card-box table-responsive">
 
-              <form method="post" enctype="multipart/form-data">
-              <input type="hidden" name="action" id="action" value="accessmatrix.store.do">
-              <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             
               <!-- <a class="btn btn-primary" href="/users-form">Добавить <i class="fa fa-plus"></i></a> -->
               <table id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -64,14 +82,10 @@ foreach($accessList as $item){
                       <td><?= $doc_type->object->title ?></td>
                       <?php
                       foreach ($user_roles as $user_id => $user_role) :
-                        $checked = '';
-                        if (in_array($user_id, $accessResult[$doctype_id])) {
-                          $checked = 'checked';
-                        }
                       ?>
-                        <td>
-                          <input type="checkbox" name="accessmatrix[<?=$doctype_id?>_<?=$user_id?>]" 
-                            id="<?=$doctype_id?>_<?=$user_id?>" <?=$checked?>>
+                        <td class="active-td" onclick="popupForChoosingSteps(<?=$doctype_id?>, <?=$user_id?>)" 
+                          style="font-weight:bold;background-color: <?=$matrix_title[$doctype_id][$user_id]['color']?>;">
+                          <?=$matrix_title[$doctype_id][$user_id]['liter']?>
                         </td>
                       <?php
                       endforeach;
@@ -91,3 +105,13 @@ foreach($accessList as $item){
     </div>
   </div>
 </div>
+
+<style>
+  .active-td{
+    cursor: pointer;
+  }
+  .active-td:hover{
+    background-color: royalblue;
+    opacity: .8;
+  }
+</style>

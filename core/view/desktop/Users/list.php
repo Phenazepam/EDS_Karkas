@@ -1,5 +1,6 @@
 <?php
 
+use RedCore\Session;
 use \RedCore\Users\Collection as Users;
 use \RedCore\Where as Where;
 
@@ -10,6 +11,12 @@ $where = Where::Cond()
   ->parse();
 
 $items = Users::getList($where);
+// TmpExcel::setDateTable($headers, $items); //--------->
+// $resul_array = array(
+//   'headers' => $headers,
+//   'items' => $items
+// );
+// Session::set('excelDataTable', $resul_array)
 ?>
 
 <div class="row">
