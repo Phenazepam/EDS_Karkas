@@ -14,7 +14,7 @@ $doc_types = DocType::getList($where);
 
 $doc_steps = DocType::getRouteStatuses();
 
-$user_roles = Users::$roles;
+$user_roles = Users::getRolesList();
 
 
 Users::setObject("doctyperolematrix");
@@ -41,7 +41,6 @@ foreach($matrix_ready as $k => $doctypes){
   }
 }
 
-// var_dump(Users::GetDocRoute('15'));
 ?>
 <script src="/core/view/desktop/Users/js/popupForChoosingStep.js"></script>
 <div class="row">

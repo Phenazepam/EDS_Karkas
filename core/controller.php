@@ -179,6 +179,14 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),
 
+		    array(
+		        "title"    => "Модальное окно для отправки по маршруту",
+		        "url"      => "popupMovingRoute",
+		        "view"     => "desktop/Indoc/ajax/popupMovingRoute.php",
+		        "content"  => "",
+		        "tag"      => array(),
+		    ),
+
 			//Тип документов
 		    
 		    array(
