@@ -27,12 +27,13 @@ $user_roles = Users::getRolesList();
 
 Indoc::setObject("odoclog");
 
-$lb_params = array(
-  "id" => Request::vars("oindoc_id")
-);
-$doclog = Indoc::loadBy($lb_params);
+$log = Where::Cond()
+    ->add("doc_id", "=", $item->object->id)
+    ->parse();
 
-var_dump($lb_params);
+$doclog = Indoc::getList($log);
+
+var_dump($doclog);
 
 $doc_id = $item->object->id;
 $current_step = $item->object->step;
@@ -118,18 +119,18 @@ $current_role = $item->object->step_role;
 
                         <tbody>
                           <?
-                          //foreach () :
-                          //
+                          foreach ($doclog as $log) :
+                          
                           ?>
                           <tr>
-                            <td><?= $doclog->object->action ?></td>
-                            <td><?= $user_roles[$value['role']] ?></td>
-                            <td><?= $doclog->object->comment ?></td>
-                            <td><?= $doclog->object->_updated ?></td>
+                            <td><?= $log->object->action ?></td>
+                            <td><?= $log->object->user_id ?></td>
+                            <td><?= $log->object->comment ?></td>
+                            <td><?= $log->object->_updated ?></td>
                           </tr>
                           <?
-                          //endforeach;
-                          //
+                          endforeach;
+                          
                           ?>
                         </tbody>
                       </table>
