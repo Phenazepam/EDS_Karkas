@@ -101,10 +101,10 @@ class Collection extends \RedCore\Base\Collection {
 	    $active_sheet = $objExcel -> getActiveSheet()->setTitle('Прайс лист');
 	    $active_sheet->setCellValue('A1', 'ДОКУМЕНТЫ');
 	  	  	    
-	    foreach ($header_array as $val) {
+	    /*foreach ($header_array as $val) {
 	        $row_next = $row_start + $i;
 	        $active_sheet->setCellValueByColumnAndRow(0, $row_next, $val[]);
-	    }
+	    }*/
 	    //var_dump($header_array);
 	   
 	    $row_start = 4;
