@@ -107,13 +107,13 @@ class Collection extends \RedCore\Base\Collection {
 	            $params["oindoc"]["params"]["file_title"] = $title;
 	        }
 	        if(!empty($params["oindoc"]["id"])){
-	            self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "123", $user_id);
+	            self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "", $user_id);
 	        }
 	        else{
 	            self::setObject("oindoc");
 	            parent::store($params);
 	            $lastId = Core::$db->InsertId();
-	            self::registerDocLog($lastId, "Черновик создан", "123", $user_id);
+	            self::registerDocLog($lastId, "Черновик создан", "", $user_id);
 	            return;
 	        }
 			self::setObject("oindoc");
@@ -126,7 +126,7 @@ class Collection extends \RedCore\Base\Collection {
 	    $user_id = Users::getAuthId();
 	    
 	    if($params["oindoc"]["id"]){
-	        self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "123", $user_id);
+	        self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "", $user_id);
 	    }
 	    self::setObject("oindoc");
 	
@@ -150,8 +150,49 @@ class Collection extends \RedCore\Base\Collection {
 	        'comment' => $comment,
 	        'user_id' => $user_id,
 	    );
-	    
+	    var_dump($params);
         self::store($params);
+	}
+	public static function getDocTypesList(){
+		self::setObject("odoctypes");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		$list = self::getList($where);
+
+		foreach ($list as $key => $value) {
+			$res[$value->object->id] = $value->object->title;	
+		}
+		return $res;
+	}
+
+	public static function ajaxMoveRoute($params = array()){
+		$params = $params["oindoc"];
+		$doc_id = $params["id"];
+		$next_step = $params["step"];
+		$next_step_role = $params["step_role"];
+		$comment = $params["comment"];
+
+		Users::setObject('user');
+		$user_id = Users::getAuthId();
+		var_dump($user_id);
+		if ('2' == $next_step) {
+			self::registerDocLog($doc_id, 'Направлен на согласование', $comment, $user_id);
+		}
+		if ('3' == $next_step) {
+			self::registerDocLog($doc_id, 'Направлен на утверждение', $comment, $user_id);
+		}
+
+		self::setObject("oindoc");
+		$params["oindoc"] = array(
+			'id' => $doc_id,
+			'step' => $next_step,
+			'step_role' => $next_step_role
+		);
+		var_dump($params["oindoc"]);
+		self::store($params);
+		exit();
+
 	}
 }
 ?>

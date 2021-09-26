@@ -3,10 +3,10 @@ async function popupMovingRoute(oindocId, cstep, crole) {
     const option = {
         method: "GET",
     }  
-    let url = `/popupMovingRoute?oindoc_id="+${oindocId}&cstep=${cstep}&crole=${crole}`
-    const response = await fetch("/popupMovingRoute?oindoc_id="+oindocId, option);
+    let url = `/popupMovingRoute?oindoc_id=${oindocId}&cstep=${cstep}&crole=${crole}`
+    const response = await fetch(url, option);
     let txt = await response.text();
-    console.log(response);
+    // console.log(response);
     Swal.fire({
         html: txt,
         showCancelButton: true,
@@ -22,9 +22,9 @@ async function popupMovingRoute(oindocId, cstep, crole) {
               body: formData,
             };
             console.log(formData);
-            const response = await fetch("/doctyperolematrix-list?action=doctyperolematrix.store.do", option);
+            const response = await fetch("/indocitems-form-view?action=oindoc.ajaxMoveRoute.do", option);
             var text = await response.text();
-            console.log(text);
+            // console.log(text);
             location.reload();
         }
     })

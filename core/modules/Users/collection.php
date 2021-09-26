@@ -289,6 +289,39 @@ class Collection extends \RedCore\Base\Collection {
 		self::setObject('user');
 		$user_role = self::getAuthRole();
 
+		if (in_array($user_role, ['1', '2'])) {
+			foreach($doctypes as $key => $item) {
+				$res[$item] =  true;
+			}
+			return $res;
+		}
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("role", "=", $user_role)
+			->add("and")
+			->add("step", "=", "1")//вытаскиваем только черновики
+			->parse();
+		$accessList = self::getList($where);
+		foreach($accessList as $item) {
+			$accessResult[$item->object->doctype] = true;
+		}
+		
+		foreach($doctypes as $key => $item) {
+			$res[$item] = empty($accessResult[$item]) ? false : true;
+		}
+		var_dump($res);
+		return $res;
+	}
+
+	//Тут была завязка на матрицу доступов
+	public static function GetDocTypesByUserOld($doctypes = array()){
+		
+		self::setObject('user');
+		$user_role = self::getAuthRole();
+
 		self::setObject("accessmatrix");
 		$where = Where::Cond()
 			->add("_deleted", "=", "0")

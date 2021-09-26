@@ -385,6 +385,14 @@ class Controller
 		        ),
 		    ),
 		    
+			array(
+		        "name"   => "oindoc.ajaxMoveRoute.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxMoveRoute",
+		        "params" => array(
+		            "oindoc",
+		        ),
+		    ),
 			//DocType actions
 		    array(
 		        "name"   => "odoctypes.store.do",

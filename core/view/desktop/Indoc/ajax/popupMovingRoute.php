@@ -24,7 +24,7 @@ $next_role = $tmp['role'];
 ?>
 <h3>Отправить документ на </h3>
 <h5 style="text-align: center;">
-    <?=$doc_steps[$next_step]?> для <?= $user_roles[$next_role]?>
+    <b><?=$doc_steps[$next_step]?></b> для <b><?= $user_roles[$next_role]?></b>
 </h5>
 <hr>
 <form action="/indocitems-form-view?action=oindoc.ajaxMoveRoute.do" 
