@@ -33,12 +33,13 @@ $log = Where::Cond()
 
 $doclog = Indoc::getList($log);
 
-$t = Users::loadBy();
+Users::setObject("user");
+
+$fio_user = Users::getList();
 
 $doc_id = $item->object->id;
 $current_step = $item->object->step;
 $current_role = $item->object->step_role;
-
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
 <div class="row">
@@ -120,11 +121,10 @@ $current_role = $item->object->step_role;
                         <tbody>
                           <?
                           foreach ($doclog as $log) :
-                          
                           ?>
                           <tr>
                             <td><?= $log->object->action ?></td>
-                            <td><?= $log->object->user_id ?></td>
+                            <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
                             <td><?= $log->object->_updated ?></td>
                           </tr>

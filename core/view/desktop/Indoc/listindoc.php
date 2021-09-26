@@ -2,6 +2,7 @@
 
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
+use RedCore\Users\Collection as Users;
 
 Indoc::setObject("odoctypes");
 $where = Where::Cond()
@@ -28,8 +29,9 @@ $log = Where::Cond()
 
 $doclog = Indoc::getList($log);
 
-var_dump($doclog->object);
+Users::setObject("user");
 
+$user = Users::getRolesList();
 ?>
 
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
@@ -60,7 +62,7 @@ var_dump($doclog->object);
 		<td><?= $item->object->name_doc ?></td>
 		<td><?= $item->object->reg_number ?></td>
 		<td><?= $item->object->reg_date ?></td>
-		<td><?= $doclog->object->action ?></td>
+		<td><?= $user[$item->object->step_role] ?></td>
 		<td><?= $doc_steps[$item->object->step] ?></td>
 		<td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
 		<td>
