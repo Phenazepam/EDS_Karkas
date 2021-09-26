@@ -153,5 +153,18 @@ class Collection extends \RedCore\Base\Collection {
 	    
         self::store($params);
 	}
+	
+	public static function getDocTypesList(){
+	    self::setObject("odoctypes");
+	    $where = Where::Cond()
+	    ->add("_deleted", "=", "0")
+	    ->parse();
+	    $list = self::getList($where);
+	    
+	    foreach ($list as $key => $value) {
+	        $res[$value->object->id] = $value->object->title;
+	    }
+	    return $res;
+	}
 }
 ?>
