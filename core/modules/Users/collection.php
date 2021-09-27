@@ -410,6 +410,31 @@ class Collection extends \RedCore\Base\Collection {
 		return $result;
 	}
 
+	public static function CanUserMoveRoute($doc_type = -1, $user_role = -1, $step = -1){
+		if (-1 == $doc_type || -1 == $user_role || -1 ==$step) return;
+
+		if('2' == $user_role || '1' == $user_role) return true;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$tmpArray = array(
+				'step' => $item->step,
+				'role' => $item->role
+			);
+			$result[$item->step_order] = $tmpArray;
+		}
+
+		return $result;
+	}
+
 
 }
 

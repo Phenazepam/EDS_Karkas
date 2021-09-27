@@ -189,7 +189,7 @@ class Collection extends \RedCore\Base\Collection {
 			'step' => $next_step,
 			'step_role' => $next_step_role
 		);
-		var_dump($params["oindoc"]);
+		// var_dump($params["oindoc"]);
 		self::store($params);
 		exit();
 
