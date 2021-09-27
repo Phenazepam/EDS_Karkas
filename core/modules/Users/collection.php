@@ -439,6 +439,13 @@ class Collection extends \RedCore\Base\Collection {
 		self::setObject('user');
 		$user_role = self::getAuthRole();
 
+		if (in_array($user_role, ['1', '2'])) {
+			foreach($doctypes as $key => $item) {
+				$res[$item] =  true;
+			}
+			return $res;
+		}
+
 		self::setObject("accessmatrix");
 		$where = Where::Cond()
 			->add("_deleted", "=", "0")
