@@ -9,8 +9,13 @@ $where = Where::Cond()
         ->add("_deleted", "=", "0")
         ->parse();
 
-$DocTypes_list = Indoc::getList($where);       
-    
+$DocTypes_list = Indoc::getList($where);   
+
+$DocTypesid = array();
+foreach ($DocTypes as $id => $temp) {
+    $DocTypesid[$id] = $temp->object->id;
+}
+
 Indoc::setObject("oindoc");
 
 $where = Where::Cond()
@@ -33,7 +38,7 @@ Users::setObject("user");
 
 $user = Users::getRolesList();
 
-$read_doc = Users::CanUserReadDocs();
+$read_doc = Users::CanUserReadDocs($DocTypesid);
 ?>
 
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
