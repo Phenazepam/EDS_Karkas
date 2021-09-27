@@ -249,7 +249,7 @@ class Controller
 		        "url"      => "infodocs-mainlist",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/list.php",
-				"default"  => true,
+				"default"  => false,
 		        "tag"      => array("top", "dictionary"),
 		    ),
 
