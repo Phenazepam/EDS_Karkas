@@ -293,7 +293,7 @@ class Controller
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/form.php",
 		        "default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", ""),
 		    ),
 
 
