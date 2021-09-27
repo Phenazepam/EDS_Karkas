@@ -178,6 +178,42 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Черновик'",
+		        "url"      => "indocitems-list-draft",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocfordraft.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Согласование'",
+		        "url"      => "indocitems-list-agreement",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforagreement.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Утверждение'",
+		        "url"      => "indocitems-list-approval",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforapproval.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Принятие'",
+		        "url"      => "indocitems-list-adoption",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforadoption.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 		    array(
 		        "title"    => "Модальное окно для отправки по маршруту",
