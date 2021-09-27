@@ -1,12 +1,15 @@
 <?php
 
-use \RedCore\Infodocs\Collection as Test;
+use \RedCore\Infodocs\Collection as MainList;
 
-Test::setObject("oinfodocs");
-$items = Test::getList();
+MainList::setObject("oinfodocs");
+$items = MainList::getList();
 
 ?>
-
+	<div class="x_title">
+        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень справочников</small></h2>
+        <div class="clearfix"></div>
+     </div>
 <!--<a class="btn btn-primary" href="/infodocs-form">Добавить</a>-->
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -14,7 +17,7 @@ $items = Test::getList();
 		<tr>
 			<th>id</th>
 			<th>Наименование</th>
-			<th>ссылка</th>
+			<th>Ссылка</th>
 		
 		</tr>
 	</thead>

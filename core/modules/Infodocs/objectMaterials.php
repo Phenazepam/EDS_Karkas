@@ -23,7 +23,7 @@ class ObjectMaterials extends \RedCore\Base\ObjectBase {
 			"id"         => "Number",
 			"su"      => "String",
 			"code"   => "String",
-			"group"   => "String",
+			"gruppa"   => "String",
 			"material"   => "String",
 			"izm"   => "String",
 			"params" => array(
@@ -34,9 +34,6 @@ class ObjectMaterials extends \RedCore\Base\ObjectBase {
 		);
 
 	}
-
-
-
 }
 
 

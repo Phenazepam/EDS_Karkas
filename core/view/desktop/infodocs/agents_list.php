@@ -1,13 +1,17 @@
 <?php
 
-use \RedCore\Infodocs\Collection as Test;
+use \RedCore\Infodocs\Collection as Agents;
 
-Test::setObject("oinfodocsagents");
-$items = Test::getList();
+Agents::setObject("oinfodocsagents");
+$items = Agents::getList();
 
 ?>
 
-<a class="btn btn-primary" href="/infodocs-form">Добавить</a>
+	<div class="x_title">
+        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень контрагентов/корреспондентов</small></h2>
+        <div class="clearfix"></div>
+    </div>
+<!--<a class="btn btn-primary" href="/infodocs-form">Добавить</a>-->
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
@@ -36,7 +40,7 @@ $items = Test::getList();
 		<td><?= $item->object->material ?></td>
 		<td><?= $item->object->main_worker ?></td>
 		<td><?= $item->object->other ?></td>
-		<td><a class="badge badge-primary" href="/infodocs-form?otest_id=<?=$item->object->id?>">Редактировать</a></td>
+		<!--<td><a class="badge badge-primary" href="/infodocs-form?otset_id=<?=$item->object->id?>">Редактировать</a></td>-->
 	</tr>
 	
 <?

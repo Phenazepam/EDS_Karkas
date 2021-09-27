@@ -21,7 +21,7 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 		$this->properties = array(
 		
 			"id"         => "Number",
-			"group"      => "String",
+			"gruppa"      => "String",
 			"name"   => "String",
 			"izm"   => "String",
 			"krd"   => "String",

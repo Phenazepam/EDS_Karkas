@@ -41,7 +41,7 @@ class Sql {
 		$sqlInfodocsWorks = '
 			SELECT
 				id,
-				group,
+				gruppa,
 				name,
 				izm,
 				krd,
@@ -57,18 +57,44 @@ class Sql {
 				eds_karkas__infodocsworks
 		';
 		
-		public static
+	public static
 		$sqlInfodocsMaterials = '
 			SELECT
 				id,
 				su,
 				code,
-				group,
+				gruppa,
 				material,
 				izm,
+				params,
                 _deleted
 			FROM
 				eds_karkas__infodocsmaterials
+		';
+		
+	public static
+		$sqlInfodocsStandarts = '
+			SELECT
+				id,
+				name,
+				izm,
+				ku,
+				bp,
+				fp,
+				rostverk,
+				walls,
+				kolon,
+				perekryt,
+				balki,
+				rigel,
+				smallconstr,
+				decor,
+				pryamlest,
+				krivlest,
+				params,
+                _deleted
+			FROM
+				eds_karkas__infodocsstandarts
 		';
 
 }
