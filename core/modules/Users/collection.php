@@ -409,7 +409,7 @@ class Collection extends \RedCore\Base\Collection {
 		ksort($result);
 		return $result;
 	}
-
+	// todo
 	public static function CanUserMoveRoute($doc_type = -1, $user_role = -1, $step = -1){
 		if (-1 == $doc_type || -1 == $user_role || -1 ==$step) return;
 
@@ -434,6 +434,27 @@ class Collection extends \RedCore\Base\Collection {
 
 		return $result;
 	}
+
+	public static function CanUserReadDocs($doctypes = array()){
+		self::setObject('user');
+		$user_role = self::getAuthRole();
+
+		self::setObject("accessmatrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		$accessList = self::getList($where);
+		foreach($accessList as $item){
+			$accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
+		}
+
+		foreach($doctypes as $key => $item){
+			$res[$item] = in_array($user_role, $accessResult[$item]) ? true : false;
+		}
+	
+		return $res;
+	}
+
 
 
 }
