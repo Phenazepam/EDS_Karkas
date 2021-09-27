@@ -243,6 +243,59 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),
 
+			//Information documents module
+			array(
+		        "title"    => "Нормативно-справочная документация",
+		        "url"      => "infodocs-mainlist",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/list.php",
+				"default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+
+			array(
+		        "title"    => "Нормативно-справочная документация. Контрагенты",
+		        "url"      => "infodocs-agents",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/agents_list.php",
+				"default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+			array(
+		        "title"    => "Нормативно-справочная документация. Виды работ",
+		        "url"      => "infodocs-works",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/works_list.php",
+				"default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+            array(
+		        "title"    => "Нормативно-справочная документация. Материалы",
+		        "url"      => "infodocs-materials",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/materials_list.php",
+				"default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+			array(
+		        "title"    => "Нормативно-справочная документация. Нормы",
+		        "url"      => "infodocs-standarts",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/standarts_list.php",
+				"default"  => false,
+		        "tag"      => array("top", "dictionary"),
+		    ),
+
+			
+			array(
+		        "title"    => "Форма нормативно-справочной документации",
+		        "url"      => "infodocs-form",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+
 
 			/**
 			 * INSTALL
@@ -411,6 +464,26 @@ class Controller
 		            "odoctypes",
 		        ),
 		    ),
+
+			//Infodocs actions
+			array(
+		        "name"   => "oinfodocs.store.do",
+		        "module" => "RedCore\infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocs",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "oinfodocs.delete.do",
+		        "module" => "RedCore\infdocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocs",
+		        ),
+		    ),
+			
 
 		)
 	);

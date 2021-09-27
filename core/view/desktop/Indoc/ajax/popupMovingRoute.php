@@ -35,7 +35,7 @@ $next_role = $tmp['role'];
         <input type="hidden" name="oindoc[step]" value="<?=$next_step?>">
         <div style="min-width: 200px; text-align: center;">
             Комментарий: <br>
-            <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;"></textarea>
+            <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;font-size:medium"></textarea>
         </div>
     </div>
 </form>

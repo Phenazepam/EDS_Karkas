@@ -98,17 +98,19 @@ use RedCore\Controller;
 
           <!-- sidebar menu -->
           <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-           <!--  <div class="menu_section">
+            <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-dashboard"></i> Основные данные <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file"></i> Мои документы <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
-                    <li><a href="/monitoring">Бюджет</a></li>
-                    <li><a href="/indicators">Показатели</a></li>
+                    <li><a href="/indocitems-list-draft">Черновики</a></li>
+                    <li><a href="/indocitems-list-agreement">На согласование</a></li>
+                    <li><a href="/indocitems-list-approval">На утверждение</a></li>
+                    <li><a href="/indocitems-list-adoption">На принятие</a></li>
                   </ul>
                 </li>
               </ul>
-            </div> -->
+            </div>
             <!-- <div class="menu_section">
               <h3>Отдел продаж</h3>
               <ul class="nav side-menu">

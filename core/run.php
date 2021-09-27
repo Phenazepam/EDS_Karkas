@@ -49,6 +49,7 @@ require_once(CMS_HELPER . SEP . 'files.php');
  */
 require_once(CMS_MODULE . SEP . 'Users/collection.php');
 require_once(CMS_MODULE . SEP . 'Indoc/collection.php');
+require_once(CMS_MODULE . SEP . 'Infodocs/collection.php');
 
 require_once(CMS_MODULE . SEP . 'logger/collection.php');
 
