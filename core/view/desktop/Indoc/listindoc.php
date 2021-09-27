@@ -10,9 +10,8 @@ $where = Where::Cond()
         ->parse();
 
 $DocTypes_list = Indoc::getList($where);   
-
 $DocTypesid = array();
-foreach ($DocTypes as $id => $temp) {
+foreach ($DocTypes_list as $id => $temp) {
     $DocTypesid[$id] = $temp->object->id;
 }
 
