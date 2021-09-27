@@ -312,7 +312,7 @@ class Collection extends \RedCore\Base\Collection {
 		foreach($doctypes as $key => $item) {
 			$res[$item] = empty($accessResult[$item]) ? false : true;
 		}
-		var_dump($res);
+		// var_dump($res);
 		return $res;
 	}
 
