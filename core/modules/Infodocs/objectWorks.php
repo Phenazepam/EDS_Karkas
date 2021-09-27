@@ -16,7 +16,7 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 
 	public function __construct() {
 		
-		$this->table = "infodocsmaterials";
+		$this->table = "infodocsworks";
 
 		$this->properties = array(
 		

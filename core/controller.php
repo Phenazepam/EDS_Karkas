@@ -418,7 +418,29 @@ class Controller
 		            "doctyperolematrix",
 		        ),
 			),
-
+			//Infodocs actions
+			
+			array(
+		        "name"   => "oinfodocsagents.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsagents.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+			
+			
+			
 			//Indoc actions
 			array(
 		        "name"   => "oindoc.store.do",

@@ -16,7 +16,7 @@ class ObjectStandarts extends \RedCore\Base\ObjectBase {
 
 	public function __construct() {
 		
-		$this->table = "infodocsstandartss";
+		$this->table = "infodocsstandarts";
 
 		$this->properties = array(
 		
