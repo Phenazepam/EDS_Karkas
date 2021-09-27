@@ -40,4 +40,3 @@ class ObjectAgents extends \RedCore\Base\ObjectBase {
 
 
 ?>
-

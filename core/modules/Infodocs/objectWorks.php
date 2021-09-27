@@ -46,4 +46,3 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 
 
 ?>
-

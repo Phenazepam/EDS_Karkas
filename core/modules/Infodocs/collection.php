@@ -86,4 +86,3 @@ class Collection extends \RedCore\Base\Collection {
 
 
 ?>
-

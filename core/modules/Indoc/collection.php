@@ -150,7 +150,7 @@ class Collection extends \RedCore\Base\Collection {
 	        'comment' => $comment,
 	        'user_id' => $user_id,
 	    );
-	    var_dump($params);
+	    // var_dump($params);
         self::store($params);
 	}
 	public static function getDocTypesList(){
@@ -175,7 +175,7 @@ class Collection extends \RedCore\Base\Collection {
 
 		Users::setObject('user');
 		$user_id = Users::getAuthId();
-		var_dump($user_id);
+		// var_dump($user_id);
 		if ('2' == $next_step) {
 			self::registerDocLog($doc_id, 'Направлен на согласование', $comment, $user_id);
 		}
