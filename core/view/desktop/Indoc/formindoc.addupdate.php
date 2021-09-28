@@ -35,18 +35,17 @@ foreach ($DocTypesAcceess as $key => $item) {
     }
 }
 
-$form = Forms::Create()->add("action", "action", "hidden", "action", $html_object . ".store.do", 6, false)
+$form = Forms::Create()
+    ->add("action", "action", "hidden", "action", $html_object . ".store.do", 6, false)
     ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
-    ->
-add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
+    
+    ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $oindoc_item->object->params->doctypes, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
     ->add("reg_number", "№ Регистрации", "text", $html_object . "[reg_number]", $oindoc_item->object->reg_number)
     ->add("reg_date", "Дата регистрации", "text", $html_object . "[reg_date]", $oindoc_item->object->reg_date)
-    ->add("resolution", "Резолюции", "text", $html_object . "[resolution]", $oindoc_item->object->resolution)
-    ->add("status_id", "Статус", "select", $html_object . "[params][status_id]", $oindoc_item->object->params->status_id, 6, false, $select_params)
-    ->
-add("html", "", "html", "", '<img src="' . IMAGES . SEP . $oindoc_item->object->params->file_title . '">')
+    
+    ->add("html", "", "html", "", '<img src="' . IMAGES . SEP . $oindoc_item->object->params->file_title . '">')
     ->add("file", "Файл", "file", $html_object . "[file]")
     ->parse();
 ?>

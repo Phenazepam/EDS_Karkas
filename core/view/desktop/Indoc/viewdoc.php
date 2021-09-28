@@ -33,7 +33,7 @@ $log = Where::Cond()
 
 $doclog = Indoc::getList($log);
 
-var_dump($doclog);
+//var_dump($doclog);
 
 $doc_id = $item->object->id;
 $current_step = $item->object->step;
