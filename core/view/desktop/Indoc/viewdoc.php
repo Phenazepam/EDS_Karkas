@@ -7,6 +7,8 @@ use RedCore\Users\Collection as Users;
 
 Indoc::setObject("oindoc");
 
+$edit_doc = Indoc::CanUserEditDocs();
+
 $lb_params = array(
   "id" => Request::vars("oindoc_id")
 );
@@ -163,7 +165,9 @@ $current_role = $item->object->step_role;
                       </tr>
                     </tbody>
                   </table>
+                  <? if ($edit_doc[$item->object->id]):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
+                  <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>
