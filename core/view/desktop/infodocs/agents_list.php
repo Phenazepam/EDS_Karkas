@@ -1,9 +1,13 @@
 <?php
 
 use \RedCore\Infodocs\Collection as Agents;
+use \RedCore\Where as Where;
 
 Agents::setObject("oinfodocsagents");
-$items = Agents::getList();
+$where = Where::Cond()
+  ->add("_deleted", "=", "0")
+  ->parse();
+$items = Agents::getList($where);
 
 ?>
 	<div class="x_title">

@@ -525,7 +525,7 @@ class Controller
 		        "module" => "RedCore\Infodocs\Collection",
 		        "method" => "delete",
 		        "params" => array(
-		            "oinfodocsmaterials",
+		            "oinfodocsstandarts",
 		        ),
 		    ),
 			
