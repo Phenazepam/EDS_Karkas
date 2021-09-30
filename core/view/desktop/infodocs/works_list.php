@@ -7,11 +7,11 @@ $items = Works::getList();
 
 ?>
 	<div class="x_title">
-        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень рвбот</small></h2>
+        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень работ</small></h2>
         <div class="clearfix"></div>
      </div>
 	 
-<!--<a class="btn btn-primary" href="/infodocs-form">Добавить</a>-->
+<a class="btn btn-primary" href="/infodocs-worksform">Добавить</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
@@ -48,7 +48,18 @@ $items = Works::getList();
 		<td><?= $item->object->obj2 ?></td>
 		<td><?= $item->object->obj3 ?></td>
 		<td><?= $item->object->obj4 ?></td>
-		<td><a class="badge badge-primary" href="/infodocs-form?otest_id=<?=$item->object->id?>">Редактировать</a></td>
+		<td>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Действия
+                </button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/infodocs-worksform?oinfodocsworks_id=<?=$item->object->id?>">Редактировать</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="/infodocs-works?action=oinfodocsworks.delete.do&oinfodocsworks[id]=<?= $item->object->id ?>">Удалить</a>
+				</div>
+            </div>
+        </td>
 	</tr>
 	
 <?

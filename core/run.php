@@ -8,7 +8,7 @@
 namespace RedCore;
 
 ini_set('display_errors','On');
-// ini_set('display_errors','Off');
+//ini_set('display_errors','Off');
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT ^ E_WARNING ^ E_DEPRECATED );
 if(isset($_REQUEST["test-info"])) {
 	ini_set('display_errors','On');

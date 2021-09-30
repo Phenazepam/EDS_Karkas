@@ -6,7 +6,6 @@ Agents::setObject("oinfodocsagents");
 $items = Agents::getList();
 
 ?>
-
 	<div class="x_title">
         <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень контрагентов/корреспондентов</small></h2>
         <div class="clearfix"></div>
@@ -31,7 +30,6 @@ $items = Agents::getList();
 
 <?
     foreach($items as $item):
-		$oFS = $item->getId("agents");
 ?>
 
 	<tr>
@@ -50,7 +48,7 @@ $items = Agents::getList();
 				<div class="dropdown-menu">
 					<a class="dropdown-item" href="/infodocs-agentsform?oinfodocsagents_id=<?=$item->object->id?>">Редактировать</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/infodocs-agents?action=oinfodocsagents.delete.do&*что сюда вписать?*[id]=<?= $oFS->id ?>">Удалить</a>
+					<a class="dropdown-item" href="/infodocs-agents?action=oinfodocsagents.delete.do&oinfodocsagents[id]=<?= $item->object->id ?>">Удалить</a>
 				</div>
             </div>
         </td>
@@ -58,10 +56,8 @@ $items = Agents::getList();
 		
 		<!--<td><a class="badge badge-primary" href="/infodocs-agentsform?oinfodocsagents_id=<?=$item->object->id?>">Редактировать</a></td>-->
 	</tr>
-	
 <?
 endforeach;	
-
 ?>
 </tbody>
 </table>

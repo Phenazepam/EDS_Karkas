@@ -67,7 +67,7 @@ $items = Standarts::getList();
 				<div class="dropdown-menu">
 					<a class="dropdown-item" href="/infodocs-standartsform?oinfodocsstandarts_id=<?=$item->object->id?>">Редактировать</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/infodocs-standarts?action=oinfodocsstandarts.delete.do&*что сюда вписать?*[id]=<?= $oFS->id ?>">Удалить</a>
+					<a class="dropdown-item" href="/infodocs-standarts?action=oinfodocsstandarts.delete.do&oinfodocsstandarts[id]=<?= $item->object->id ?>">Удалить</a>
 				</div>
             </div>
         </td>
@@ -78,7 +78,6 @@ $items = Standarts::getList();
 	
 <?
 endforeach;	
-
 ?>
 </tbody>
 </table>
