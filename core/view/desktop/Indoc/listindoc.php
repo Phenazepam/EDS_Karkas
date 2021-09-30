@@ -41,7 +41,6 @@ $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
-var_dump($read_doc);
 ?>
 
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
