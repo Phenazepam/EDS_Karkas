@@ -13,7 +13,8 @@ $items = Standarts::getList();
      </div>
 <a class="btn btn-primary" href="/infodocs-standartsform">Добавить</a>
 
-<table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
+<!--<table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">-->
+<table id="dtOrderExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
 	<thead>
 		<tr>
 			<th>id</th>
