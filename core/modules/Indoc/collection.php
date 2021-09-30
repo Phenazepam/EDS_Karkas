@@ -194,5 +194,23 @@ class Collection extends \RedCore\Base\Collection {
 		exit();
 
 	}
+	
+	public static function CanUserEditDocs($indoc = array()){
+	    Users::setObject('user');
+	    $user_role = Users::getAuthRole();
+	    
+	    self::setObject('oindoc');
+	    $where = Where::Cond()
+	       ->add("step", "=", "1")
+	       ->add("and")
+	       ->add("step_role", "=", $user_role)
+	       ->parse();
+	    $step = self::getList($where);
+	    foreach($step as $item) {
+	        $stepRes[$item->object->id] = true;
+	    }
+	    return $stepRes;
+	    var_dump($stepRes);
+	}
 }
 ?>

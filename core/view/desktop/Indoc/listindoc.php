@@ -23,6 +23,8 @@ $where = Where::Cond()
 
 $items = Indoc::getList($where);
 
+$edit_doc = Indoc::CanUserEditDocs();
+
 $doc_steps = Indoc::getRouteStatuses();
 
 Indoc::setObject("odoclog");
@@ -38,6 +40,7 @@ Users::setObject("user");
 $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
+
 ?>
 
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
@@ -78,8 +81,10 @@ $read_doc = Users::CanUserReadDocs($DocTypesid);
             	</button>
         	<div class="dropdown-menu">
             	<a class="dropdown-item" href="/indocitems-form-view?oindoc_id=<?=$item->object->id?>">Просмотреть</a>
+            <? if ($edit_doc[$item->object->id]):?>
             <div class="dropdown-divider"></div>
             	<a class="dropdown-item" href="/indocitems-form-addupdate?oindoc_id=<?=$item->object->id?>">Редактировать</a>
+            <? endif;?>
             <div class="dropdown-divider"></div>
             	<a class="dropdown-item" href="/indocitems-form-delete?oindoc_id=<?=$item->object->id?>">Удалить</a>
             </div>
