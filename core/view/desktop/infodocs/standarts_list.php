@@ -11,7 +11,7 @@ $items = Standarts::getList();
         <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень норм</small></h2>
         <div class="clearfix"></div>
      </div>
-<!--<a class="btn btn-primary" href="/infodocs-form">Добавить</a>-->
+<a class="btn btn-primary" href="/infodocs-standartsform">Добавить</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
@@ -32,6 +32,7 @@ $items = Standarts::getList();
 			<th>Декор. элементы</th>
 			<th>Прям. лест. марши</th>
 			<th>Крив. лест. марши</th>
+			<th>Действия</th>
 		
 		</tr>
 	</thead>
@@ -58,6 +59,20 @@ $items = Standarts::getList();
 		<td><?= $item->object->decor ?></td>
 		<td><?= $item->object->pryamlest ?></td>
 		<td><?= $item->object->krivlest ?></td>
+		<td>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Действия
+                </button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/infodocs-standartsform?oinfodocsstandarts_id=<?=$item->object->id?>">Редактировать</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="/infodocs-standarts?action=oinfodocsstandarts.delete.do&*что сюда вписать?*[id]=<?= $oFS->id ?>">Удалить</a>
+				</div>
+            </div>
+        </td>
+		
+		
 		<!--<td><a class="badge badge-primary" href="/infodocs-form?otest_id=<?=$item->object->id?>">Редактировать</a></td>-->
 	</tr>
 	

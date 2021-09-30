@@ -35,9 +35,22 @@ class ObjectAgents extends \RedCore\Base\ObjectBase {
 		);
 
 	}
+	public function getId($name = "") {
+		    $oFS = array();
+		    
+		    switch ($name) {
+		        case 'agents':
+		            $oFS = array(
+		               'id' => $this->object->id,
+	            );
+		            break;
+		        default:
+		            $oFS = array();
+		            break;
+	    }
+	    
+	    return (object)$oFS;
+	}
 }
 
-
-
 ?>
-

@@ -10,7 +10,7 @@ $items = Materials::getList();
         <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень материалов</small></h2>
         <div class="clearfix"></div>
      </div>
-<!--<a class="btn btn-primary" href="/infodocs-form">Добавить</a>-->
+<a class="btn btn-primary" href="/infodocs-materialsform">Добавить</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
@@ -21,6 +21,7 @@ $items = Materials::getList();
 			<th>Группа</th>
 			<th>Материал</th>
 			<th>Единица измерения</th>
+			<th>Действия</th>
 		
 		</tr>
 	</thead>
@@ -37,6 +38,20 @@ $items = Materials::getList();
 		<td><?= $item->object->gruppa ?></td>
 		<td><?= $item->object->material ?></td>
 		<td><?= $item->object->izm ?></td>
+		<td>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Действия
+                </button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/infodocs-materialsform?oinfodocsmaterials_id=<?=$item->object->id?>">Редактировать</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="/infodocs-materials?action=oinfodocsmaterials.delete.do&*что сюда вписать?*[id]=<?= $oFS->id ?>">Удалить</a>
+				</div>
+            </div>
+        </td>
+		
+		
 		<!--<td><a class="badge badge-primary" href="/infodocs-form?otest_id=<?=$item->object->id?>">Редактировать</a></td>-->
 	</tr>
 	
