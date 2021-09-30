@@ -280,6 +280,7 @@ class Controller
 		    ),
 
 			//Information documents module
+			/*
 			array(
 		        "title"    => "Нормативно-справочная документация",
 		        "url"      => "infodocs-mainlist",
@@ -287,7 +288,7 @@ class Controller
 		        "content"  => "desktop/infodocs/list.php",
 				"default"  => false,
 		        "tag"      => array("top", "dictionary"),
-		    ),
+		    ),*/
 
 			array(
 		        "title"    => "Нормативно-справочная документация. Контрагенты",
@@ -324,14 +325,50 @@ class Controller
 
 			
 			array(
-		        "title"    => "Форма нормативно-справочной документации",
-		        "url"      => "infodocs-form",
+		        "title"    => "Форма редактирования справочника контрагентов",
+		        "url"      => "infodocs-agentsform",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/infodocs/form.php",
+		        "content"  => "desktop/infodocs/agents_form.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
-
+			
+			array(
+		        "title"    => "Форма редактирования справочника материалов",
+		        "url"      => "infodocs-materialsform",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/materials_form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+			
+			array(
+		        "title"    => "Форма редактирования справочника работ",
+		        "url"      => "infodocs-worksform",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/works_form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+			
+			array(
+		        "title"    => "Форма редактирования справочника норм",
+		        "url"      => "infodocs-standartsform",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/standarts_form.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+			/*
+			array(
+		        "title"    => "Контрагенты. Форма удаления",
+		        "url"      => "infodocs-agentsdelete",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/infodocs/agents_delete.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),*/
+			
 
 			/**
 			 * INSTALL
@@ -454,7 +491,81 @@ class Controller
 		            "doctyperolematrix",
 		        ),
 			),
-
+			//Infodocs actions
+			
+			array(
+		        "name"   => "oinfodocsagents.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsagents.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsworks.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsworks",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsworks.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsworks",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsmaterials.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsmaterials.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsstandarts.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsstandarts",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsstandarts.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+			
 			//Indoc actions
 			array(
 		        "name"   => "oindoc.store.do",

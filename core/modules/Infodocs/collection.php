@@ -19,6 +19,9 @@ use RedCore\Request;
 require_once('sql.php');
 require_once('objectMain.php');
 require_once('objectAgents.php');
+require_once('objectMaterials.php');
+require_once('objectWorks.php');
+require_once('objectStandarts.php');
 
 class Collection extends \RedCore\Base\Collection { 
 
@@ -32,25 +35,33 @@ class Collection extends \RedCore\Base\Collection {
 			self::$object = "oinfodocs";
 			self::$sql    = Sql::$sqlInfodocsMain;
 			self::$class  = "RedCore\Infodocs\ObjectMain";
-		}
-		
-		if("oinfodocsagents" == $obj) {
+			
+		} elseif("oinfodocsmaterials" == $obj) {
+			
+			self::$object = "oinfodocsmaterials";
+			self::$sql    = Sql::$sqlInfodocsMaterials;
+			self::$class  = "RedCore\Infodocs\ObjectMaterials";
+			
+		} elseif("oinfodocsagents" == $obj) {
+			
 			self::$object = "oinfodocsagents";
 			self::$sql    = Sql::$sqlInfodocsAgents;
 			self::$class  = "RedCore\Infodocs\ObjectAgents";
-		}
-		
-		/*if("oinfodocsworks" == $obj) {
+			
+		} elseif("oinfodocsworks" == $obj) {
+			
 			self::$object = "oinfodocsworks";
 			self::$sql    = Sql::$sqlInfodocsWorks;
 			self::$class  = "RedCore\Infodocs\ObjectWorks";
+			
+		} elseif("oinfodocsstandarts" == $obj) {
+			
+			self::$object = "oinfodocsstandarts";
+			self::$sql    = Sql::$sqlInfodocsStandarts;
+			self::$class  = "RedCore\Infodocs\ObjectStandarts";
 		}
 		
-		if("oinfodocsmaterials" == $obj) {
-			self::$object = "oinfodocsmaterials";
-			self::$sql    = Sql::$sqlInfodocsMaterials;
-			self::$class  = "RedCore\Infodocs\Objectmaterials";
-		}*/
+		
 
 	}
 

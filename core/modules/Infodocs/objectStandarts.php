@@ -8,29 +8,34 @@
  
 namespace RedCore\Infodocs;
 
-class ObjectWorks extends \RedCore\Base\ObjectBase {
+class ObjectStandarts extends \RedCore\Base\ObjectBase {
 	
 	public static function Create() {
-	    return new ObjectWorks();
+	    return new ObjectStandarts();
 	}
 
 	public function __construct() {
 		
-		$this->table = "infodocsworks";
+		$this->table = "infodocsstandarts";
 
 		$this->properties = array(
 		
 			"id"         => "Number",
-			"gruppa"      => "String",
 			"name"   => "String",
 			"izm"   => "String",
-			"krd"   => "String",
-			"rnd"   => "String",
-			"vldvstk"   => "String",
-			"obj1"   => "String",
-			"obj2"   => "String",
-			"obj3"   => "String",
-			"obj4"   => "String",
+			"ku"   => "String",
+			"bp"   => "String",
+			"fp"   => "String",
+			"rostverk"   => "String",
+			"walls"   => "String",
+			"kolon"   => "String",
+			"perekryt"   => "String",
+			"balki"   => "String",
+			"rigel"   => "String",
+			"smallconstr"   => "String",
+			"decor"   => "String",
+			"pryamlest"   => "String",
+			"krivlest"   => "String",
 			"params" => array(
 				
 			),
@@ -43,7 +48,7 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 		    $oFS = array();
 		    
 		    switch ($name) {
-		        case 'works':
+		        case 'standarts':
 		            $oFS = array(
 		               'id' => $this->object->id,
 	            );
@@ -56,9 +61,9 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 	    return (object)$oFS;
 	}
 
-
 }
 
 
 
 ?>
+
