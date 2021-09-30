@@ -227,6 +227,14 @@ class Controller
 				"default"  => false,
 		        "tag"      => array("top", "docs"),
 		    ),
+		    array(
+		        "title"    => "Поиск-форма-document",
+		        "url"      => "searchitems-form_document",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/form_search_doc.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 			array(
 		        "title"    => "Выгрузка в Excel",
 		        "url"      => "searchitems-download",
@@ -242,6 +250,14 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    array(
+		        "title"    => "Тест-Поиск",
+		        "url"      => "searchtest-list",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/testsearch.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+            ),
 
 
 			/**
@@ -403,7 +419,17 @@ class Controller
 		            "odoctypes",
 		        ),
 		    ),
-		)
+		   
+	 	    //Search action)
+		    array(
+		        "name"   => "osearch.searchall.do",
+		        "module" => "RedCore\Search\Collection",
+		        "method" => "searchall",
+		        "params" => array(
+		            "oseacrh",
+		        ),
+		    ),
+	    )
 	);
 
 

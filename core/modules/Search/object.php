@@ -22,7 +22,6 @@ class ObjectSearch extends \RedCore\Base\ObjectBase {
 		    "name_doc"   => "String",
 		    "reg_number" => "String",
 		    "reg_date"   => "Timestamp",
-		    "resolution" => "String",
 		    "params" => array(
 		        "file_title" => "String",
 		        "status_id"  => "Number",

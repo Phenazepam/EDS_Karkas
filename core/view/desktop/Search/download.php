@@ -2,6 +2,7 @@
 
 use RedCore\Search\Collection as Search;
 
+
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename=' . 'file.xls');

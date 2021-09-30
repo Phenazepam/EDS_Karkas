@@ -71,7 +71,7 @@ class Collection extends \RedCore\Base\Collection {
 		    self::$sql    = Sql::$sqlDocTypes;
 		    self::$class  = "RedCore\Indoc\ObjectDocTypes";
 		}
-		elseif ("odoclog" == $obj){
+	        elseif ("odoclog" == $obj){
 		    self::$object = "odoclog";
 		    self::$sql    = Sql::$sqlDocLog;
 		    self::$class  = "RedCore\Indoc\ObjectDocLog";
