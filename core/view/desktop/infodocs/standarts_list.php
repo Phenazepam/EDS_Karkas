@@ -17,22 +17,22 @@ $items = Standarts::getList();
 <table id="dtOrderExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
 	<thead>
 		<tr>
-			<th>id</th>
-			<th> </th>
-			<th>ед.изм</th>
-			<th>Коэф. умнож.</th>
-			<th>БП</th>
-			<th>ФП</th>
-			<th>Ростверк</th>
-			<th>Стены</th>
-			<th>Колонны</th>
-			<th>Перекрытия</th>
-			<th>Балки</th>
-			<th>Ригельное перекрытие</th>
-			<th>Мелкие конструкции</th>
-			<th>Декор. элементы</th>
-			<th>Прям. лест. марши</th>
-			<th>Крив. лест. марши</th>
+			<th class="th-sm">id</th>
+			<th class="th-sm"> </th>
+			<th class="th-sm">ед.изм</th>
+			<th class="th-sm">Коэф. умнож.</th>
+			<th class="th-sm">БП</th>
+			<th class="th-sm">ФП</th>
+			<th class="th-sm">Ростверк</th>
+			<th class="th-sm">Стены</th>
+			<th class="th-sm">Колонны</th>
+			<th class="th-sm">Перекрытия</th>
+			<th class="th-sm">Балки</th>
+			<th class="th-sm">Ригельное перекрытие</th>
+			<th class="th-sm">Мелкие конструкции</th>
+			<th class="th-sm">Декор. элементы</th>
+			<th class="th-sm">Прям. лест. марши</th>
+			<th class="th-sm">Крив. лест. марши</th>
 			<th>Действия</th>
 		
 		</tr>
