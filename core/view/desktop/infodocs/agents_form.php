@@ -4,20 +4,19 @@
 	use RedCore\Forms as Forms;
 	use RedCore\Session as Session;
 
-
 	$html_object = "oinfodocsagents";
 	
-	
-	
 	$lb_params = array(
-        "id" => Request::vars("oinfodocsagents_id"),
-    );
+		"id" => Request::vars("oinfodocsagents_id"),
+	);
 	
-	Infodocs::setObject($html_object);
+	Infodocs::setObject("oinfodocsagents");
 	$item = Infodocs::loadBy($lb_params);
 	$item = $item->object;
 	
 
+	//var_dump(Session::get("controller_user_auth"));
+	//var_dump($_SESSION);
 	$form = Forms::Create()
 		->add("action",   "action",   "hidden", "action",                     $html_object. ".store.do",         6, false)
 		->add("redirect", "redirect", "hidden", "redirect",                   "infodocs-agents",                       6, false)
@@ -36,7 +35,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>редактирование справочника корреспондентов/контрагентов</small></h2>
+        <h2>ПОЛЬЗОВАТЕЛИ<small>форма редактирования справочника контрагентов</small></h2>
         
         <div class="clearfix"></div>
       </div>

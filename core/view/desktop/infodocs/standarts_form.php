@@ -39,8 +39,6 @@
 		->add("krivlest",       "Кривые лест. марши",      "text",   $html_object . "[krivlest]", htmlspecialchars($item->krivlest), 6, true)
 		->parse();	
 ?>
-
-
 <div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">

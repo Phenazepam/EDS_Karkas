@@ -46,7 +46,7 @@ $items = Materials::getList();
 				<div class="dropdown-menu">
 					<a class="dropdown-item" href="/infodocs-materialsform?oinfodocsmaterials_id=<?=$item->object->id?>">Редактировать</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/infodocs-materials?action=oinfodocsmaterials.delete.do&*что сюда вписать?*[id]=<?= $oFS->id ?>">Удалить</a>
+					<a class="dropdown-item" href="/infodocs-materials?action=oinfodocsmaterials.delete.do&oinfodocsmaterials[id]=<?= $oFS->id ?>">Удалить</a>
 				</div>
             </div>
         </td>

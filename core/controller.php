@@ -516,7 +516,7 @@ class Controller
 		        "module" => "RedCore\Infodocs\Collection",
 		        "method" => "store",
 		        "params" => array(
-		            "oinfodocsstandartss",
+		            "oinfodocsstandarts",
 		        ),
 		    ),
 			
