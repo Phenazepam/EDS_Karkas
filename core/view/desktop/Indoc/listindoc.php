@@ -42,9 +42,7 @@ $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
-$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Резолюция','Статус');
-
-Search::export($header_array, $items);
+Search::export($items);
 
 ?>
 
