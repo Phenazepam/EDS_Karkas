@@ -41,15 +41,15 @@ class Collection extends \RedCore\Base\Collection
     );
 
     private static $actionDoc = array(
-        "1"  => "Черновик создан",
-        "2"  => "Черновик изменен",
-        "3"  => "Черновик удален",
-        "4"  => "Направлен на согласование",
-        "5"  => "Возврат на доработку",
-        "6"  => "Согласован",
-        "7"  => "Направлен на утверждение",
-        "8"  => "Утвержден",
-        "9"  => "Принят",
+        "1" => "Черновик создан",
+        "2" => "Черновик изменен",
+        "3" => "Черновик удален",
+        "4" => "Направлен на согласование",
+        "5" => "Возврат на доработку",
+        "6" => "Согласован",
+        "7" => "Направлен на утверждение",
+        "8" => "Утвержден",
+        "9" => "Принят",
         "10" => "Документ просмотрен",
     );
 
@@ -157,9 +157,19 @@ class Collection extends \RedCore\Base\Collection
 	}
 	
 	public static function ajaxRegisterDocLog($params = array()) {
-		if (empty($params["doclog"] || is_null($params["doclog"]["id"]))) return;
+		if (empty($params["doclog"] || is_null($params["doclog"]["id"]))) exit();
 		$params = $params["doclog"];
+		self::setObject("odoclog");
+		$where = Where::Cond()
+			->add("doc_id","=", $params["id"])
+			->parse();
+		$data = self::getList($where);
+		// var_dump(end($data));
+		if ('10' == end($data)->object->action) {
+			exit();
+		}
 	    self::registerDocLog($params["id"], $params["action"], $params["comment"], $params["user_id"]);
+		exit();
 	}
 
 	public static function getDocTypesList(){
