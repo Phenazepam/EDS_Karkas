@@ -48,11 +48,9 @@ $current_role = $item->object->step_role;
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>
-          ДОКУМЕНТЫ<small>форма просмотра</small>
-        </h2>
-
-        <div class="clearfix"></div>
+        <div class="clearfix">
+                <h2><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?>:</b> <?= $item->object->name_doc ?></h2>
+        </div>
       </div>
       <div class="x_content">
         <div class="row">
@@ -60,7 +58,6 @@ $current_role = $item->object->step_role;
             <div class="card-box table-responsive">
               <div class="row">
                 <div class="col">
-                  <h2><b>Имя документ:</b> <?= $item->object->name_doc ?></h2>
                 </div>
                 <div class="col">
                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
@@ -93,7 +90,7 @@ $current_role = $item->object->step_role;
                             if ($value['role'] == $trole && $value['step'] == $tstep) {
                               $current = "current";
                             } else {
-                              $current = "";
+                              $current = "path";
                             }
 
                           ?>
@@ -124,7 +121,7 @@ $current_role = $item->object->step_role;
                           <?
                           foreach ($doclog as $log) :
                           ?>
-                          <tr>
+                          <tr style ="font-size: 8pt";>
                             <td><?= $log->object->action ?></td>
                             <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
@@ -181,5 +178,9 @@ $current_role = $item->object->step_role;
 <style>
   .current {
     background-color: lightblue;
+    font-weight: bold;
+  }
+  .path {
+    color: rgba(0,0,0,0.5);
   }
 </style>
