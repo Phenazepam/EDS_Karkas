@@ -79,6 +79,7 @@ use RedCore\Controller;
               <?php
 
               use RedCore\Users\Collection as Users;
+              use RedCore\Indoc\Collection as Indoc;
 
               Users::setObject("user");
               $c_user = Users::getAuthToken();
@@ -101,12 +102,18 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-file"></i> Мои документы <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file"></i> Мои документы 
+                	<span style="color: red";><?php echo Indoc::NumberDocs();?></span>
+                	<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
-                    <li><a href="/indocitems-list-draft">Черновики</a></li>
-                    <li><a href="/indocitems-list-agreement">На согласование</a></li>
-                    <li><a href="/indocitems-list-approval">На утверждение</a></li>
-                    <li><a href="/indocitems-list-adoption">На принятие</a></li>
+                    <li><a href="/indocitems-list-draft">Черновики 
+                    	<span style="color: red";><?php echo Indoc::NumberDocs(1);?></span></a></li>
+                    <li><a href="/indocitems-list-agreement">На согласование
+                    	<span style="color: red";><?php echo Indoc::NumberDocs(2);?></span></a></li>
+                    <li><a href="/indocitems-list-approval">На утверждение
+                    	<span style="color: red";><?php echo Indoc::NumberDocs(3);?></span></a></li>
+                    <li><a href="/indocitems-list-adoption">На принятие
+                    	<span style="color: red";><?php echo Indoc::NumberDocs(4);?></span></a></li>
                   </ul>
                 </li>
               </ul>
@@ -125,6 +132,7 @@ use RedCore\Controller;
               <h3>Данные</h3>
               <?php 
                 $mainPageModules = require('MainPageModules.php');
+                Users::setObject("user");
                 $user_role = Users::getAuthRole();
                 foreach($mainPageModules as $moduleKey => $module):
                   if(Users::CanUserSeeModule($user_role, $moduleKey)):
