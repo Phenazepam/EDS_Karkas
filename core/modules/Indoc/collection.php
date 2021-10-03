@@ -210,7 +210,6 @@ class Collection extends \RedCore\Base\Collection {
 	        $stepRes[$item->object->id] = true;
 	    }
 	    return $stepRes;
-	    var_dump($stepRes);
 	}
 }
 ?>

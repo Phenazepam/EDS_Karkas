@@ -48,11 +48,9 @@ $current_role = $item->object->step_role;
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>
-          ДОКУМЕНТЫ<small>форма просмотра</small>
-        </h2>
-
-        <div class="clearfix"></div>
+        <div class="clearfix">
+                <h2><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?>:</b> <?= $item->object->name_doc ?></h2>
+        </div>
       </div>
       <div class="x_content">
         <div class="row">
@@ -60,12 +58,8 @@ $current_role = $item->object->step_role;
             <div class="card-box table-responsive">
               <div class="row">
                 <div class="col">
-                  <h2><b>Имя документ:</b> <?= $item->object->name_doc ?></h2>
                 </div>
-                <div class="col">
-                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
-                    Отправить документ далее
-                  </button>
+                <div class="col"> 
                 </div>
               </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -75,7 +69,7 @@ $current_role = $item->object->step_role;
               <div class="tab-content">
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row">
-                    <div class="col">
+                    <div class="col-5">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
@@ -93,7 +87,7 @@ $current_role = $item->object->step_role;
                             if ($value['role'] == $trole && $value['step'] == $tstep) {
                               $current = "current";
                             } else {
-                              $current = "";
+                              $current = "path";
                             }
 
                           ?>
@@ -106,7 +100,7 @@ $current_role = $item->object->step_role;
                         </tbody>
                       </table>
                     </div>
-                    <div class="col">
+                    <div class="col-7">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
@@ -132,7 +126,6 @@ $current_role = $item->object->step_role;
                           </tr>
                           <?
                           endforeach;
-                          
                           ?>
                         </tbody>
                       </table>
@@ -169,6 +162,9 @@ $current_role = $item->object->step_role;
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
+                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
+                    Отправить документ далее
+                  </button>
                 </div>
               </div>
             </div>
@@ -181,5 +177,9 @@ $current_role = $item->object->step_role;
 <style>
   .current {
     background-color: lightblue;
+    font-weight: bold;
+  }
+  .path {
+    color: rgba(0,0,0,0.5);
   }
 </style>
