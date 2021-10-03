@@ -101,6 +101,21 @@ class Collection extends \RedCore\Base\Collection
         if ("oindoc" == key($params)) {
             Users::setObject("user");
             $user_id = Users::getAuthId();
+		if("oindoc" == $obj) {
+			self::$object = "oindoc";
+			self::$sql    = Sql::$sqlIndoc;
+			self::$class  = "RedCore\Indoc\ObjectIndoc";
+		}
+		elseif ("odoctypes" == $obj){
+		    self::$object = "odoctypes";
+		    self::$sql    = Sql::$sqlDocTypes;
+		    self::$class  = "RedCore\Indoc\ObjectDocTypes";
+		}
+	        elseif ("odoclog" == $obj){
+		    self::$object = "odoclog";
+		    self::$sql    = Sql::$sqlDocLog;
+		    self::$class  = "RedCore\Indoc\ObjectDocLog";
+		}
 
             if ($title = Files::upload("oindoc", "file")) {
                 $params["oindoc"]["params"]["file_title"] = $title;

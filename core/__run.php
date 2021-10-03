@@ -31,6 +31,7 @@ require_once(CMS_DIR    . SEP . 'config.php');
 /*
  * Helpers
  */
+
 require_once(CMS_HELPER . SEP . 'db/db.php');
 require_once(CMS_HELPER . SEP . 'phpmailer/class.phpmailer.php');
 require_once(CMS_HELPER . SEP . 'tcpdf/tcpdf.php');
@@ -42,6 +43,7 @@ require_once(CMS_HELPER . SEP . 'response.php');
 require_once(CMS_HELPER . SEP . 'validator.php');
 require_once(CMS_HELPER . SEP . 'request.php');
 require_once(CMS_HELPER . SEP . 'files.php');
+
 
 /*
  * Modules

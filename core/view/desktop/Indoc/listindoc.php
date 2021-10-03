@@ -3,6 +3,7 @@
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 use RedCore\Users\Collection as Users;
+use RedCore\Search\Collection as Search;
 
 Indoc::setObject("odoctypes");
 $where = Where::Cond()
@@ -40,6 +41,10 @@ Users::setObject("user");
 $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
+
+$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Резолюция','Статус');
+
+Search::export($header_array, $items);
 
 ?>
 
