@@ -59,10 +59,7 @@ $current_role = $item->object->step_role;
               <div class="row">
                 <div class="col">
                 </div>
-                <div class="col">
-                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
-                    Отправить документ далее
-                  </button>
+                <div class="col"> 
                 </div>
               </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -72,7 +69,7 @@ $current_role = $item->object->step_role;
               <div class="tab-content">
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row">
-                    <div class="col">
+                    <div class="col-5">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
@@ -103,7 +100,7 @@ $current_role = $item->object->step_role;
                         </tbody>
                       </table>
                     </div>
-                    <div class="col">
+                    <div class="col-7">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
@@ -121,7 +118,7 @@ $current_role = $item->object->step_role;
                           <?
                           foreach ($doclog as $log) :
                           ?>
-                          <tr style ="font-size: 8pt";>
+                          <tr>
                             <td><?= $log->object->action ?></td>
                             <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
@@ -129,7 +126,6 @@ $current_role = $item->object->step_role;
                           </tr>
                           <?
                           endforeach;
-                          
                           ?>
                         </tbody>
                       </table>
@@ -166,6 +162,9 @@ $current_role = $item->object->step_role;
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
+                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
+                    Отправить документ далее
+                  </button>
                 </div>
               </div>
             </div>
