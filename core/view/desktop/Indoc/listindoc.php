@@ -31,9 +31,7 @@ $doclog = Indoc::getList($log);
 
 var_dump($doclog->object);
 
-$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Резолюция','Статус');
-
-Search::export($header_array, $items);
+Search::export($items);
 
 ?>
 
