@@ -173,10 +173,10 @@ $current_role = $item->object->step_role;
                   <? if ($edit_doc[$item->object->id]):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
-                  <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
-                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
                     Отправить документ далее
                   </button>
+                  <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>
             </div>

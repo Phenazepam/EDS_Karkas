@@ -4,28 +4,26 @@
  * @author Darkas
  * @copyright REDUIT Co.
  */
-
 namespace RedCore\Indoc;
 
-use \RedCore\Where as Where;
+use RedCore\Where as Where;
 use RedCore\Files;
 use RedCore\Session;
 use RedCore\Controller;
 use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Users\Collection as Users;
+require_once ('sql.php');
+require_once ('objectIndoc.php');
+require_once ('objectDocTypes.php');
+require_once ('objectDocLog.php');
 
-require_once('sql.php');
-require_once('objectIndoc.php');
-require_once('objectDocTypes.php');
-require_once('objectDocLog.php');
+class Collection extends \RedCore\Base\Collection
+{
 
-class Collection extends \RedCore\Base\Collection { 
-    
-    
     private static $list = array(
         "0" => "Не выбран",
-        
+
         "1" => "Черновик",
         "2" => "Зарегистрирован",
         "3" => "Предварительное рассмотрение",
@@ -34,14 +32,14 @@ class Collection extends \RedCore\Base\Collection {
         "6" => "В деле",
         "7" => "В архиве"
     );
-     
+
     private static $routeStatuses = array(
         "1" => "Черновик",
         "2" => "Согласование",
         "3" => "Утверждение",
-        "4" => "Принятие",
+        "4" => "Принятие"
     );
-    
+
     private static $actionDoc = array(
         "1" => "Черновик создан",
         "2" => "Черновик изменен",
@@ -51,106 +49,109 @@ class Collection extends \RedCore\Base\Collection {
         "6" => "Согласован",
         "7" => "Направлен на утверждение",
         "8" => "Утвержден",
-        "9" => "Принят",
+        "9" => "Принят"
     );
 
+    /**
+     *
+     * @method \RedCore\Base\Collection setObject()
+     */
+    public static function setObject($obj = "oindoc")
+    {
+        if ("oindoc" == $obj) {
+            self::$object = "oindoc";
+            self::$sql = Sql::$sqlIndoc;
+            self::$class = "RedCore\Indoc\ObjectIndoc";
+        } elseif ("odoctypes" == $obj) {
+            self::$object = "odoctypes";
+            self::$sql = Sql::$sqlDocTypes;
+            self::$class = "RedCore\Indoc\ObjectDocTypes";
+        } elseif ("odoclog" == $obj) {
+            self::$object = "odoclog";
+            self::$sql = Sql::$sqlDocLog;
+            self::$class = "RedCore\Indoc\ObjectDocLog";
+        }
+    }
 
-	/**
-	 * @method \RedCore\Base\Collection setObject()
-	 */
+    /**
+     *
+     * @method \RedCore\Base\Collection loadBy()
+     *        
+     * @return \RedCore\Indoc\ObjectIndoc ObjectIndoc
+     */
+    public static function loadBy($params = array())
+    {
+        return parent::loadBy($params);
+    }
 
-	public static function setObject($obj = "oindoc") {
+    /**
+     *
+     * @method \RedCore\Base\Collection getList()
+     *        
+     * @return \RedCore\Base\ObjectBase ObjectBase
+     */
+    public static function getList($where = "")
+    {
+        return parent::getList($where);
+    }
 
-		if("oindoc" == $obj) {
-			self::$object = "oindoc";
-			self::$sql    = Sql::$sqlIndoc;
-			self::$class  = "RedCore\Indoc\ObjectIndoc";
-		}
-		elseif ("odoctypes" == $obj){
-		    self::$object = "odoctypes";
-		    self::$sql    = Sql::$sqlDocTypes;
-		    self::$class  = "RedCore\Indoc\ObjectDocTypes";
-		}
-		elseif ("odoclog" == $obj){
-		    self::$object = "odoclog";
-		    self::$sql    = Sql::$sqlDocLog;
-		    self::$class  = "RedCore\Indoc\ObjectDocLog";
-		}
+    public static function store($params = array())
+    {
+        if ("oindoc" == key($params)) {
+            Users::setObject("user");
+            $user_id = Users::getAuthId();
 
-	}
+            if ($title = Files::upload("oindoc", "file")) {
+                $params["oindoc"]["params"]["file_title"] = $title;
+            }
+            if (! empty($params["oindoc"]["id"])) {
+                self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "", $user_id);
+            } else {
+                self::setObject("oindoc");
+                parent::store($params);
+                $lastId = Core::$db->InsertId();
+                self::registerDocLog($lastId, "Черновик создан", "", $user_id);
+                return;
+            }
+            self::setObject("oindoc");
+        }
+        parent::store($params);
+    }
 
-	/**
-	 * @method \RedCore\Base\Collection loadBy()
-	 *
-	 * @return \RedCore\Indoc\ObjectIndoc ObjectIndoc
-	 */
-	public static function loadBy($params = array()) {
-	    return parent::loadBy($params);
-	}
+    public static function delete($params = array())
+    {
+        Users::setObject("user");
+        $user_id = Users::getAuthId();
 
-	/**
-	 * @method \RedCore\Base\Collection getList()
-	 *
-	 * @return \RedCore\Base\ObjectBase ObjectBase
-	 */
-	public static function getList($where = "") {
-	    return parent::getList($where);
-	}
+        if ($params["oindoc"]["id"]) {
+            self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "", $user_id);
+        }
+        self::setObject("oindoc");
 
-	public static function store($params = array()) {
-	    
-	    if("oindoc" == key($params)) {
-			Users::setObject("user");
-	    	$user_id = Users::getAuthId();
+        parent::delete($params);
+    }
 
-	        if($title = Files::upload("oindoc", "file")) {
-	            $params["oindoc"]["params"]["file_title"] = $title;
-	        }
-	        if(!empty($params["oindoc"]["id"])){
-	            self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "", $user_id);
-	        }
-	        else{
-	            self::setObject("oindoc");
-	            parent::store($params);
-	            $lastId = Core::$db->InsertId();
-	            self::registerDocLog($lastId, "Черновик создан", "", $user_id);
-	            return;
-	        }
-			self::setObject("oindoc");
-	    }
-		parent::store($params);
-	}
-	
-	public static function delete($params = array()){
-	    Users::setObject("user");
-	    $user_id = Users::getAuthId();
-	    
-	    if($params["oindoc"]["id"]){
-	        self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "", $user_id);
-	    }
-	    self::setObject("oindoc");
-	
-	parent::delete($params);
-	}
-	
-	public static  function getStatuslist() {
-	    return self::$list;
-	}
-	
-	public static function getRouteStatuses(){
-	    return self::$routeStatuses;
-	}
-	
-	public static function registerDocLog($doc_id = '', $action = '', $comment = '', $user_id = '') {
-	    self::setObject("odoclog");
-	    
-	    $params["odoclog"] = array(
-	        'doc_id' => $doc_id,
-	        'action' => $action,
-	        'comment' => $comment,
-	        'user_id' => $user_id,
-	    );
-	    // var_dump($params);
+    public static function getStatuslist()
+    {
+        return self::$list;
+    }
+
+    public static function getRouteStatuses()
+    {
+        return self::$routeStatuses;
+    }
+
+    public static function registerDocLog($doc_id = '', $action = '', $comment = '', $user_id = '')
+    {
+        self::setObject("odoclog");
+
+        $params["odoclog"] = array(
+            'doc_id' => $doc_id,
+            'action' => $action,
+            'comment' => $comment,
+            'user_id' => $user_id
+        );
+        // var_dump($params);
         self::store($params);
 	}
 	
@@ -218,5 +219,33 @@ class Collection extends \RedCore\Base\Collection {
 	    }
 	    return $stepRes;
 	}
+
+	public static function NumberDocs($step = "-1")
+    {
+        Users::setObject('user');
+        $user_role = Users::getAuthRole();
+
+        self::setObject('oindoc');
+        if (- 1 == $step) {
+            $where = Where::Cond()
+                ->add("_deleted", "=", "0")
+                ->add("and")
+                ->add("step_role", "=", $user_role)
+                ->parse();
+        } else {
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("step_role", "=", $user_role)
+            ->add("and")
+            ->add("step", "=", $step)
+            ->parse();
+        }
+        
+        $number = (array)self::getList($where);
+        $docs =  count($number);
+        //var_dump($docs);
+        return $docs;
+    }
 }
 ?>

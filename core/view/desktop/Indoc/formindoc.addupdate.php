@@ -61,7 +61,7 @@ $form = Forms::Create()
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $oindoc_item->object->params->doctypes, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
     ->add("reg_number", "№ Регистрации", "text", $html_object . "[reg_number]", $oindoc_item->object->reg_number)
-    ->add("reg_date", "Дата регистрации", "date", $html_object . "[reg_date]", $oindoc_item->object->reg_date)
+    ->add("reg_date", "Дата регистрации", "text", $html_object . "[reg_date]", $oindoc_item->object->reg_date)
     
     ->add("html", "", "html", "", '<img src="' . IMAGES . SEP . $oindoc_item->object->params->file_title . '">')
     ->add("file", "Файл", "file", $html_object . "[file]")
