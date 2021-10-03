@@ -36,7 +36,7 @@ $log = Where::Cond()
 $doclog = Indoc::getList($log);
 
 Users::setObject("user");
-
+$user_id = Users::getAuthId();
 $fio_user = Users::getList();
 
 $doc_id = $item->object->id;
@@ -44,6 +44,7 @@ $current_step = $item->object->step;
 $current_role = $item->object->step_role;
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
+<script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
 <div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
@@ -63,8 +64,19 @@ $current_role = $item->object->step_role;
                 </div>
               </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item"><a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Маршрут документа</a></li>
-                <li class="nav-item"><a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Просмотр</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" 
+                      data-toggle="tab" href="#home" role="tab" 
+                      aria-controls="home" aria-selected="true">
+                    Маршрут документа</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" 
+                      data-toggle="tab" href="#profile" role="tab" 
+                      aria-controls="profile" aria-selected="false"
+                      onclick="saveDocViewEvent(<?=$doc_id?>, <?=$user_id?>)">
+                    Просмотр</a>
+                </li>
               </ul>
               <div class="tab-content">
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">

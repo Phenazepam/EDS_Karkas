@@ -593,6 +593,15 @@ class Controller
 		            "oindoc",
 		        ),
 		    ),
+
+			array(
+		        "name"   => "doclog.ajaxRegisterDocLog.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxRegisterDocLog",
+		        "params" => array(
+		            "doclog",
+		        ),
+		    ),
 			//DocType actions
 		    array(
 		        "name"   => "odoctypes.store.do",

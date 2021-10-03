@@ -153,6 +153,13 @@ class Collection extends \RedCore\Base\Collection {
 	    // var_dump($params);
         self::store($params);
 	}
+	
+	public static function ajaxRegisterDocLog($params = array()) {
+		if (empty($params["doclog"] || is_null($params["doclog"]["id"]))) return;
+		$params = $params["doclog"];
+	    self::registerDocLog($params["id"], $params["action"], $params["comment"], $params["user_id"]);
+	}
+
 	public static function getDocTypesList(){
 		self::setObject("odoctypes");
 		$where = Where::Cond()
