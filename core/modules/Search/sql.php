@@ -10,15 +10,17 @@ namespace RedCore\Search;
 
 class Sql {
 	public static 
-	   $sqlSearch = '
+	   $sqlIndoc = '
 			SELECT
 				id,
-				name,
+                name_doc,
                 reg_number,
-				date_create,
-                Status
+                reg_date,
+                params,
+                _updated,
+                _deleted
 			FROM
-				search
+				eds_karkas__document
 		';
 	
 

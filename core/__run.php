@@ -24,13 +24,14 @@ define('CMS_HELPER'   , CMS_DIR . SEP . 'helpers');
 define('CMS_MODULE'   , CMS_DIR . SEP . 'modules');
 define('CMS_VIEW'     , CMS_DIR . SEP . 'view');
 define('IMAGES'       , SEP . 'images');
-define('NO_IMAGE'     , IMAGES . SEP . 'nophoto.jpg');
+define('NO_IMAGE'     , IMAGES . SEP . 'nophoto2.jpg');
 
 
 require_once(CMS_DIR    . SEP . 'config.php');
 /*
  * Helpers
  */
+
 require_once(CMS_HELPER . SEP . 'db/db.php');
 require_once(CMS_HELPER . SEP . 'phpmailer/class.phpmailer.php');
 require_once(CMS_HELPER . SEP . 'tcpdf/tcpdf.php');
@@ -42,6 +43,7 @@ require_once(CMS_HELPER . SEP . 'response.php');
 require_once(CMS_HELPER . SEP . 'validator.php');
 require_once(CMS_HELPER . SEP . 'request.php');
 require_once(CMS_HELPER . SEP . 'files.php');
+
 
 /*
  * Modules

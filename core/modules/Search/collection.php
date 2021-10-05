@@ -13,6 +13,7 @@ use RedCore\Controller;
 use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Files;
+use RedCore\Indoc\Collection as Indoc;
 
 
 
@@ -21,47 +22,11 @@ require_once('sql.php');
 require_once('object.php');
 
 class Collection extends \RedCore\Base\Collection { 
-/*
- * 
- * 
- * 
- */
-    public static function export(){
-        $objExcel = new \PHPExcel();
-        $objExcel -> setActiveSheetIndex(0);
-        
-        $active_sheet = $objExcel -> getActiveSheet()->setTitle('Прайс лист');
-        $active_sheet->mergeCells("A1:B1")->setCellValue('A1', 'Нужный текст')->getStyle('A1')->applyFromArray(
-            array(
-                'fill' => array(
-                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                    'color' => array('rgb' => 'BB0000')
-                )
-            )
-            );
-        $active_sheet->mergeCells("A3:B3")->setCellValue('A3', 'нужный текст');
-        $active_sheet->mergeCells("D1:E1")->setCellValue('D1', 'Нужный текст2');
-        $active_sheet->mergeCells("D3:E3")->setCellValue('D3', 'нужный текст2');
-        
-        $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
-        $objWriter -> save('php://output');
-    }
-    /*
-     * 
-     * 
-     */
+
     public static $list = array(
-        "0" => "Не выбран",
-        
-        "1" => "Входящие",
-        "2" => "Исходящие",
 
     );
-    /*
-     * 
-     * 
-     */
-    
+
     public static function getStatuslist(){
         return self::$list;
     }
@@ -76,7 +41,7 @@ class Collection extends \RedCore\Base\Collection {
 
 		if("osearch" == $obj) {
 			self::$object = "osearch";
-			self::$sql    = Sql::$sqlSearch;
+			self::$sql    = Sql::$sqlIndoc;
 			self::$class  = "RedCore\Search\ObjectSearch";
 		}
 
@@ -85,7 +50,7 @@ class Collection extends \RedCore\Base\Collection {
 	/**
 	 * @method \RedCore\Base\Collection loadBy()
 	 *
-	 * @return \RedCore\Users\ObjectSearch ObjectTest
+	 * @return ObjectSearch
 	 */
 	public static function loadBy($params = array()) {
 	    return parent::loadBy($params);
@@ -94,20 +59,141 @@ class Collection extends \RedCore\Base\Collection {
 	/**
 	 * @method \RedCore\Base\Collection getList()
 	 *
-	 * @return \RedCore\Users\ObjectSearch ObjectSearch
+	 * @return \RedCore\Users\ObjectUser
 	 */
 	public static function getList($where = "") {
 	    return parent::getList($where);
 	}
 
 	public static function store($params = array()) {
-	    if ("osearch" == key($params)) {
-	       // $title = Files::upload("otest", "file");
-	        $params["osearch"]["params"]["file_title"] = Files::upload("osearch", "file");
-	    }
+	    
 	    parent::store($params);
 		
 	}
+	/*
+	 * 
+	 * 
+	 */
+	public static function searchall() {	    
+	    Indoc::getList();
+	    
+	    if(isset($_POST['search'])) {    
+	            if(preg_match("/[A-Z  | a-z]+/", $_POST['name'])) {
+	                $name = $_POST['name'];
+	                
+	                $sql = "SELECT * FORM eds_karkas__document WHERE name_doc LIKE '%" . $name . "%' OR reg_number LIKE '%" . $name . "%' OR reg_date LIKE '%" . $name . "%' " ;
+	                
+	                $result = mysqli_query($sql);
+	                
+	                while ($row = mysqli_fetch_array($result)) {
+	                       $name_doc = $row['name_doc'];
+	                       $reg_number = $row['reg_number'];
+	                       $reg_date = $row['reg_date'];         
+	              }
+	            }
+	            else {
+	                echo "<p>Введите поисковой запрос</p>";
+	           }
+	         }	    
+	      exit();
+	     }
+	 
+
+	/*
+	 * 
+	 * 
+	 */
+	
+	public static function export($items) {
+	    $items = Indoc::getList();
+	    $status_list = Indoc::getStatuslist();
+	    Indoc::setObject('odoctypes');
+	    $DocTypes_list = Indoc::getList();
+	    
+	    $header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Статус');
+	    
+	    $objExcel = new \PHPExcel();
+	    $objExcel -> setActiveSheetIndex(0);
+	    
+	    $active_sheet = $objExcel -> getActiveSheet()->setTitle('Прайс лист');
+	    $active_sheet->setCellValue('A1', 'ДОКУМЕНТЫ');
+
+	    $border = array(
+	        'borders'=>array(
+	            'allborders' => array(
+	                'style' => \PHPExcel_Style_Border::BORDER_THIN,
+	                'color' => array('rgb' => '000000')
+	            )
+	        )
+	    );
+	    
+	    $bg = array(
+	        'fill' => array(
+	            'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+	            'color' => array('rgb' => 'FFD700')
+	        )
+	    );
+	    
+	    $active_sheet
+	       ->getStyle("A4:E4")
+	       ->applyFromArray($bg);
+	    
+	    $active_sheet
+	       ->getStyle("A4:E8")
+	       ->applyFromArray($border);
+	    
+	    
+	    $row_start = 4;
+	    $i = 0;
+	    
+	    $row_next = $row_start + $i;
+	    $column_next = 0;
+	    
+	    foreach ($header_array as $vale) {	        
+	        $active_sheet
+	           ->setCellValueByColumnAndRow($column_next, $row_next, $vale)
+	           ->getColumnDimension('A')
+	           ->setWidth(30);
+	        
+	        $column_next++; 
+	    }
+	    
+	    $i++;
+
+	    foreach ($items as $val) {	       
+	       $row_next = $row_start + $i;
+	      	    	       
+	       $active_sheet
+	           ->setCellValueByColumnAndRow(0, $row_next, $DocTypes_list[$val->object->params->doctypes]->object->title);
+	       
+	       $active_sheet
+    	       ->setCellValueByColumnAndRow(1, $row_next, $val->object->name_doc)
+    	       ->getColumnDimension('B')
+    	       ->setWidth(20);
+	       
+	       $active_sheet
+    	       ->setCellValueByColumnAndRow(2, $row_next, $val->object->reg_number)
+    	       ->getColumnDimension('C')
+    	       ->setWidth(20);
+	       
+	       $active_sheet
+    	       ->setCellValueByColumnAndRow(3, $row_next, $val->object->reg_date)
+    	       ->getColumnDimension('D')
+    	       ->setWidth(20);
+	       
+	      
+	       $active_sheet
+    	       ->setCellValueByColumnAndRow(4, $row_next, $status_list[$val->object->params->status_id])
+    	       ->getColumnDimension('E')
+    	       ->setWidth(20);
+
+	       $i++;	       
+	   };
+ 
+	   $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
+	   //$objWriter -> save('php://output');
+	  }
+	  
  }
 	
 

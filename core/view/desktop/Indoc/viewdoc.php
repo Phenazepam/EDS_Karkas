@@ -7,6 +7,8 @@ use RedCore\Users\Collection as Users;
 
 Indoc::setObject("oindoc");
 
+$action = Indoc::getActionDoc();
+
 $edit_doc = Indoc::CanUserEditDocs();
 
 $lb_params = array(
@@ -101,7 +103,8 @@ $current_role = $item->object->step_role;
                           foreach ($t as $key => $value) :
                             if ($value['role'] == $trole && $value['step'] == $tstep) {
                               $current = "current";
-                            } else {
+                            } 
+                            else {
                               $current = "path";
                             }
 
@@ -134,7 +137,7 @@ $current_role = $item->object->step_role;
                           foreach ($doclog as $log) :
                           ?>
                           <tr>
-                            <td><?= $log->object->action ?></td>
+                            <td><?= $action[$log->object->action] ?></td>
                             <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
                             <td><?= $log->object->_updated ?></td>
@@ -169,7 +172,7 @@ $current_role = $item->object->step_role;
                       </tr>
                       <tr>
                         <td><b>Файл</b></td>
-                        <td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
+                        <td><a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a></td>
                       </tr>
                     </tbody>
                   </table>

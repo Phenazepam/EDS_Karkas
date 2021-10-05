@@ -222,6 +222,14 @@ class Controller
 		        "content"  => "",
 		        "tag"      => array(),
 		    ),
+		    
+		    array(
+		        "title"    => "Скачивание документов",
+		        "url"      => "docs-download",
+		        "view"     => "desktop/Indoc/download.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 			//Тип документов
 		    
@@ -263,10 +271,18 @@ class Controller
 				"default"  => false,
 		        "tag"      => array("top", "docs"),
 		    ),
+		    array(
+		        "title"    => "Поиск-форма-document",
+		        "url"      => "searchitems-form_document",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/form_search_doc.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 			array(
-		        "title"    => "Выгрузка",
+		        "title"    => "Выгрузка в Excel",
 		        "url"      => "searchitems-download",
-		        "view"     => "desktop/download/download.php",
+		        "view"     => "desktop/Search/download.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -278,6 +294,14 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    array(
+		        "title"    => "Тест-Поиск",
+		        "url"      => "searchtest-list",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/testsearch.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+            ),
 
 			//Information documents module
 			/*
@@ -620,28 +644,17 @@ class Controller
 		            "odoctypes",
 		        ),
 		    ),
-
-			//Infodocs actions
-			array(
-		        "name"   => "oinfodocs.store.do",
-		        "module" => "RedCore\infodocs\Collection",
-		        "method" => "store",
+		   
+	 	    //Search action)
+		    array(
+		        "name"   => "osearch.searchall.do",
+		        "module" => "RedCore\Search\Collection",
+		        "method" => "searchall",
 		        "params" => array(
-		            "oinfodocs",
+		            "oseacrh",
 		        ),
 		    ),
-
-			array(
-		        "name"   => "oinfodocs.delete.do",
-		        "module" => "RedCore\infdocs\Collection",
-		        "method" => "delete",
-		        "params" => array(
-		            "oinfodocs",
-		        ),
-		    ),
-			
-
-		)
+	    )
 	);
 
 
