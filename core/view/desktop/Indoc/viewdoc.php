@@ -40,8 +40,11 @@ $user_id = Users::getAuthId();
 $fio_user = Users::getList();
 
 $doc_id = $item->object->id;
+$doc_type = $item->object->params->doctypes;
 $current_step = $item->object->step;
 $current_role = $item->object->step_role;
+
+// var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
 <script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
@@ -173,9 +176,11 @@ $current_role = $item->object->step_role;
                   <? if ($edit_doc[$item->object->id]):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
+                  <?php if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)):?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
                     Отправить документ далее
                   </button>
+                  <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>

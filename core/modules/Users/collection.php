@@ -415,24 +415,34 @@ class Collection extends \RedCore\Base\Collection {
 
 		if('2' == $user_role || '1' == $user_role) return true;
 
-		self::setObject("doctyperolematrix");
-		$where = Where::Cond()
-			->add("_deleted", "=", "0")
-			->add("and")
-			->add("doctype", "=", $doc_type)
-			->parse();
-		$matrix = self::getList($where);
-		
-		foreach ($matrix as $key => $item) {
-			$item=$item->object;
-			$tmpArray = array(
-				'step' => $item->step,
-				'role' => $item->role
-			);
-			$result[$item->step_order] = $tmpArray;
+		Users::setObject("user");
+		if ($user_role == Users::getAuthRole()) {
+			return true;
 		}
+		// self::setObject("doctyperolematrix");
+		// $where = Where::Cond()
+		// 	->add("_deleted", "=", "0")
+		// 	->add("and")
+		// 	->add("doctype", "=", $doc_type)
+		// 	->parse();
+		// $matrix = self::getList($where);
+		
+		// foreach ($matrix as $key => $item) {
+		// 	$item=$item->object;
+		// 	$tmpArray = array(
+		// 		'step' => $item->step,
+		// 		'role' => $item->role
+		// 	);
+		// 	$result[$item->step_order] = $tmpArray;
+		// }
+		// // var_dump($result);
 
-		return $result;
+		// foreach ($result as $key => $value) {
+		// 	if ($value['step'] == $step && $value['role'] == $user_role) {
+		// 		return true;
+		// 	}
+		// }
+		return false;
 	}
 
 	public static function CanUserReadDocs($doctypes = array()){
