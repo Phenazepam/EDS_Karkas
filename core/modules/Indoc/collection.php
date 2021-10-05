@@ -195,19 +195,29 @@ class Collection extends \RedCore\Base\Collection
 		Users::setObject('user');
 		$user_id = Users::getAuthId();
 		// var_dump($user_id);
+		self::setObject("oindoc");
+		
+		$lb_params = array(
+		    "id" => $doc_id
+		);
+		
+		$item = self::loadBy($lb_params);
+		
+		$step = $item->object->step;
+		
+		if('2' == $step){
+		    self::registerDocLog($doc_id, 6, $comment, $user_id);
+		}
+		
+		if('3' == $step){
+		    self::registerDocLog($doc_id, 8, $comment, $user_id);
+		}
+		
 		if ('2' == $next_step) {
-			//self::registerDocLog($doc_id, 6, $comment, $user_id);
 			self::registerDocLog($doc_id, 4, $comment, $user_id);
-			if ('9' == $next_step_role) {
-			    self::registerDocLog($doc_id, 6, $comment, $user_id);
-			}
 		}
 		if ('3' == $next_step) {
-		    //self::registerDocLog($doc_id, 6, $comment, $user_id);
 		    self::registerDocLog($doc_id, 7, $comment, $user_id);
-		    if ('10' == $next_step_role) {
-		        self::registerDocLog($doc_id, 6, $comment, $user_id);
-		    }
 		}
 
 		self::setObject("oindoc");

@@ -13,7 +13,7 @@ $item = Indoc::loadBy($lb_params);
 $file = CMS_TMP . SEP . $item->object->params->file_title;
 
 header('Content-Description: File Transfer');
-header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename=' . basename($file));
 header('Content-Transfer-Encoding: binary');
 header('Content-Length: ' . filesize($file));
