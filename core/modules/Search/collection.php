@@ -191,7 +191,7 @@ class Collection extends \RedCore\Base\Collection {
 	   };
  
 	   $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
-	   $objWriter -> save('php://output');
+	   //$objWriter -> save('php://output');
 	  }
 	  
  }

@@ -222,6 +222,14 @@ class Controller
 		        "content"  => "",
 		        "tag"      => array(),
 		    ),
+		    
+		    array(
+		        "title"    => "Скачивание документов",
+		        "url"      => "docs-download",
+		        "view"     => "desktop/Indoc/download.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 			//Тип документов
 		    

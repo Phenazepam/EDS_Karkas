@@ -42,6 +42,7 @@ $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
+Search::setObject("osearch");
 Search::export($items);
 
 ?>
@@ -76,7 +77,18 @@ Search::export($items);
 		<td><?= $item->object->reg_date ?></td>
 		<td><?= $user[$item->object->step_role] ?></td>
 		<td><?= $doc_steps[$item->object->step] ?></td>
-		<td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
+		<? 
+		if (!empty($item->object->params->file_title)){
+		?>
+		<td><img src="<?= ICONS . SEP . 'doc.png' ?>"></td>
+		<?
+		}
+		else{
+		?>
+		<td><img src="<?= NO_IMAGE ?>" width="100" height="67"></td>
+		<?
+		}
+		?>
 		<td>
         	<div class="btn-group btn-group-sm">
             	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
