@@ -184,6 +184,11 @@ $current_role = $item->object->step_role;
                     Отправить документ далее
                   </button>
                   <? endif;?>
+                  <?php if(true):?>
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?>, 1)">
+                    Вернуть на доработку
+                  </button>
+                  <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>

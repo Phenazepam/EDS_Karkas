@@ -380,6 +380,42 @@ class Collection extends \RedCore\Base\Collection {
 		return $result;
 	}
 
+	public static function GetStepBack($doc_type = -1, $current_step = -1, $current_role = -1) {
+		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+
+		foreach($matrix as $key => $item) {
+			$item = $item->object;
+			$matrix_ready[$item->step][$item->role] = $item->step_order;
+			$tmpItem = array(
+				"step" => $item->step,
+				"role" => $item->role,
+			);
+			$matrix_ordered[$item->step_order] = $tmpItem;
+		}
+		$current_step_order = $matrix_ready[$current_step][$current_role];
+		$i = 1;
+
+		while(true) {
+			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
+				$result['step'] = $matrix_ordered[$current_step_order - $i]['step'];
+				$result['role'] = $matrix_ordered[$current_step_order - $i]['role'];
+				break;
+			}
+			else {
+				$i++;
+			}
+		}
+		return $result;
+	}
+
 	/**
 	 * @method \RedCore\Users\Collection GetDocRoute()
 	 *
@@ -419,29 +455,6 @@ class Collection extends \RedCore\Base\Collection {
 		if ($user_role == Users::getAuthRole()) {
 			return true;
 		}
-		// self::setObject("doctyperolematrix");
-		// $where = Where::Cond()
-		// 	->add("_deleted", "=", "0")
-		// 	->add("and")
-		// 	->add("doctype", "=", $doc_type)
-		// 	->parse();
-		// $matrix = self::getList($where);
-		
-		// foreach ($matrix as $key => $item) {
-		// 	$item=$item->object;
-		// 	$tmpArray = array(
-		// 		'step' => $item->step,
-		// 		'role' => $item->role
-		// 	);
-		// 	$result[$item->step_order] = $tmpArray;
-		// }
-		// // var_dump($result);
-
-		// foreach ($result as $key => $value) {
-		// 	if ($value['step'] == $step && $value['role'] == $user_role) {
-		// 		return true;
-		// 	}
-		// }
 		return false;
 	}
 
@@ -471,6 +484,8 @@ class Collection extends \RedCore\Base\Collection {
 	
 		return $res;
 	}
+
+
 
 
 

@@ -1,9 +1,9 @@
-async function popupMovingRoute(oindocId, cstep, crole) {
+async function popupMovingRoute(oindocId, cstep, crole, isBack = 0) {
 
     const option = {
         method: "GET",
     }  
-    let url = `/popupMovingRoute?oindoc_id=${oindocId}&cstep=${cstep}&crole=${crole}`
+    let url = `/popupMovingRoute?oindoc_id=${oindocId}&cstep=${cstep}&crole=${crole}&isback=${isBack}`
     const response = await fetch(url, option);
     let txt = await response.text();
     // console.log(response);
