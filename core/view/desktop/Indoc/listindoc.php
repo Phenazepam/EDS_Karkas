@@ -36,12 +36,14 @@ $log = Where::Cond()
 
 $doclog = Indoc::getList($log);
 
+
 Users::setObject("user");
 
 $user = Users::getRolesList();
 
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
+Search::setObject("osearch");
 Search::export($items);
 
 ?>

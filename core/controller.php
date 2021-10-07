@@ -264,10 +264,10 @@ class Controller
 		        "tag"      => array("top", "docs"),
 		    ),
 		    array(
-		        "title"    => "Поиск-форма-document",
-		        "url"      => "searchitems-form_document",
+		        "title"    => "Поиск",
+		        "url"      => "searchitems-form",
 		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/search/form_search_doc.php",
+		        "content"  => "desktop/search/form_search.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -278,22 +278,6 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
-			array(
-		        "title"    => "Фильтр",
-		        "url"      => "searchitems-form",
-		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/search/form.php",
-		        "default"  => false,
-		        "tag"      => array("top", ""),
-		    ),
-		    array(
-		        "title"    => "Тест-Поиск",
-		        "url"      => "searchtest-list",
-		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/search/testsearch.php",
-		        "default"  => false,
-		        "tag"      => array("top", ""),
-            ),
 
 			//Information documents module
 			/*

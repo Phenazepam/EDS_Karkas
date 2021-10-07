@@ -74,30 +74,31 @@ class Collection extends \RedCore\Base\Collection {
 	 * 
 	 * 
 	 */
-	public static function searchall() {	    
-	    Indoc::getList();
+	public static function searchall($params = array()) {	    
+	    $documents = Indoc::getList();
 	    
-	    if(isset($_POST['search'])) {    
-	            if(preg_match("/[A-Z  | a-z]+/", $_POST['name'])) {
-	                $name = $_POST['name'];
-	                
-	                $sql = "SELECT * FORM eds_karkas__document WHERE name_doc LIKE '%" . $name . "%' OR reg_number LIKE '%" . $name . "%' OR reg_date LIKE '%" . $name . "%' " ;
-	                
-	                $result = mysqli_query($sql);
-	                
-	                while ($row = mysqli_fetch_array($result)) {
-	                       $name_doc = $row['name_doc'];
-	                       $reg_number = $row['reg_number'];
-	                       $reg_date = $row['reg_date'];         
-	              }
+	    if (empty($_POST[$params]))
+	    {
+        echo "Введите запрос";   
+	    } else{
+	           
+	        $search = $_POST[$params];
+	        
+	            $sql = "SELECT 'doctypes', 'name_doc', 'reg_number', 'reg_date' FORM eds_karkas__document WHERE `doctypes` LIKE '%$search%' OR `name_doc` LIKE '%$search%' OR `reg_number` LIKE '%$search%' OR `reg_date` LIKE '%$search%'";
+
+	            $result = mysqli_query($sql);
+
+	            while ($row = mysqli_fetch_array($result)) {
+	                $doctype = $row['doctype'];
+	                $name_doc = $row['name_doc'];
+	                $reg_number = $row['reg_number'];
+	                $reg_date = $row['reg_date'];
+	          
+	                echo  "<a>".$doctype  ." ". $name_doc ." ". $reg_number ." ". $reg_date ."</a>";
 	            }
-	            else {
-	                echo "<p>Введите поисковой запрос</p>";
-	           }
-	         }	    
-	      exit();
-	     }
-	 
+	        }
+	
+	}
 
 	/*
 	 * 
@@ -191,7 +192,7 @@ class Collection extends \RedCore\Base\Collection {
 	   };
  
 	   $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
-	   $objWriter -> save('php://output');
+	   //$objWriter -> save('php://output');
 	  }
 	  
  }
