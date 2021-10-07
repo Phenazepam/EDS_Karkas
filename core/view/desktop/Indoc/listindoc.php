@@ -1,9 +1,14 @@
 <?php
 
 use RedCore\Indoc\Collection as Indoc;
+use RedCore\Session as Session;
 use RedCore\Where;
 use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
+
+Session::bind("filter_doc_types_id",      "general_filter_doc_types_id", -1);
+
+$session_doctypes      = (int)Session::get("general_filter_doc_types_id");
 
 Indoc::setObject("odoctypes");
 $where = Where::Cond()
@@ -19,10 +24,19 @@ foreach ($DocTypes_list as $id => $temp) {
 Indoc::setObject("oindoc");
 
 $where = Where::Cond()
-        ->add("_deleted", "=", "0")
-        ->parse();
-
+->add("_deleted", "=", "0")
+->parse();
 $items = Indoc::getList($where);
+
+$tmp = array();
+
+foreach($items as $document) {
+    if($document->object->params->doctypes == $session_doctypes){
+        $tmp[]=$document;
+    }
+}
+
+$items = $tmp;
 
 $edit_doc = Indoc::CanUserEditDocs();
 
@@ -46,8 +60,13 @@ $read_doc = Users::CanUserReadDocs($DocTypesid);
 Search::setObject("osearch");
 Search::export($items);
 
-?>
 
+var_dump($session_doctypes);
+
+?>
+<?
+require 'listindoc.filter.php';
+?>
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -78,7 +97,18 @@ Search::export($items);
 		<td><?= $item->object->reg_date ?></td>
 		<td><?= $user[$item->object->step_role] ?></td>
 		<td><?= $doc_steps[$item->object->step] ?></td>
-		<td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
+		<? 
+		if (!empty($item->object->params->file_title)){
+		?>
+		<td><img src="<?= ICONS . SEP . 'doc.png' ?>"></td>
+		<?
+		}
+		else{
+		?>
+		<td><img src="<?= NO_IMAGE ?>" width="100" height="67"></td>
+		<?
+		}
+		?>
 		<td>
         	<div class="btn-group btn-group-sm">
             	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

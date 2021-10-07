@@ -95,38 +95,23 @@ class Collection extends \RedCore\Base\Collection
     {
         return parent::getList($where);
     }
-
+    
     public static function store($params = array())
     {
         if ("oindoc" == key($params)) {
             Users::setObject("user");
             $user_id = Users::getAuthId();
-		if("oindoc" == $obj) {
-			self::$object = "oindoc";
-			self::$sql    = Sql::$sqlIndoc;
-			self::$class  = "RedCore\Indoc\ObjectIndoc";
-		}
-		elseif ("odoctypes" == $obj){
-		    self::$object = "odoctypes";
-		    self::$sql    = Sql::$sqlDocTypes;
-		    self::$class  = "RedCore\Indoc\ObjectDocTypes";
-		}
-	        elseif ("odoclog" == $obj){
-		    self::$object = "odoclog";
-		    self::$sql    = Sql::$sqlDocLog;
-		    self::$class  = "RedCore\Indoc\ObjectDocLog";
-		}
-
+		
             if ($title = Files::upload("oindoc", "file")) {
                 $params["oindoc"]["params"]["file_title"] = $title;
             }
             if (! empty($params["oindoc"]["id"])) {
-                self::registerDocLog($params["oindoc"]["id"], "Черновик изменен", "", $user_id);
+                self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
             } else {
                 self::setObject("oindoc");
                 parent::store($params);
                 $lastId = Core::$db->InsertId();
-                self::registerDocLog($lastId, "Черновик создан", "", $user_id);
+                self::registerDocLog($lastId, 1, "", $user_id);
                 return;
             }
             self::setObject("oindoc");
@@ -140,7 +125,7 @@ class Collection extends \RedCore\Base\Collection
         $user_id = Users::getAuthId();
 
         if ($params["oindoc"]["id"]) {
-            self::registerDocLog($params["oindoc"]["id"], "Черновик удален", "", $user_id);
+            self::registerDocLog($params["oindoc"]["id"], 3, "", $user_id);
         }
         self::setObject("oindoc");
 
@@ -210,11 +195,29 @@ class Collection extends \RedCore\Base\Collection
 		Users::setObject('user');
 		$user_id = Users::getAuthId();
 		// var_dump($user_id);
+		self::setObject("oindoc");
+		
+		$lb_params = array(
+		    "id" => $doc_id
+		);
+		
+		$item = self::loadBy($lb_params);
+		
+		$step = $item->object->step;
+		
+		if('2' == $step){
+		    self::registerDocLog($doc_id, 6, $comment, $user_id);
+		}
+		
+		if('3' == $step){
+		    self::registerDocLog($doc_id, 8, $comment, $user_id);
+		}
+		
 		if ('2' == $next_step) {
-			self::registerDocLog($doc_id, 'Направлен на согласование', $comment, $user_id);
+			self::registerDocLog($doc_id, 4, $comment, $user_id);
 		}
 		if ('3' == $next_step) {
-			self::registerDocLog($doc_id, 'Направлен на утверждение', $comment, $user_id);
+		    self::registerDocLog($doc_id, 7, $comment, $user_id);
 		}
 
 		self::setObject("oindoc");
@@ -258,7 +261,8 @@ class Collection extends \RedCore\Base\Collection
                 ->add("and")
                 ->add("step_role", "=", $user_role)
                 ->parse();
-        } else {
+        } 
+        else {
             $where = Where::Cond()
             ->add("_deleted", "=", "0")
             ->add("and")
@@ -277,6 +281,5 @@ class Collection extends \RedCore\Base\Collection
     public static function getActionDoc(){
         return self::$actionDoc;
     }
-    
 }
 ?>

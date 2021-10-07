@@ -103,17 +103,17 @@ use RedCore\Controller;
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-file"></i> Мои документы 
-                	<span style="color: red";><?php echo Indoc::NumberDocs();?></span>
+                	<span class="badge badge-light"><?php echo Indoc::NumberDocs();?></span>
                 	<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list-draft">Черновики 
-                    	<span style="color: red";><?php echo Indoc::NumberDocs(1);?></span></a></li>
+                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(1);?></span></a></li>
                     <li><a href="/indocitems-list-agreement">На согласование
-                    	<span style="color: red";><?php echo Indoc::NumberDocs(2);?></span></a></li>
+                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(2);?></span></a></li>
                     <li><a href="/indocitems-list-approval">На утверждение
-                    	<span style="color: red";><?php echo Indoc::NumberDocs(3);?></span></a></li>
+                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(3);?></span></a></li>
                     <li><a href="/indocitems-list-adoption">На принятие
-                    	<span style="color: red";><?php echo Indoc::NumberDocs(4);?></span></a></li>
+                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(4);?></span></a></li>
                   </ul>
                 </li>
               </ul>

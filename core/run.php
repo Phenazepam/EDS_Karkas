@@ -26,6 +26,7 @@ define('CMS_MODULE'   , CMS_DIR . SEP . 'modules');
 define('CMS_VIEW'     , CMS_DIR . SEP . 'view');
 define('IMAGES'       , SEP . 'images');
 define('NO_IMAGE'     , IMAGES . SEP . 'nophoto.jpg');
+define('ICONS'       , IMAGES . SEP . 'icons');
 
 
 require_once(CMS_DIR    . SEP . 'config.php');

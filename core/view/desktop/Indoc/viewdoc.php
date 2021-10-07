@@ -7,6 +7,8 @@ use RedCore\Users\Collection as Users;
 
 Indoc::setObject("oindoc");
 
+$action = Indoc::getActionDoc();
+
 $edit_doc = Indoc::CanUserEditDocs();
 
 $lb_params = array(
@@ -40,8 +42,11 @@ $user_id = Users::getAuthId();
 $fio_user = Users::getList();
 
 $doc_id = $item->object->id;
+$doc_type = $item->object->params->doctypes;
 $current_step = $item->object->step;
 $current_role = $item->object->step_role;
+
+// var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
 <script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
@@ -98,7 +103,8 @@ $current_role = $item->object->step_role;
                           foreach ($t as $key => $value) :
                             if ($value['role'] == $trole && $value['step'] == $tstep) {
                               $current = "current";
-                            } else {
+                            } 
+                            else {
                               $current = "path";
                             }
 
@@ -131,7 +137,7 @@ $current_role = $item->object->step_role;
                           foreach ($doclog as $log) :
                           ?>
                           <tr>
-                            <td><?= $log->object->action ?></td>
+                            <td><?= $action[$log->object->action] ?></td>
                             <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
                             <td><?= $log->object->_updated ?></td>
@@ -166,16 +172,18 @@ $current_role = $item->object->step_role;
                       </tr>
                       <tr>
                         <td><b>Файл</b></td>
-                        <td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
+                        <td><a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a></td>
                       </tr>
                     </tbody>
                   </table>
                   <? if ($edit_doc[$item->object->id]):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
+                  <?php if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)):?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
                     Отправить документ далее
                   </button>
+                  <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>
