@@ -17,6 +17,7 @@ require_once ('sql.php');
 require_once ('objectIndoc.php');
 require_once ('objectDocTypes.php');
 require_once ('objectDocLog.php');
+require_once ('objectDocRoute.php');
 
 class Collection extends \RedCore\Base\Collection
 {
@@ -71,6 +72,10 @@ class Collection extends \RedCore\Base\Collection
             self::$object = "odoclog";
             self::$sql = Sql::$sqlDocLog;
             self::$class = "RedCore\Indoc\ObjectDocLog";
+        } elseif ("odocroute" == $obj) {
+            self::$object = "odocroute";
+            self::$sql = Sql::$sqlDocRoute;
+            self::$class = "RedCore\Indoc\ObjectDocRoute";
         }
     }
 
@@ -101,7 +106,7 @@ class Collection extends \RedCore\Base\Collection
         if ("oindoc" == key($params)) {
             Users::setObject("user");
             $user_id = Users::getAuthId();
-		
+            $role_id = Users::getAuthRole();
             if ($title = Files::upload("oindoc", "file")) {
                 $params["oindoc"]["params"]["file_title"] = $title;
             }
@@ -109,9 +114,11 @@ class Collection extends \RedCore\Base\Collection
                 self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
             } else {
                 self::setObject("oindoc");
-                parent::store($params);
-                $lastId = Core::$db->InsertId();
+                $lastId = parent::store($params)->object->id;
                 self::registerDocLog($lastId, 1, "", $user_id);
+                self::MoveRoute($lastId, $params['oindoc']['params']['doctypes'],
+                    $role_id, $user_id, '1', '1');
+
                 return;
             }
             self::setObject("oindoc");
@@ -185,52 +192,80 @@ class Collection extends \RedCore\Base\Collection
 		return $res;
 	}
 
-	public static function ajaxMoveRoute($params = array()){
-		$params = $params["oindoc"];
-		$doc_id = $params["id"];
-		$next_step = $params["step"];
-		$next_step_role = $params["step_role"];
-		$comment = $params["comment"];
+    public static function MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step,
+        $step_order, $isCurrent = '1', $comment = '', $isBack = '0') {
 
-		Users::setObject('user');
-		$user_id = Users::getAuthId();
-		// var_dump($user_id);
 		self::setObject("oindoc");
-		
 		$lb_params = array(
 		    "id" => $doc_id
 		);
 		
 		$item = self::loadBy($lb_params);
 		
-		$step = $item->object->step;
-		
-		if('2' == $step){
-		    self::registerDocLog($doc_id, 6, $comment, $user_id);
-		}
-		
-		if('3' == $step){
-		    self::registerDocLog($doc_id, 8, $comment, $user_id);
-		}
-		
-		if ('2' == $next_step) {
-			self::registerDocLog($doc_id, 4, $comment, $user_id);
-		}
-		if ('3' == $next_step) {
-		    self::registerDocLog($doc_id, 7, $comment, $user_id);
-		}
+		$current_step = $item->object->step;
+        if ('1' == $isBack) {
+            self::registerDocLog($doc_id, 5, $comment, $user_id);
+        }
+        else {
+            
+            if('2' == $current_step){
+                self::registerDocLog($doc_id, 6, $comment, $user_id);
+            }
+            
+            if('3' == $current_step){
+                self::registerDocLog($doc_id, 8, $comment, $user_id);
+            }
+            
+            if ('2' == $current_step) {
+                self::registerDocLog($doc_id, 4, $comment, $user_id);
+            }
+            if ('3' == $current_step) {
+                self::registerDocLog($doc_id, 7, $comment, $user_id);
+            }
+        }
 
-		self::setObject("oindoc");
-		$params["oindoc"] = array(
-			'id' => $doc_id,
-			'step' => $next_step,
-			'step_role' => $next_step_role
+		self::setObject("odocroute");
+        self::UnsetCurrentStep($doc_id);
+		$params["odocroute"] = array(
+			'doc_id' => $doc_id,
+            'doc_type' => $doc_type,
+            'role_id' => $role_id,
+            'user_id' => $user_id,
+            'step' => $step,
+            'step_order' => $step_order,
+            'iscurrent' => $isCurrent,
 		);
 		// var_dump($params["oindoc"]);
 		self::store($params);
+	}
+
+	public static function ajaxMoveRoute($params = array()){
+		$params = $params["oindoc"];
+
+        Users::setObject('user');
+        
+		$doc_id = $params["id"];
+		$doc_type = $params["doc_type"];
+		$role_id = $params["step_role"];
+        $user_id = Users::getAuthId();
+		$step = $params["step"];
+		$step_order = $params["step_order"];
+        $isCurrent = '1';
+		$comment = $params["comment"];
+        
+		$isBack = $params["isback"];
+
+		self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step,
+        $step_order, $isCurrent, $comment, $isBack);
 		exit();
 
 	}
+
+    protected static function UnsetCurrentStep($doc_id = -1){
+        if (-1 == $doc_id) return;
+        $sql = 'UPDATE `eds_karkas__docroute` SET iscurrent= 0 WHERE doc_id = '. $doc_id;
+        Core::$db->execute($sql);
+    }
 	
 	public static function CanUserEditDocs($indoc = array()){
 	    Users::setObject('user');

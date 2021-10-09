@@ -25,6 +25,7 @@ else {
 }
 $next_step = $tmp['step'];
 $next_role = $tmp['role'];
+$step_order = $tmp['step_order'];
 
 // var_dump(Users::GetNextStep($doc_type));
 ?>
@@ -39,6 +40,9 @@ $next_role = $tmp['role'];
         <input type="hidden" name="oindoc[id]" value="<?=$doc_id?>">
         <input type="hidden" name="oindoc[step_role]" value="<?=$next_role?>">
         <input type="hidden" name="oindoc[step]" value="<?=$next_step?>">
+        <input type="hidden" name="oindoc[step_order]" value="<?=$step_order?>">
+        <input type="hidden" name="oindoc[doc_type]" value="<?=$doc_type?>">
+        <input type="hidden" name="oindoc[isback]" value="<?=$isBack?>">
         <div style="min-width: 200px; text-align: center;">
             Комментарий: <br>
             <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;font-size:medium"></textarea>
