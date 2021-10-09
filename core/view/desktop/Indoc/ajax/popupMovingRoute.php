@@ -4,24 +4,31 @@ use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 
 $doc_id = $_REQUEST['oindoc_id'];
-$cstep = $_REQUEST['cstep'];
-$crole = $_REQUEST['crole'];
+
 $isBack = $_REQUEST['isback'];
 
 Indoc::setObject("oindoc");
 $data = Indoc::loadBy(array('id' => $doc_id));
-
 $doc_type = $data->object->params->doctypes;
+
+Indoc::setObject('odocroute');
+$lb_params = array(
+    'doc_id' => $doc_id,
+    'iscurrent' => '1'
+);
+
+$current_step = Indoc::loadBy($lb_params);
+$current_step_order = $current_step->object->step_order;
 
 $doc_steps = Indoc::getRouteStatuses();
 
 $user_roles = Users::getRolesList();
 
-if ($isBack == 1) {
-    $tmp = Users::GetStepBack($doc_type, $cstep, $crole);
+if (1 == $isBack) {
+    $tmp = Users::GetPrevStep($doc_id, $current_step_order);
 }
 else {
-    $tmp = Users::GetNextStep($doc_type, $cstep, $crole);
+    $tmp = Users::GetNextStep($doc_type, $current_step_order);
 }
 $next_step = $tmp['step'];
 $next_role = $tmp['role'];

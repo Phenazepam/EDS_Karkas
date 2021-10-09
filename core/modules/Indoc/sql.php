@@ -53,14 +53,14 @@ class Sql {
 	   public static
 	   $sqlDocRoute = '
 			SELECT
-				"id",
-				"doc_id",
-				"doc_type",
-				"role_id",
-				"user_id",
-				"step",
-				"step_order",
-				"iscurrent",
+				id,
+				doc_id,
+				doc_type,
+				role_id,
+				user_id,
+				step,
+				step_order,
+				iscurrent,
                 _updated,
                 _deleted
 			FROM
