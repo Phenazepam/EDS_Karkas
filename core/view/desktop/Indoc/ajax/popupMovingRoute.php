@@ -6,6 +6,7 @@ use RedCore\Where;
 $doc_id = $_REQUEST['oindoc_id'];
 $cstep = $_REQUEST['cstep'];
 $crole = $_REQUEST['crole'];
+$isBack = $_REQUEST['isback'];
 
 Indoc::setObject("oindoc");
 $data = Indoc::loadBy(array('id' => $doc_id));
@@ -16,7 +17,12 @@ $doc_steps = Indoc::getRouteStatuses();
 
 $user_roles = Users::getRolesList();
 
-$tmp = Users::GetNextStep($doc_type, $cstep, $crole);
+if ($isBack == 1) {
+    $tmp = Users::GetStepBack($doc_type, $cstep, $crole);
+}
+else {
+    $tmp = Users::GetNextStep($doc_type, $cstep, $crole);
+}
 $next_step = $tmp['step'];
 $next_role = $tmp['role'];
 

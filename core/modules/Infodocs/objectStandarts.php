@@ -66,4 +66,3 @@ class ObjectStandarts extends \RedCore\Base\ObjectBase {
 
 
 ?>
-

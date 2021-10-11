@@ -102,18 +102,21 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-file"></i> Мои документы 
-                	<span class="badge badge-light"><?php echo Indoc::NumberDocs();?></span>
-                	<span class="fa fa-chevron-down"></span></a>
+                <li>
+                  <a>
+                    <i class="fa fa-file"></i> Мои документы 
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs();?></span>
+                    <span class="fa fa-chevron-down"></span>
+                  </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list-draft">Черновики 
-                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(1);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1);?></span></a></li>
                     <li><a href="/indocitems-list-agreement">На согласование
-                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(2);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2);?></span></a></li>
                     <li><a href="/indocitems-list-approval">На утверждение
-                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(3);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3);?></span></a></li>
                     <li><a href="/indocitems-list-adoption">На принятие
-                    	<span class="badge badge-light"><?php echo Indoc::NumberDocs(4);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4);?></span></a></li>
                   </ul>
                 </li>
               </ul>
