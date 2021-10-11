@@ -171,7 +171,11 @@ $doc_type = $item->object->params->doctypes;
                       </tr>
                       <tr>
                         <td><b>Файл</b></td>
-                        <td><a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a></td>
+                        <td>
+                        <? if (!empty($item->object->params->file_title)): ?>
+                        <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+                        <? endif; ?>
+                        </td>
                       </tr>
                     </tbody>
                   </table>

@@ -18,25 +18,24 @@ Indoc::setObject("oindoc");
 
 $where = Where::Cond()
         ->add("_deleted", "=", "0")
-        ->add("and")
-        ->add("step", "=", "1")
-        ->add("and")
-        ->add("step_role", "=", $us)
         ->parse();
 
 $items = Indoc::getList($where);
 
-$doc_steps = Indoc::getRouteStatuses();
-
-Indoc::setObject("odoclog");
-
-$log = Where::Cond()
-->add("doc_id", "=", $items->object->id)
+Indoc::setObject('odocroute');
+$where = Where::Cond()
+->add("_deleted", "=", "0")
 ->parse();
+$doc_steps = Indoc::getList($where);
 
-$doclog = Indoc::getList($log);
+foreach ($doc_steps as $key => $item) {
+    $doc_steps_ready[$item->object->doc_id] = $item;
+}
+$doc_steps_name = Indoc::getRouteStatuses();
 
 Users::setObject("user");
+
+$fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
@@ -61,8 +60,7 @@ $user = Users::getRolesList();
 
 <?
     foreach($items as $item):
-
-
+        if($doc_steps_ready[$item->object->id]->object->step == 1):
 ?>
 
 	<tr>
@@ -70,8 +68,10 @@ $user = Users::getRolesList();
 		<td><?= $item->object->name_doc ?></td>
 		<td><?= $item->object->reg_number ?></td>
 		<td><?= $item->object->reg_date ?></td>
-		<td><?= $user[$item->object->step_role] ?></td>
-		<td><?= $doc_steps[$item->object->step] ?></td>
+		<td><?= $user[$doc_steps_ready[$item->object->id]->object->role_id]?> 
+          <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f?> 
+          <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i?></td>
+        <td><?=$doc_steps_name[$doc_steps_ready[$item->object->id]->object->step]?></td>
 		<? 
 		if (!empty($item->object->params->file_title)){
 		?>
@@ -102,6 +102,7 @@ $user = Users::getRolesList();
 	
 	
 <?
+endif;
 endforeach;	
 ?>
 </tbody>

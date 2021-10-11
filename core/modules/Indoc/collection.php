@@ -272,12 +272,7 @@ class Collection extends \RedCore\Base\Collection
 	    $user_role = Users::getAuthRole();
 	    
 	    self::setObject('oindoc');
-	    $where = Where::Cond()
-	       ->add("step", "=", "1")
-	       ->add("and")
-	       ->add("step_role", "=", $user_role)
-	       ->parse();
-	    $step = self::getList($where);
+	    $step = self::getList();
 	    foreach($step as $item) {
 	        $stepRes[$item->object->id] = true;
 	    }
@@ -293,17 +288,11 @@ class Collection extends \RedCore\Base\Collection
         if (- 1 == $step) {
             $where = Where::Cond()
                 ->add("_deleted", "=", "0")
-                ->add("and")
-                ->add("step_role", "=", $user_role)
                 ->parse();
         } 
         else {
             $where = Where::Cond()
             ->add("_deleted", "=", "0")
-            ->add("and")
-            ->add("step_role", "=", $user_role)
-            ->add("and")
-            ->add("step", "=", $step)
             ->parse();
         }
         

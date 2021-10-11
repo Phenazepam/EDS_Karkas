@@ -16,8 +16,6 @@ class Sql {
 				name_doc,
 				reg_number,
                 reg_date,
-                step,
-                step_role,
 				params,
                 _updated,
                 _deleted
