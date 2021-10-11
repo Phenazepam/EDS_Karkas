@@ -11,6 +11,10 @@ Indoc::setObject("oindoc");
 $data = Indoc::loadBy(array('id' => $doc_id));
 $doc_type = $data->object->params->doctypes;
 
+Users::setObject('user');
+// $user_id = Users::getAuthRole();
+$users_list = Users::getList();
+
 Indoc::setObject('odocroute');
 $lb_params = array(
     'doc_id' => $doc_id,
@@ -33,12 +37,17 @@ else {
 $next_step = $tmp['step'];
 $next_role = $tmp['role'];
 $step_order = $tmp['step_order'];
+$user_id = $tmp['user_id'];
+if (0 != $user_id) {
+    $name = ' ('.$users_list[$user_id]->object->params->f . ' ' . $users_list[$user_id]->object->params->i.')';
+}
 
-// var_dump(Users::GetNextStep($doc_type));
 ?>
 <h3>Отправить документ на </h3>
 <h5 style="text-align: center;">
-    <b><?=$doc_steps[$next_step]?></b> для <b><?= $user_roles[$next_role]?></b>
+    <b><?= $doc_steps[$next_step] ?></b> для <b><?= $user_roles[$next_role] ?></b>
+    <br>
+    <b><?= $name ?></b>
 </h5>
 <hr>
 <form action="/indocitems-form-view?action=oindoc.ajaxMoveRoute.do" 
@@ -49,6 +58,7 @@ $step_order = $tmp['step_order'];
         <input type="hidden" name="oindoc[step]" value="<?=$next_step?>">
         <input type="hidden" name="oindoc[step_order]" value="<?=$step_order?>">
         <input type="hidden" name="oindoc[doc_type]" value="<?=$doc_type?>">
+        <input type="hidden" name="oindoc[user_id]" value="<?=$user_id?>">
         <input type="hidden" name="oindoc[isback]" value="<?=$isBack?>">
         <div style="min-width: 200px; text-align: center;">
             Комментарий: <br>

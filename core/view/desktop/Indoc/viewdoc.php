@@ -45,6 +45,14 @@ $fio_user = Users::getList();
 $doc_id = $item->object->id;
 $doc_type = $item->object->params->doctypes;
 
+Indoc::setObject('odocroute');
+$lb_params = array(
+  'doc_id' => $doc_id,
+  'iscurrent' => '1'
+);
+$current_route_step = Indoc::loadBy($lb_params);
+$current_step_order = $current_route_step->object->step_order;
+
 // var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
@@ -180,13 +188,13 @@ $doc_type = $item->object->params->doctypes;
                   <? endif;?>
                   <?php 
                     if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)
-                      && !Users::IsLastStep($doc_type, $current_role, $current_step)):
+                      && !Users::IsLastStep($doc_type, $current_step_order)):
                   ?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
                     Отправить документ далее
                   </button>
-                  <? endif;?>
-                  <?php if(!Users::IsFirstStep($doc_type, $current_role, $current_step)):?>
+                  <? endif; ?>
+                  <?php if(!Users::IsFirstStep($doc_type, $current_step_order)):?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, 1)">
                     Вернуть на доработку
                   </button>
