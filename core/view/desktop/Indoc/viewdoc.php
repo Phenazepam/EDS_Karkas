@@ -52,6 +52,8 @@ $lb_params = array(
 );
 $current_route_step = Indoc::loadBy($lb_params);
 $current_step_order = $current_route_step->object->step_order;
+$current_role = $current_route_step->object->role_id;
+$current_step = $current_route_step->object->step;
 
 // var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
@@ -100,15 +102,14 @@ $current_step_order = $current_route_step->object->step_order;
                             <th>Шаг №</th>
                             <th>Роль</th>
                             <th>Статус</th>
+                            <th>Ответственный</th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php
-                          $tstep = $item->object->step; // шаг документа
-                          $trole = $item->object->step_role; // роль для документа
-                          $t = Users::GetDocRoute($item->object->params->doctypes);
+                          $t = Users::GetDocRoute($item->object->params->doctypes, $doc_id);
                           foreach ($t as $key => $value) :
-                            if ($value['role'] == $trole && $value['step'] == $tstep) {
+                            if (1 == $value["iscurrent"]) {
                               $current = "current";
                             } 
                             else {
@@ -120,6 +121,7 @@ $current_step_order = $current_route_step->object->step_order;
                               <td><?= $key ?></td>
                               <td><?= $user_roles[$value['role']] ?></td>
                               <td><?= $doc_steps[$value['step']] ?></td>
+                              <td><?= Users::getUserNameById($value['user_id']) ?></td>
                             </tr>
                           <?php endforeach; ?>
                         </tbody>

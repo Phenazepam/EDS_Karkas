@@ -207,6 +207,12 @@ class Collection extends \RedCore\Base\Collection {
 		return false;
 	}
 
+	public static function getUserNameById($user_id){
+		self::setObject('user');
+		$users_list = Users::getList();
+		return $users_list[$user_id]->object->params->f . ' ' . $users_list[$user_id]->object->params->i;
+	}
+
 	public static function accessmatrixStore($params = array()){
 		// var_dump($params["accessmatrix"]);
 		$items = $params["accessmatrix"];
@@ -422,7 +428,7 @@ class Collection extends \RedCore\Base\Collection {
 	 * @return array key => step order, values => steps and roles of document route
 	 * 
 	 */
-	public static function GetDocRoute($doc_type = -1) {
+	public static function GetDocRoute($doc_type = -1, $doc_id = -1) {
 		if (-1 == $doc_type) return;
 
 		self::setObject("doctyperolematrix");
@@ -432,16 +438,44 @@ class Collection extends \RedCore\Base\Collection {
 			->add("doctype", "=", $doc_type)
 			->parse();
 		$matrix = self::getList($where);
+
+		Indoc::setObject("odocroute");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doc_id", "=", $doc_id)
+			->parse();
+		$routes = self::getList($where);
+
+		foreach ($routes as $item) {
+			$item = $item->object;
+			$tmpArray = array(
+				'step' => $item->step,
+				'role' => $item->role_id,
+				'user_id' => $item->user_id,
+				'iscurrent' => $item->iscurrent
+			);
+			$routes_ready[$item->step_order] =  $tmpArray;
+		}
+
+		// var_dump($routes_ready);
 		
 		foreach ($matrix as $key => $item) {
 			$item=$item->object;
-			$tmpArray = array(
-				'step' => $item->step,
-				'role' => $item->role
-			);
-			$result[$item->step_order] = $tmpArray;
+			// var_dump($routes_ready[$item->step_order]);
+			if (!empty($routes_ready[$item->step_order])) {
+				$result[$item->step_order] = $routes_ready[$item->step_order];
+			}
+			else {
+				$tmpArray = array(
+					'step' => $item->step,
+					'role' => $item->role,
+					'user_id' => 0,
+					'iscurrent' => 0
+				);
+				$result[$item->step_order] = $tmpArray;
+			}
 		}
-
 		ksort($result);
 		return $result;
 	}
