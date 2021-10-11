@@ -10,6 +10,7 @@ namespace RedCore\Users;
 
 use \RedCore\Logger\Collection as Logger;
 use \RedCore\Users\Collection as Users;
+use \RedCore\Indoc\Collection as Indoc;
 use \RedCore\Controller as Controller;
 use RedCore\Validator as Vladik;
 use \RedCore\Core as Core;
@@ -344,8 +345,8 @@ class Collection extends \RedCore\Base\Collection {
 	 * @return array [step] => next step, [role] => next role of document route
 	 * 
 	 */
-	public static function GetNextStep($doc_type = -1, $current_step = -1, $current_role = -1) {
-		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+	public static function GetNextStep($doc_type = -1, $current_step_order = -1) {
+		if (-1 == $doc_type || -1 == $current_step_order) return; 
 
 		self::setObject("doctyperolematrix");
 		$where = Where::Cond()
@@ -364,13 +365,14 @@ class Collection extends \RedCore\Base\Collection {
 			);
 			$matrix_ordered[$item->step_order] = $tmpItem;
 		}
-		$current_step_order = $matrix_ready[$current_step][$current_role];
+		// $current_step_order = $matrix_ready[$current_step][$current_role];
 		$i = 1;
 
 		while(true) {
 			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
 				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
 				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
+				$result['step_order'] = $current_step_order + $i;
 				break;
 			}
 			else {
@@ -380,39 +382,35 @@ class Collection extends \RedCore\Base\Collection {
 		return $result;
 	}
 
-	public static function GetStepBack($doc_type = -1, $current_step = -1, $current_role = -1) {
-		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+	public static function GetPrevStep($doc_id = -1, $current_step_order = -1) {
+		if (-1 == $doc_id || -1 == $current_step_order) return; 
 
-		self::setObject("doctyperolematrix");
+		self::setObject("odocroute");
 		$where = Where::Cond()
 			->add("_deleted", "=", "0")
 			->add("and")
-			->add("doctype", "=", $doc_type)
+			->add("doc_id", "=", $doc_id)
 			->parse();
-		$matrix = self::getList($where);
+		$route = self::getList($where);
 
-		foreach($matrix as $key => $item) {
+		// var_dump($current_step_order);
+		foreach($route as $key => $item) {
 			$item = $item->object;
-			$matrix_ready[$item->step][$item->role] = $item->step_order;
-			$tmpItem = array(
-				"step" => $item->step,
-				"role" => $item->role,
-			);
-			$matrix_ordered[$item->step_order] = $tmpItem;
+			$route_ready[$item->step_order] = $item;
 		}
-		$current_step_order = $matrix_ready[$current_step][$current_role];
-		$i = 1;
 
-		while(true) {
-			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
-				$result['step'] = $matrix_ordered[$current_step_order - $i]['step'];
-				$result['role'] = $matrix_ordered[$current_step_order - $i]['role'];
+		$i = 1;
+		while($i < 20){
+			if (isset($route_ready[$current_step_order - $i])) {				
+				$result['step'] = $route_ready[$current_step_order - $i]->step;
+				$result['role'] = $route_ready[$current_step_order - $i]->role_id;
+				$result['step_order'] =$route_ready[$current_step_order - $i]->step_order;
 				break;
 			}
-			else {
-				$i++;
-			}
+			$i++;
 		}
+		
+		// var_dump(isset($route_ready[$current_step_order - 2]));
 		return $result;
 	}
 
@@ -445,14 +443,57 @@ class Collection extends \RedCore\Base\Collection {
 		ksort($result);
 		return $result;
 	}
-	// todo
+
 	public static function CanUserMoveRoute($doc_type = -1, $user_role = -1, $step = -1){
 		if (-1 == $doc_type || -1 == $user_role || -1 ==$step) return;
 
-		if('2' == $user_role || '1' == $user_role) return true;
-
 		Users::setObject("user");
-		if ($user_role == Users::getAuthRole()) {
+		$current_role = Users::getAuthRole();
+		if('2' == $current_role || '1' == $current_role) return true;
+
+		if ($user_role == $current_role) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function IsLastStep($doc_type = -1, $step_role = -1, $step = -1){
+		if (-1 == $doc_type || -1 == $step_role || -1 ==$step) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		$max_order = -1;
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$result[$item->step][$item->role] = $item->step_order;
+			$max_order = $item->step_order > $max_order ? $item->step_order : $max_order;
+		}
+		if ($max_order == $result[$step][$step_role]) {
+			return true;
+		}
+		return false;
+	}
+	public static function IsFirstStep($doc_type = -1, $step_role = -1, $step = -1){
+		if (-1 == $doc_type || -1 == $step_role || -1 ==$step) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$result[$item->step][$item->role] = $item->step_order;
+		}
+		if ('1' == $result[$step][$step_role]) {
 			return true;
 		}
 		return false;

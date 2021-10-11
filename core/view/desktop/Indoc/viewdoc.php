@@ -39,12 +39,11 @@ $doclog = Indoc::getList($log);
 
 Users::setObject("user");
 $user_id = Users::getAuthId();
+$user_role = Users::getAuthRole();
 $fio_user = Users::getList();
 
 $doc_id = $item->object->id;
 $doc_type = $item->object->params->doctypes;
-$current_step = $item->object->step;
-$current_role = $item->object->step_role;
 
 // var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
@@ -179,13 +178,16 @@ $current_role = $item->object->step_role;
                   <? if ($edit_doc[$item->object->id]):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
-                  <?php if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)):?>
-                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
+                  <?php 
+                    if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)
+                      && !Users::IsLastStep($doc_type, $current_role, $current_step)):
+                  ?>
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
                     Отправить документ далее
                   </button>
                   <? endif;?>
-                  <?php if(true):?>
-                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?>, 1)">
+                  <?php if(!Users::IsFirstStep($doc_type, $current_role, $current_step)):?>
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, 1)">
                     Вернуть на доработку
                   </button>
                   <? endif;?>

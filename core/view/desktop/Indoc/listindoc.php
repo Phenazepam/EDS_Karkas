@@ -24,9 +24,8 @@ foreach ($DocTypes_list as $id => $temp) {
 Indoc::setObject("oindoc");
 
 $where = Where::Cond()
-  ->add("_deleted", "=", "0")
-  ->parse();
-
+->add("_deleted", "=", "0")
+->parse();
 $items = Indoc::getList($where);
 
 $tmp = array();
@@ -76,7 +75,7 @@ require 'listindoc.filter.php';
       <th>Имя документа</th>
       <th>№ Регистрации</th>
       <th>Дата регистрации</th>
-      <th>Назначенно на</th>
+      <th>Назначено</th>
       <th>Шаг</th>
       <th>Файл</th>
       <th>Действие</th>
