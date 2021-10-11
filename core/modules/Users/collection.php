@@ -373,6 +373,7 @@ class Collection extends \RedCore\Base\Collection {
 				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
 				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
 				$result['step_order'] = $current_step_order + $i;
+				$result['user_id'] = 0;
 				break;
 			}
 			else {
@@ -401,10 +402,11 @@ class Collection extends \RedCore\Base\Collection {
 
 		$i = 1;
 		while($i < 20){
-			if (isset($route_ready[$current_step_order - $i])) {				
+			if (isset($route_ready[$current_step_order - $i])) {
 				$result['step'] = $route_ready[$current_step_order - $i]->step;
 				$result['role'] = $route_ready[$current_step_order - $i]->role_id;
 				$result['step_order'] =$route_ready[$current_step_order - $i]->step_order;
+				$result['user_id'] =$route_ready[$current_step_order - $i]->user_id;
 				break;
 			}
 			$i++;
@@ -457,8 +459,8 @@ class Collection extends \RedCore\Base\Collection {
 		return false;
 	}
 
-	public static function IsLastStep($doc_type = -1, $step_role = -1, $step = -1){
-		if (-1 == $doc_type || -1 == $step_role || -1 ==$step) return;
+	public static function IsLastStep($doc_type = -1, $current_step_order){
+		if (-1 == $doc_type || -1 == $current_step_order) return;
 
 		self::setObject("doctyperolematrix");
 		$where = Where::Cond()
@@ -470,32 +472,18 @@ class Collection extends \RedCore\Base\Collection {
 		$max_order = -1;
 		foreach ($matrix as $key => $item) {
 			$item=$item->object;
-			$result[$item->step][$item->role] = $item->step_order;
 			$max_order = $item->step_order > $max_order ? $item->step_order : $max_order;
 		}
-		if ($max_order == $result[$step][$step_role]) {
+		if ($current_step_order == $max_order) {
 			return true;
 		}
 		return false;
 	}
-	public static function IsFirstStep($doc_type = -1, $step_role = -1, $step = -1){
-		if (-1 == $doc_type || -1 == $step_role || -1 ==$step) return;
+	public static function IsFirstStep($doc_type = -1, $current_step_order){
+		if (-1 == $doc_type || -1 == $current_step_order) return;
 
-		self::setObject("doctyperolematrix");
-		$where = Where::Cond()
-			->add("_deleted", "=", "0")
-			->add("and")
-			->add("doctype", "=", $doc_type)
-			->parse();
-		$matrix = self::getList($where);
+		if (1 == $current_step_order ) return true;
 
-		foreach ($matrix as $key => $item) {
-			$item=$item->object;
-			$result[$item->step][$item->role] = $item->step_order;
-		}
-		if ('1' == $result[$step][$step_role]) {
-			return true;
-		}
 		return false;
 	}
 
