@@ -67,7 +67,7 @@ class Controller
 			array(
 				"title"    => "Авторизация",
 				"url"      => "auth",
-				"view"     => "desktop/users/auth.php",
+				"view"     => "desktop/Users/auth.php",
 				"content"  => "",
 				"tag"      => array(),
 				"auth"     => true,

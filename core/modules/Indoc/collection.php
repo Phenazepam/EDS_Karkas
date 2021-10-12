@@ -164,7 +164,7 @@ class Collection extends \RedCore\Base\Collection
 
     public static function ajaxRegisterDocLog($params = array())
     {
-        if (empty($params["doclog"] || is_null($params["doclog"]["id"])))
+        if ((empty($params["doclog"]) or (is_null($params["doclog"]["id"]))))
             exit();
         $params = $params["doclog"];
         self::setObject("odoclog");
@@ -201,11 +201,15 @@ class Collection extends \RedCore\Base\Collection
 
         Users::setObject("user");
         $current_user = Users::getAuthId();
-
+        
         $current_step = $item->object->step;
         if ('1' == $isBack) {
             self::registerDocLog($doc_id, 5, $comment, $user_id);
         } else {
+
+            if ('1' == $current_step && '2' == $step) {
+                self::registerDocLog($doc_id, 4, $comment, $user_id);
+            }
 
             if ('2' == $current_step) {
                 self::registerDocLog($doc_id, 6, $comment, $user_id);
