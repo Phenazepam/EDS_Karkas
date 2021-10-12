@@ -17,8 +17,6 @@ $lb_params = array(
 
 $item = Indoc::loadBy($lb_params);
 
-$edit_doc = Indoc::CanUserEditDocs();
-
 Indoc::setObject("odoctypes");
 
 $where = Where::Cond()
@@ -191,7 +189,7 @@ $current_step = $current_route_step->object->step;
                       </tr>
                     </tbody>
                   </table>
-                  <? if ($edit_doc[$item->object->id]):?>
+                  <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
                   <?php 

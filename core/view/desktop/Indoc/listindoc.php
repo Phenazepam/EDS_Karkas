@@ -6,9 +6,9 @@ use RedCore\Where;
 use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
 
-Session::bind("filter_doc_types_id",      "general_filter_doc_types_id", -1);
+Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
 
-$session_doctypes      = (int)Session::get("general_filter_doc_types_id");
+$session_doctypes = (int)Session::get("general_filter_doc_types_id");
 
 Indoc::setObject("odoctypes");
 $where = Where::Cond()
@@ -24,35 +24,35 @@ foreach ($DocTypes_list as $id => $temp) {
 Indoc::setObject("oindoc");
 
 $where = Where::Cond()
-->add("_deleted", "=", "0")
-->parse();
+  ->add("_deleted", "=", "0")
+  ->parse();
 $items = Indoc::getList($where);
 
 $tmp = array();
 
-foreach($items as $document) {
-    if($document->object->params->doctypes == $session_doctypes){
-        $tmp[]=$document;
+if (-1 != $session_doctypes) {
+  foreach ($items as $document) {
+    if ($document->object->params->doctypes == $session_doctypes) {
+      $tmp[] = $document;
     }
+  }
+  $items = $tmp;
 }
-
-$items = $tmp;
-
-$edit_doc = Indoc::CanUserEditDocs();
 
 Indoc::setObject('odocroute');
 $where = Where::Cond()
-->add("_deleted", "=", "0")
-->parse();
+  ->add("_deleted", "=", "0")
+  ->parse();
 $doc_steps = Indoc::getList($where);
 
 foreach ($doc_steps as $key => $item) {
-    $doc_steps_ready[$item->object->doc_id] = $item;
+  $doc_steps_ready[$item->object->doc_id] = $item;
 }
 $doc_steps_name = Indoc::getRouteStatuses();
 
 Users::setObject("user");
-
+$user_id = Users::getAuthId();
+$user_role = Users::getAuthRole();
 $fio_user = Users::getList();
 
 $user = Users::getRolesList();
@@ -95,10 +95,10 @@ require 'listindoc.filter.php';
           <td><?= $item->object->name_doc ?></td>
           <td><?= $item->object->reg_number ?></td>
           <td><?= $item->object->reg_date ?></td>
-          <td><?= $user[$doc_steps_ready[$item->object->id]->object->role_id]?> 
-          <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f?> 
-          <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i?></td>
-          <td><?=$doc_steps_name[$doc_steps_ready[$item->object->id]->object->step]?></td>
+          <td><?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?>
+            <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?>
+            <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?></td>
+          <td><?= $doc_steps_name[$doc_steps_ready[$item->object->id]->object->step] ?></td>
           <?
           if (!empty($item->object->params->file_title)) {
           ?>
@@ -117,10 +117,10 @@ require 'listindoc.filter.php';
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>">Просмотреть</a>
-				<? if ($edit_doc[$item->object->id]): ?>
+                <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
-				<? endif; ?>
+                <? endif; ?>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>">Удалить</a>
               </div>

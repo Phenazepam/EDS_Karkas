@@ -276,49 +276,40 @@ class Collection extends \RedCore\Base\Collection
         Core::$db->execute($sql);
     }
 
-    public static function CanUserEditDocs() {
+    public static function CanUserEditDocs($doc_id = -1, $user_role = -1, $user_id = -1) {
+        if (-1 == $doc_id || -1 == $user_role  || -1 == $user_id ) return;
 
-        Users::setObject('user');
-        $user_id = Users::getAuthId();
-        $user_role = Users::getAuthRole();
-        
         self::setObject('odocroute');
-        $where = Where::Cond()
-            ->add("iscurrent", "=", "1")
-            ->add("and")
-            ->add("step", "=", "1")
-            ->add("and")
-            ->add("user_id", "=", $user_id)
-            ->add("and")
-            ->add("role_id", "=", $user_role)
-            ->parse();
-        $items = self::getList($where);
-        
-        foreach ($items as $item) {
-            $res[$item->object->doc_id] = true;
-        }
+        $lb_params = array(
+            'doc_id' => $doc_id,
+            'iscurrent' => '1'
+        );
+        $route = self::loadBy($lb_params);
+        $route = $route->object;
 
-        return $res;
-        
-        
+        if (1 == $route->step) {
+            if (0 == $route->user_id) {
+                if ($user_role == $route->role_id) {
+                    return true;
+                }
+            }
+            else {
+                if ($user_id == $route->user_id) {
+                    return true;
+                }
+            }
+        }    
+        return false;    
     }
 
-    public static function NumberDocs($step = "-1")
-    {
-        Users::setObject('user');
-        $user_role = Users::getAuthRole();
-        $user_id = Users::getAuthId();
-        
+    public static function NumberDocs($step = -1, $user_role, $user_id)
+    {   
         self::setObject('odocroute');
-        if (- 1 == $step) {
+        if ( -1 == $step) {
             $where = Where::Cond()
             ->add("_deleted", "=", "0")
             ->add("and")
             ->add("iscurrent", "=", "1")
-            ->add("and")
-            ->add("role_id", "=", $user_role)
-            ->add("and")
-            ->add("user_id", "=", $user_id)
             ->parse();
         } else {
             $where = Where::Cond()
@@ -326,18 +317,28 @@ class Collection extends \RedCore\Base\Collection
             ->add("and")
             ->add("iscurrent", "=", "1")
             ->add("and")
-            ->add("role_id", "=", $user_role)
-            ->add("and")
-            ->add("user_id", "=", $user_id)
-            ->add("and")
             ->add("step", "=", $step)
             ->parse();
         }
-        
         $number = self::getList($where);
-        $docs =  count($number);
-        //var_dump($docs);
-        return $docs;
+        
+        $count = 0;
+        foreach($number as $item) {
+            $item = $item->object; 
+            if (1 == $item->step) {
+                if (0 == $item->user_id) {
+                    if ($user_role == $item->role_id) {
+                        $count++;
+                    }
+                }
+                else {
+                    if ($user_id == $item->user_id) {
+                        $count++;
+                    }
+                }
+            }
+        }
+        return $count;
     }
 
     public static function getActionDoc()

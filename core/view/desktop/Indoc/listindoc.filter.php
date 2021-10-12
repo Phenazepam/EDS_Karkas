@@ -1,4 +1,5 @@
 <?php
+
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Session as Session;
 use RedCore\Where as Where;
@@ -38,26 +39,23 @@ $filter_doc_types_list = array(
 ?>
 
 <div class="col-12">
-	<div class="section-content content-details">
-		<div class="row">
-			<div class="col-lg-12 text-center">
-				<div class="text-center" style="font-weight: bold;"></div>
-				<div class="row">
-					<div class="col-lg-3">
-						<div class="text-center" style="font-weight: bold;">Тип документа</div>
-						<button class="btn btn-sm btn-block btn-light dropdown-toggle"
-							type="button" id="dropdownCategoryBar" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">
-							<i class="icon-calendar icons"></i> <?=$filter_doc_types_list[$session_doctypes]?></button>
-						<div class="dropdown-menu" aria-labelledby="dropdownCategoryBar">
-                	<? foreach ($filter_doc_types_list as $filter_doc_types_id => $filter_doc_types_title): ?>
-                		<a class="dropdown-item"
-								<?=(($filter_doc_types_id == $session_doctypes) ? 'style="color: #ccc"' : ('href="/indocitems-list?filter_doc_types_id=' . $filter_doc_types_id . '"'))?>><?=$filter_doc_types_title?></a>
-                    <? endforeach; ?>
+    <div class="section-content content-details">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="text-center" style="font-weight: bold;"></div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="text-center" style="font-weight: bold;">Тип документа</div>
+                        <button class="btn btn-sm btn-block btn-light dropdown-toggle" type="button" id="dropdownCategoryBar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-calendar icons"></i> <?= $filter_doc_types_list[$session_doctypes] ?></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownCategoryBar">
+                            <? foreach ($filter_doc_types_list as $filter_doc_types_id => $filter_doc_types_title) : ?>
+                                <a class="dropdown-item" <?= (($filter_doc_types_id == $session_doctypes) ? 'style="color: #ccc"' : ('href="/indocitems-list?filter_doc_types_id=' . $filter_doc_types_id . '"')) ?>><?= $filter_doc_types_title ?></a>
+                            <? endforeach; ?>
+                        </div>
+                    </div>
                 </div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>

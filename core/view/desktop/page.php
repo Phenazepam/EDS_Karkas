@@ -83,6 +83,8 @@ use RedCore\Controller;
 
               Users::setObject("user");
               $c_user = Users::getAuthToken();
+              $user_role = Users::getAuthRole();
+              $user_id = Users::getAuthId();
 
               $lb_params = array(
                 "token_key" => $c_user
@@ -105,18 +107,18 @@ use RedCore\Controller;
                 <li>
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs();?></span>
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list-draft">Черновики 
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1,  $user_role, $user_id);?></span></a></li>
                     <li><a href="/indocitems-list-agreement">На согласование
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
                     <li><a href="/indocitems-list-approval">На утверждение
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
                     <li><a href="/indocitems-list-adoption">На принятие
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
                   </ul>
                 </li>
               </ul>
@@ -136,7 +138,6 @@ use RedCore\Controller;
               <?php 
                 $mainPageModules = require('MainPageModules.php');
                 Users::setObject("user");
-                $user_role = Users::getAuthRole();
                 foreach($mainPageModules as $moduleKey => $module):
                   if(Users::CanUserSeeModule($user_role, $moduleKey)):
               ?>
@@ -156,61 +157,6 @@ use RedCore\Controller;
                 </li>
               </ul>
               <?endforeach;?>
-              <!-- <?php
-                $user_role = Users::getAuthRole();
-                if($user_role == "2" or $user_role == "3" or $user_role == "4" or $user_role == "5" ):
-              ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-building"></i> Отдел продаж <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "SalesDep");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul>
-              <?php endif; ?>
-              <?php
-                // $user_role = Users::getAuthRole();
-                if($user_role == "2" or $user_role == "3" or $user_role == "4" or $user_role == "5" or $user_role == "6" ):
-              ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-calculator"></i> Бюджетирование <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "bookkeeping");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul>
-              <?php endif; ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-database"></i> Справочники <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "sprav");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul> -->
 
             </div>
           </div>
