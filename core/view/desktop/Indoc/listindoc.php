@@ -40,8 +40,6 @@ $items = $tmp;
 
 $edit_doc = Indoc::CanUserEditDocs();
 
-
-
 Indoc::setObject('odocroute');
 $where = Where::Cond()
 ->add("_deleted", "=", "0")
@@ -119,10 +117,10 @@ require 'listindoc.filter.php';
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>">Просмотреть</a>
-                <? if ($edit_doc[$item->object->id]) : ?>
+				<? if ($edit_doc[$item->object->id]): ?>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
-                <? endif; ?>
+				<? endif; ?>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>">Удалить</a>
               </div>

@@ -9,13 +9,15 @@ Indoc::setObject("oindoc");
 
 $action = Indoc::getActionDoc();
 
-$edit_doc = Indoc::CanUserEditDocs();
+
 
 $lb_params = array(
   "id" => Request::vars("oindoc_id")
 );
 
 $item = Indoc::loadBy($lb_params);
+
+$edit_doc = Indoc::CanUserEditDocs();
 
 Indoc::setObject("odoctypes");
 
