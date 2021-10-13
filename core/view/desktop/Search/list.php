@@ -4,24 +4,21 @@ use \RedCore\Search\Collection as Search;
 use RedCore\Where;
 
 Search::setObject("osearch");
+$items = Search::getList(); 
 
-$items = Search::getList();
 
-//$searcf = Search::searchall();
-
-//var_dump($searcf);
 ?>
 
 <a class="btn btn-primary" href="/searchitems-download">Выгрузить в Excel</a>
 
-<a class="btn btn-primary" href="/searchitems-form">Поиск</a>
-
-<form name="form" action="/searchitems-list?action=osearch.searchall.do" method="post">
-      
-      <input type="text" name="doc_name" > 
-      <input type="submit"  value="Искать" >  
-         
+<form  method = "post">
+  <div class="form-search">
+  	<input type="hidden" name="action" id="action" value="osearch.searchall.do">
+    <input name="osearch[search]" type="text" class="form-search">
+  </div>
+  <button type="submit" class="btn btn-primary">Отправить</button>
 </form>
+
 
 
 <table id="datatable" class="table table-striped table-bordered" style="width:100%">
@@ -39,7 +36,6 @@ $items = Search::getList();
   </thead>
   
   <tbody>
-
 
     <?
     foreach ($items as $item) :

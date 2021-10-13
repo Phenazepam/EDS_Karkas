@@ -270,15 +270,7 @@ class Controller
 		        "content"  => "desktop/search/list.php",
 				"default"  => false,
 		        "tag"      => array("top", "docs"),
-		    ),
-		    array(
-		        "title"    => "Поиск",
-		        "url"      => "searchitems-form",
-		        "view"     => "desktop/page.php",
-		        "content"  => "desktop/search/form_search.php",
-		        "default"  => false,
-		        "tag"      => array("top", ""),
-		    ),
+		    ),   
 			array(
 		        "title"    => "Выгрузка в Excel",
 		        "url"      => "searchitems-download",
@@ -635,7 +627,7 @@ class Controller
 		        "module" => "RedCore\Search\Collection",
 		        "method" => "searchall",
 		        "params" => array(
-		            "oseacrh",
+		            "osearch",
 		        ),
 		    ),
 	    )

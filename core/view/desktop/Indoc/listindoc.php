@@ -6,7 +6,8 @@ use RedCore\Where;
 use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
 
-Session::bind("filter_doc_types_id",      "general_filter_doc_types_id", -1);
+Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
+
 
 $session_doctypes      = (int)Session::get("general_filter_doc_types_id");
 

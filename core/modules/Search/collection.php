@@ -8,12 +8,13 @@
 namespace RedCore\Search;
 
 use \RedCore\Where as Where;
-use RedCore\Session;
+use RedCore\Session as Session;
 use RedCore\Controller;
 use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Files;
 use RedCore\Indoc\Collection as Indoc;
+use RedCore\Config as Config;
 
 
 
@@ -74,37 +75,40 @@ class Collection extends \RedCore\Base\Collection {
 	 * 
 	 * 
 	 */
-	public static function searchall($params = array()) {	    
-	    $documents = Indoc::getList();
-	    
-	    if (empty($_POST[$params]))
-	    {
-        echo "Введите запрос";   
-	    } else{
-	           
-	        $search = $_POST[$params];
-	        
-	            $sql = "SELECT 'doctypes', 'name_doc', 'reg_number', 'reg_date' FORM eds_karkas__document WHERE `doctypes` LIKE '%$search%' OR `name_doc` LIKE '%$search%' OR `reg_number` LIKE '%$search%' OR `reg_date` LIKE '%$search%'";
-
-	            $result = mysqli_query($sql);
-
-	            while ($row = mysqli_fetch_array($result)) {
-	                $doctype = $row['doctype'];
-	                $name_doc = $row['name_doc'];
-	                $reg_number = $row['reg_number'];
-	                $reg_date = $row['reg_date'];
-	          
-	                echo  "<a>".$doctype  ." ". $name_doc ." ". $reg_number ." ". $reg_date ."</a>";
-	            }
-	        }
+	public static function searchall($params = array()) {
+	  //var_dump($params);
+	  //exit();
+	Session::set("session_search", $params['osearch']['search']);
 	
+	$session_doctypes = $params["osearch"]["search"];
+	
+	Indoc::setObject("oindoc");
+	
+	$where = Where::Cond()
+	->add("_deleted", "=", "0")
+	->parse();
+	
+	$documentIndoc = Indoc::getList($where);
+	
+	$tmp = array(); 
+	
+	foreach($documentIndoc as $document) {
+	    if($document == $session_doctypes){
+	        $tmp[]=$document;
+	    }
 	}
-
+	
+	$documentIndoc = $tmp;
+	
+	
+	//var_dump($documentIndoc);
+	//exit();
+	}
+	
 	/*
 	 * 
 	 * 
 	 */
-	
 	public static function export($items) {
 	    $items = Indoc::getList();
 	    $status_list = Indoc::getStatuslist();
