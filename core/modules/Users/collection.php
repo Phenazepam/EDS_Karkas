@@ -492,6 +492,31 @@ class Collection extends \RedCore\Base\Collection {
 		}
 		return false;
 	}
+	public static function CanUserMoveRouteBack($doc_type = -1){
+		if (-1 == $doc_type) return;
+		
+		Users::setObject("user");
+		$current_role = Users::getAuthRole();
+		if (1 == $current_role || 2 == $current_role) return true;
+		
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+		->add("_deleted", "=", "0")
+		->add("and")
+		->add("doctype", "=", $doc_type)
+		->parse();
+		$matrix = self::getList($where);
+		
+		foreach($matrix as $key => $item) {
+			$item = $item->object;
+			$matrix_ordered[$item->step_order] = $item->role;
+		}
+
+		if (in_array($current_role, $matrix_ordered)) {
+			return true;
+		}
+		return false;
+	}
 
 	public static function IsLastStep($doc_type = -1, $current_step_order){
 		if (-1 == $doc_type || -1 == $current_step_order) return;

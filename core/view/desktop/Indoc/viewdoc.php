@@ -200,7 +200,8 @@ $current_step = $current_route_step->object->step;
                     Отправить документ далее
                   </button>
                   <? endif; ?>
-                  <?php if(!Users::IsFirstStep($doc_type, $current_step_order)):?>
+                  <?php if(Users::CanUserMoveRouteBack($doc_type, $current_role, $current_step)
+                    && !Users::IsFirstStep($doc_type, $current_step_order)):?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, 1)">
                     Вернуть на доработку
                   </button>
