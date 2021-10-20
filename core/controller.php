@@ -315,36 +315,36 @@ class Controller
 		    ),*/
 
 			array(
-		        "title"    => "Нормативно-справочная документация. Контрагенты",
+		        "title"    => "Контрагенты",
 		        "url"      => "infodocs-agents",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/agents_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Виды работ",
+		        "title"    => "Виды работ",
 		        "url"      => "infodocs-works",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/works_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
             array(
-		        "title"    => "Нормативно-справочная документация. Материалы",
+		        "title"    => "Материалы",
 		        "url"      => "infodocs-materials",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/materials_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Нормы",
+		        "title"    => "Нормы",
 		        "url"      => "infodocs-standarts",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/standarts_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 
 			
