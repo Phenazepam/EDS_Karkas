@@ -32,22 +32,22 @@ $where = Where::Cond()
 $doc_steps = Indoc::getList($where);
 
 foreach ($doc_steps as $key => $item) {
-    $item = $item->object;
-    if (0 != $item->user_id) {
-        if ($user_id == $item->user_id) {
-            $docs_array[$item->id]["data"] = $all_docs[$item->doc_id];
-            $docs_array[$item->id]["step"] = $item->step;
-            $docs_array[$item->id]["role"] = $item->role_id;
-            $docs_array[$item->id]["user_id"] = $item->user_id;
-        }
-    } else {
-        if ($user_role == $item->role_id) {
-            $docs_array[$item->id]["data"] = $all_docs[$item->doc_id];
-            $docs_array[$item->id]["step"] = $item->step;
-            $docs_array[$item->id]["role"] = $item->role_id;
-            $docs_array[$item->id]["user_id"] = $item->user_id;
-        }
-    }
+  $item = $item->object;
+  if (0 != $item->user_id || 1 == $user_role || 2 == $user_role) {
+      if ($user_id == $item->user_id || 1 == $user_role || 2 == $user_role) {
+          $docs_array[$item->id]["data"] = $all_docs[$item->doc_id];
+          $docs_array[$item->id]["step"] = $item->step;
+          $docs_array[$item->id]["role"] = $item->role_id;
+          $docs_array[$item->id]["user_id"] = $item->user_id;
+      }
+  } else {
+      if ($user_role == $item->role_id || 1 == $user_role || 2 == $user_role) {
+          $docs_array[$item->id]["data"] = $all_docs[$item->doc_id];
+          $docs_array[$item->id]["step"] = $item->step;
+          $docs_array[$item->id]["role"] = $item->role_id;
+          $docs_array[$item->id]["user_id"] = $item->user_id;
+      }
+  }
 }
 $doc_steps_name = Indoc::getRouteStatuses();
 

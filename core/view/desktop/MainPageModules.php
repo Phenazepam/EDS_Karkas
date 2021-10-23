@@ -39,6 +39,11 @@ array(
         'tag' => 'dictionary',
         'userAccess' => array('1', '2', '19')
     ),
+    'infodoc' => array(
+        'name' => 'Нормативно-справочная документация',
+        'tag' => 'infodoc',
+        'userAccess' => array()
+    ),
 );
 
 ?>

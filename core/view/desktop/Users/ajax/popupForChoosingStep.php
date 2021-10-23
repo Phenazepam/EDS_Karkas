@@ -25,22 +25,33 @@ foreach($tmp as $i){
     }
 }
 foreach($tmp as $i){
-    $steps_ready[$i->object->step_order] =  $i->object->step_order.'. '.
+    $steps_ready[$i->object->step_order]["title"] =  $i->object->step_order.'. '.
         $rolesList[$i->object->role].' - '. $stepsList[$i->object->step];
+        $steps_ready[$i->object->step_order]["role"] = $i->object->role;
 }
 ksort($steps_ready);
 
 $title =Indoc::getDocTypesList()[$doctype_id] .' / '. User::getRolesList()[$role_id];
 // var_dump($steps);
 ?>
+<script src="/core/view/desktop/Users/js/popupForChoosingStep.js"></script>
+
 <h3><?=$title?></h3>
 <hr>
 <h5>Шаги документа:</h5>
 <div style="text-align: left;">
     <?php
-        foreach($steps_ready as $item):
+        foreach($steps_ready as $key => $item):
+        $txt = $item["title"];
     ?>
-    <p><?=$item?></p>
+    <p>
+        <?=$item["title"] ?>
+        <?php if ($item['role'] == $role_id) : ?>
+
+        <i class="fa fa-trash" style="cursor: pointer"
+            onclick="popupForDeletingStep(<?= $doctype_id ?>, <?= $key ?>, <?= $key ?>)"></i>
+        <?php endif; ?>
+    </p>
     <?php
         endforeach;
     ?>

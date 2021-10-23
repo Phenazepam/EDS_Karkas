@@ -81,7 +81,7 @@ class Controller
 				"tag"      => array("top"),
 				"default"  => true,
 				"access"   => array(
-					"role" => array(1, 2, 3, 4, 5, 6),
+					"role" => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
 				)
 			),
 
@@ -106,7 +106,7 @@ class Controller
 				"title"    => "Форма - Пользователи",
 				"url"      => "users-form",
 				"view"     => "desktop/page.php",
-				"content"  => "desktop/users/form.php",
+				"content"  => "desktop/Users/form.php",
 				"tag"      => array(),
 				"access"   => array(
 					"role" => array(1, 2, 19),
@@ -315,36 +315,36 @@ class Controller
 		    ),*/
 
 			array(
-		        "title"    => "Нормативно-справочная документация. Контрагенты",
+		        "title"    => "Контрагенты",
 		        "url"      => "infodocs-agents",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/agents_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Виды работ",
+		        "title"    => "Виды работ",
 		        "url"      => "infodocs-works",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/works_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
             array(
-		        "title"    => "Нормативно-справочная документация. Материалы",
+		        "title"    => "Материалы",
 		        "url"      => "infodocs-materials",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/materials_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Нормы",
+		        "title"    => "Нормы",
 		        "url"      => "infodocs-standarts",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/standarts_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 
 			
@@ -511,6 +511,14 @@ class Controller
 		        "name"   => "doctyperolematrix.store.do",
 		        "module" => "RedCore\Users\Collection",
 		        "method" => "ajaxDocTypeRoleMatrixStore",
+		        "params" => array(
+		            "doctyperolematrix",
+		        ),
+			),
+			array(
+		        "name"   => "doctyperolematrix.delete.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixDelete",
 		        "params" => array(
 		            "doctyperolematrix",
 		        ),

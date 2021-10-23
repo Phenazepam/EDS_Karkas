@@ -256,17 +256,97 @@ class Collection extends \RedCore\Base\Collection {
 		$step = $tmp['step'];
 		$role = $tmp["role_id"];
 
-		$params["doctyperolematrix"] = array(
-			'doctype' => $doc_type,
-			'step_order' => $step_order,
-			'step' => $step,
-			'role' => $role
-		);
+		if (is_null($step) || is_null($role)) {
+			$out = array(
+				'errorCode' => '2',
+				'errorText' => 'Нельзя добавить пустой шаг.'
+			);
+		}
+		else
+		if (!self::CheckStepExistence($doc_type, $step, $role)) {
+			$params["doctyperolematrix"] = array(
+				'doctype' => $doc_type,
+				'step_order' => $step_order,
+				'step' => $step,
+				'role' => $role
+			);
 
-		self::setObject("doctyperolematrix");
-		self::store($params);
+			$out = array(
+				'errorCode' => '0',
+				'errorText' => ''
+			);
+			self::setObject("doctyperolematrix");
+			self::store($params);
+		}
+		else{
+			$out = array(
+				'errorCode' => '1',
+				'errorText' => 'Данный шаг уже добавлен.'
+			);
+		}
+		echo json_encode($out);
 		exit();
 	}
+	public static function ajaxDocTypeRoleMatrixDelete($params){
+		// var_dump($params);
+		$tmp = $params["doctyperolematrix"];
+		$doc_type = $tmp["doctype_id"];
+		$stepOrder = $tmp['stepOrder'];
+
+		self::setObject("doctyperolematrix");
+		$lb_params = array(
+			'doctype' => $doc_type,
+			'step_order' => $stepOrder
+		);
+		$stepForDelete = self::loadBy($lb_params);
+		$paramsForDelete["doctyperolematrix"] = array(
+			'id' => $stepForDelete->object->id,
+		);
+	
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$stepForUpd = self::getList($where);
+
+		$flag = false;
+		foreach($stepForUpd as $key => $item) {
+			$item = $item->object;
+			if ($flag) {
+				$paramsForUpd["doctyperolematrix"] = array(
+					'id' => $item->id,
+					'step_order' => $item->step_order - 1 
+				);
+				self::store($paramsForUpd);
+			}
+			if ($item->step_order == $stepOrder) {
+				$flag = true;
+			}
+		}
+
+		parent::delete($paramsForDelete);
+
+		$out = array(
+			'errorCode' => '0',
+			'errorText' => ''
+		);
+		echo json_encode($out);
+		exit();
+	}
+
+	public static function CheckStepExistence($doc_type, $step, $role) {
+		self::setObject("doctyperolematrix");
+		$lb_params = array(
+			'doctype' => $doc_type,
+			'step' => $step,
+			'role' => $role,
+		);
+		$data = self::loadBy($lb_params);
+		if (!empty($data)) return true;
+		else return false;
+	}
+
 	private static function getLastStepOrder($doc_type){
 		$lastStep = 0;
 		self::setObject("doctyperolematrix");
