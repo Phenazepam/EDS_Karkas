@@ -104,7 +104,15 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
+				<li>
+					<a href="/">
+                    <i class="fa fa-dashboard"></i> Дашбоард
+                  </a>
+           
+                </li>
+			  
                 <li>
+					
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
                     <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
@@ -287,6 +295,10 @@ use RedCore\Controller;
   <!-- bootstrap-daterangepicker -->
   <script src="/template/general/vendors/moment/min/moment.min.js"></script>
   <script src="/template/general/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+<!-- jQuery Knob -->
+    <script src="/template/general/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+
 
   <!-- Custom Theme Scripts -->
   <script src="/template/general/build/js/custom.min.js"></script>
