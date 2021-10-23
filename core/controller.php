@@ -81,7 +81,7 @@ class Controller
 				"tag"      => array("top"),
 				"default"  => true,
 				"access"   => array(
-					"role" => array(1, 2, 3, 4, 5, 6),
+					"role" => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
 				)
 			),
 
@@ -106,7 +106,7 @@ class Controller
 				"title"    => "Форма - Пользователи",
 				"url"      => "users-form",
 				"view"     => "desktop/page.php",
-				"content"  => "desktop/users/form.php",
+				"content"  => "desktop/Users/form.php",
 				"tag"      => array(),
 				"access"   => array(
 					"role" => array(1, 2, 19),
@@ -454,7 +454,89 @@ class Controller
 		            "doctyperolematrix",
 		        ),
 			),
-
+			array(
+		        "name"   => "doctyperolematrix.delete.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixDelete",
+		        "params" => array(
+		            "doctyperolematrix",
+		        ),
+			),
+			//Infodocs actions
+			
+			array(
+		        "name"   => "oinfodocsagents.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsagents.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsagents",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsworks.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsworks",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsworks.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsworks",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsmaterials.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsmaterials.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+			array(
+		        "name"   => "oinfodocsstandarts.store.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "store",
+		        "params" => array(
+		            "oinfodocsstandarts",
+		        ),
+		    ),
+			
+		    array(
+		        "name"   => "oinfodocsstandarts.delete.do",
+		        "module" => "RedCore\Infodocs\Collection",
+		        "method" => "delete",
+		        "params" => array(
+		            "oinfodocsmaterials",
+		        ),
+		    ),
+			
+			
 			//Indoc actions
 			array(
 		        "name"   => "oindoc.store.do",

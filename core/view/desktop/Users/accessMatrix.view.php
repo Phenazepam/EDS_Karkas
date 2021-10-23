@@ -12,7 +12,12 @@ $where = Where::Cond()
 
 $doc_types = DocType::getList($where);
 
-$user_roles = Users::$roles;
+$user_roles = Users::getRolesList();
+foreach ($user_roles as $key => $value) {
+  if (0 != $key && 1 != $key && 2 != $key && 3 != $key)
+  $user_roles_tmp[$key] = $value;
+}
+$user_roles = $user_roles_tmp;
 
 Users::setObject("accessmatrix");
 $accessList = Users::getList($where); 
@@ -42,7 +47,7 @@ foreach($accessList as $item){
               <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             
               <!-- <a class="btn btn-primary" href="/users-form">Добавить <i class="fa fa-plus"></i></a> -->
-              <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+              <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                   <tr>
                     <th></th>

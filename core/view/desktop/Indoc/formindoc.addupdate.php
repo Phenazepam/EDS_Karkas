@@ -13,6 +13,11 @@ $lb_params = array(
     "id" => Request::vars("oindoc_id")
 );
 
+$doc_type = Request::vars("type");
+if (is_null($doc_type)) {
+    $doc_type = $oindoc_item->object->params->doctypes;
+}
+
 $oindoc_item = Indoc::loadBy($lb_params);
 
 $select_params["list"] = Indoc::getStatuslist();
@@ -51,6 +56,11 @@ if (is_null(Request::vars("oindoc_id"))) {
     $step = "1";
     $step_role = $user_role;
 }
+
+if (is_null($doc_type)) {
+    $doc_type = $oindoc_item->object->params->doctypes;
+}
+
 $form = Forms::Create()
     ->add("action", "action", "hidden", "action", $html_object . ".store.do", 6, false)
     ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
@@ -58,7 +68,7 @@ $form = Forms::Create()
     ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
     ->add("step", "step", "hidden", $html_object . "[step]", $step)
     ->add("step_role", "step_role", "hidden", $html_object . "[step_role]", $step_role)
-    ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $oindoc_item->object->params->doctypes, 6, false, $DocTypesResult)
+    ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $doc_type, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
     ->add("reg_number", "№ Регистрации", "text", $html_object . "[reg_number]", $oindoc_item->object->reg_number)
     ->add("reg_date", "Дата регистрации", "date", $html_object . "[reg_date]", $oindoc_item->object->reg_date)

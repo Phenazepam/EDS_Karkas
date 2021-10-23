@@ -174,6 +174,7 @@ $current_role = $item->object->step_role;
     </div>
   </div>
 </div>
+<!-- <script src="../../../../template/general/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script> -->
 <style>
   .current {
     background-color: lightblue;

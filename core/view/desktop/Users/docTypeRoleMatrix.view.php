@@ -15,8 +15,11 @@ $doc_types = DocType::getList($where);
 $doc_steps = DocType::getRouteStatuses();
 
 $user_roles = Users::getRolesList();
-
-
+foreach ($user_roles as $key => $value) {
+  if (0 != $key && 1 != $key && 2 != $key && 3 != $key)
+  $user_roles_tmp[$key] = $value;
+}
+$user_roles = $user_roles_tmp;
 Users::setObject("doctyperolematrix");
 $matrix = Users::getList($where); 
 
@@ -54,8 +57,6 @@ foreach($matrix_ready as $k => $doctypes){
         <div class="row">
           <div class="col-sm-12">
             <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="action" id="action" value="accessmatrix.store.do">
-            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             <div class="card-box table-responsive">
 
             
