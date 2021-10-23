@@ -64,6 +64,18 @@ class Sql {
 			FROM
 				eds_karkas__docroute
 		';
+
+	   public static
+	   $sqlRelatedDocs = '
+			SELECT
+				id,
+				doc_id,
+				relateddoc_id,
+                _updated,
+                _deleted
+			FROM
+				eds_karkas__relateddocs
+		';
 	
 
 }

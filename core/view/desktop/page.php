@@ -317,7 +317,7 @@ use RedCore\Controller;
   <script src="/template/general/vendors/search-select/bootstrap-select.min.js"></script>
   <link rel="stylesheet" href="/template/general/vendors/search-select/bootstrap-select.css">
   <!-- Datatables -->
- <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/template/general/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="/template/general/vendors/datatables.net/js/any-number.js"></script>
   <script src="/template/general/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>

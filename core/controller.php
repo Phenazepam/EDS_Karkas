@@ -250,8 +250,6 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
-		    
-		    
 		    array(
 		        "title"    => "Тип документов форма удаления",
 		        "url"      => "doctypes-form-delete",
@@ -259,6 +257,13 @@ class Controller
 		        "content"  => "desktop/Indoc/formdoctypes.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
+		    ),
+		    array(
+		        "title"    => "",
+		        "url"      => "ajax-docsforchoose",
+		        "view"     => "desktop/Indoc/RelatedDocView/docsForChoose.php",
+		        "content"  => "",
+		        "tag"      => array(),
 		    ),
 
 			// Поиск
@@ -632,6 +637,24 @@ class Controller
 		        "method" => "ajaxRegisterDocLog",
 		        "params" => array(
 		            "doclog",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.addrelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "AddRelatedDoc",
+		        "params" => array(
+		            "relateddoc",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.deleterelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxDeleteRelatedDoc",
+		        "params" => array(
+		            "orelateddocs",
 		        ),
 		    ),
 			//DocType actions

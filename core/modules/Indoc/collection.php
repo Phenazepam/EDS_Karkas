@@ -18,6 +18,7 @@ require_once ('objectIndoc.php');
 require_once ('objectDocTypes.php');
 require_once ('objectDocLog.php');
 require_once ('objectDocRoute.php');
+require_once ('objectRelatedDocs.php');
 
 class Collection extends \RedCore\Base\Collection
 {
@@ -76,6 +77,10 @@ class Collection extends \RedCore\Base\Collection
             self::$object = "odocroute";
             self::$sql = Sql::$sqlDocRoute;
             self::$class = "RedCore\Indoc\ObjectDocRoute";
+        } elseif ("orelateddocs" == $obj) {
+            self::$object = "orelateddocs";
+            self::$sql = Sql::$sqlRelatedDocs;
+            self::$class = "RedCore\Indoc\objectRelatedDocs";
         }
     }
 
@@ -142,6 +147,13 @@ class Collection extends \RedCore\Base\Collection
         if ("odoctypes" == key($params)) {
             self::setObject("odoctypes");
             parent::delete($params);
+        
+        }
+        if ("orelateddocs" == key($params)) {
+            self::setObject("orelateddocs");
+            parent::delete($params);
+            var_dump($params);
+            exit();
         }
 
     }
@@ -383,6 +395,32 @@ class Collection extends \RedCore\Base\Collection
         $data = self::getList($where);
         $count = count((array)$data);
         return $count;
+    }
+
+    public static function AddRelatedDoc($params)
+    {   
+        $tmp = $params["relateddoc"];
+        
+        
+        $doc_id = $tmp["doc_id"];
+        $relateddoc_id = $tmp["relateddoc_id"];
+
+        $params["orelateddocs"] = array(
+            'doc_id'=>$doc_id,
+            'relateddoc_id' => $relateddoc_id
+        );
+        // var_dump($params);
+        // exit();
+        self::setObject("orelateddocs");
+        self::store($params);
+        Controller::Redirect("/indocitems-form-addupdate?oindoc_id=".$doc_id);
+    }
+
+    public static function ajaxDeleteRelatedDoc($params)
+    {   
+        self::setObject("orelateddocs");
+        self::delete($params);
+        exit();
     }
 
     public static function getActionDoc()
