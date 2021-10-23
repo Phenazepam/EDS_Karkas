@@ -104,7 +104,15 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
+				<li>
+					<a href="/">
+                    <i class="fa fa-dashboard"></i> Дашбоард
+                  </a>
+           
+                </li>
+			  
                 <li>
+					
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
                     <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
@@ -288,6 +296,10 @@ use RedCore\Controller;
   <script src="/template/general/vendors/moment/min/moment.min.js"></script>
   <script src="/template/general/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+<!-- jQuery Knob -->
+    <script src="/template/general/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+
+
   <!-- Custom Theme Scripts -->
   <script src="/template/general/build/js/custom.min.js"></script>
 
@@ -305,7 +317,7 @@ use RedCore\Controller;
   <script src="/template/general/vendors/search-select/bootstrap-select.min.js"></script>
   <link rel="stylesheet" href="/template/general/vendors/search-select/bootstrap-select.css">
   <!-- Datatables -->
- <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/template/general/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="/template/general/vendors/datatables.net/js/any-number.js"></script>
   <script src="/template/general/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>

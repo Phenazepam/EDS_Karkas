@@ -81,7 +81,7 @@ class Controller
 				"tag"      => array("top"),
 				"default"  => true,
 				"access"   => array(
-					"role" => array(1, 2, 3, 4, 5, 6),
+					"role" => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
 				)
 			),
 
@@ -106,7 +106,7 @@ class Controller
 				"title"    => "Форма - Пользователи",
 				"url"      => "users-form",
 				"view"     => "desktop/page.php",
-				"content"  => "desktop/users/form.php",
+				"content"  => "desktop/Users/form.php",
 				"tag"      => array(),
 				"access"   => array(
 					"role" => array(1, 2, 19),
@@ -250,8 +250,6 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
-		    
-		    
 		    array(
 		        "title"    => "Тип документов форма удаления",
 		        "url"      => "doctypes-form-delete",
@@ -259,6 +257,13 @@ class Controller
 		        "content"  => "desktop/Indoc/formdoctypes.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
+		    ),
+		    array(
+		        "title"    => "",
+		        "url"      => "ajax-docsforchoose",
+		        "view"     => "desktop/Indoc/RelatedDocView/docsForChoose.php",
+		        "content"  => "",
+		        "tag"      => array(),
 		    ),
 
 			// Поиск
@@ -515,6 +520,14 @@ class Controller
 		            "doctyperolematrix",
 		        ),
 			),
+			array(
+		        "name"   => "doctyperolematrix.delete.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixDelete",
+		        "params" => array(
+		            "doctyperolematrix",
+		        ),
+			),
 			//Infodocs actions
 			
 			array(
@@ -624,6 +637,24 @@ class Controller
 		        "method" => "ajaxRegisterDocLog",
 		        "params" => array(
 		            "doclog",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.addrelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "AddRelatedDoc",
+		        "params" => array(
+		            "relateddoc",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.deleterelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxDeleteRelatedDoc",
+		        "params" => array(
+		            "orelateddocs",
 		        ),
 		    ),
 			//DocType actions
