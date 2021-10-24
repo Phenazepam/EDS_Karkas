@@ -112,10 +112,13 @@ require 'listindoc.filter.php';
             	</ul>
             </td>
             <td class="project_progress">
+              <?php
+                $prc = Indoc::GetProgressPercent($item->object->id);
+              ?>
                             <div class="progress progress_sm">
-                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57" style="width: 57%;" aria-valuenow="56"></div>
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="<?= $prc ?>" style="width: 57%;" aria-valuenow="56"></div>
                             </div>
-                            <small>57% Complete</small>
+                            <small><?= $prc ?>% Пройдено</small>
                           </td>
             <td><button type="button" class="btn btn-success btn-xs"><?= $doc_steps_name[$doc_steps_ready[$item->object->id]->object->step] ?></button></td>          
           <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Просмотреть </a>

@@ -134,8 +134,8 @@ class Collection extends \RedCore\Base\Collection
             if ($params["oindoc"]["id"]) {
                 self::registerDocLog($params["oindoc"]["id"], 3, "", $user_id);
             }
+            self::UnsetCurrentStep($params["oindoc"]["id"]);
             self::setObject("oindoc");
-    
             parent::delete($params);
         }
 
@@ -395,6 +395,33 @@ class Collection extends \RedCore\Base\Collection
     public static function getActionDoc()
     {
         return self::$actionDoc;
+    }
+
+    public static function GetProgressPercent($doc_id) {
+        self::setObject("oindoc");
+        $document = self::loadBy(array('id' => $doc_id));
+        $document = $document->object;
+        
+        Users::setObject("doctyperolematrix");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("doctype", "=", $document->params->doctypes)
+            ->parse();
+        $steps = Users::getList($where);
+        $step_count = count((array)$steps);
+
+        self::setObject("odocroute");
+        $lb_params = array(
+            'doc_id' => $document->id,
+            'iscurrent' => '1' 
+        );
+        $current_step = self::loadBy($lb_params);
+        $current_step = $current_step->object;
+
+        $percent = round(($current_step->step_order / $step_count)*100);
+
+        return $percent;
     }
 }
 ?>
