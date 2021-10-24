@@ -4,6 +4,7 @@ use RedCore\Indoc\Collection as Indoc;
 use RedCore\Request;
 use RedCore\Where;
 use RedCore\Users\Collection as Users;
+use RedCore\Session as Session;
 
 Indoc::setObject("oindoc");
 
@@ -161,7 +162,7 @@ $current_step = $current_route_step->object->step;
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
                 <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                  <table border=1 id="datatable" class="table table-striped table-bordered" style="width: 100%">
+                  <table border=1 id="datatable1" class="table table-striped table-bordered" style="width: 100%">
                     <tbody>
                       <tr>
                         <td><b>Тип документа</b></td>
@@ -185,6 +186,17 @@ $current_step = $current_route_step->object->step;
                         <? if (!empty($item->object->params->file_title)): ?>
                         <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
                         <? endif; ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><b>Связанные документы</b></td>
+                        <td>
+                        <?php 
+                          Session::set("s_relateddoc_id", $oindoc_item->object->id);
+                          $relateddocs = require('RelatedDocView/generateRelatedDocView.php'); 
+                          Session::delete("s_relateddoc_id");
+                        ?>
+                          <?= $relateddocs ?>
                         </td>
                       </tr>
                     </tbody>
