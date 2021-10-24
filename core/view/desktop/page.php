@@ -82,6 +82,8 @@ use RedCore\Controller;
               use RedCore\Indoc\Collection as Indoc;
 
               Users::setObject("user");
+              $role_user = Users::getAuthRole();
+              $user = Users::getRolesList();
               $c_user = Users::getAuthToken();
               $user_role = Users::getAuthRole();
               $user_id = Users::getAuthId();
@@ -93,6 +95,8 @@ use RedCore\Controller;
               $c_user = Users::loadBy($lb_params);
               ?>
               <h2><?= $c_user->object->params->f ?> <?= $c_user->object->params->i ?></h2>
+              <br>
+              <h2><?= $user[$role_user]?></h2>
             </div>
           </div>
           <!-- /menu profile quick info -->

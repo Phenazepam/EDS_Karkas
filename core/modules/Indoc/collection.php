@@ -291,6 +291,13 @@ class Collection extends \RedCore\Base\Collection
     public static function CanUserEditDocs($doc_id = -1, $user_role = -1, $user_id = -1) {
         if (-1 == $doc_id || -1 == $user_role  || -1 == $user_id ) return;
 
+        Users::setObject('user');
+        $admin = Users::getAuthRole();
+        
+        if(2 == $admin) {
+            return true;
+        }
+        
         self::setObject('odocroute');
         $lb_params = array(
             'doc_id' => $doc_id,
@@ -298,7 +305,7 @@ class Collection extends \RedCore\Base\Collection
         );
         $route = self::loadBy($lb_params);
         $route = $route->object;
-
+        
         if (1 == $route->step) {
             if (0 == $route->user_id) {
                 if ($user_role == $route->role_id) {
@@ -311,7 +318,7 @@ class Collection extends \RedCore\Base\Collection
                 }
             }
         }    
-        return false;    
+        return false; 
     }
 
     public static function NumberDocs($step = -1, $user_role, $user_id)
