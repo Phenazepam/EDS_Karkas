@@ -15,7 +15,7 @@ async function popupAddingRelatedDoc(docId) {
         cancelButtonText: 'Отмена',
         width: 1000,
         didOpen: () => {
-            $('#datatable').DataTable();
+            $('#datatableForRelated').DataTable();
         },
         preConfirm: async () => {
             let formData = new FormData(

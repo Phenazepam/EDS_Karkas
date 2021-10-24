@@ -48,7 +48,7 @@ $doc_steps_name = Indoc::getRouteStatuses();
 
 <script src="/template/general/vendors/jquery/dist/jquery.min.js"></script>
 <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<table id="datatable" class="table table-striped table-bordered" style="width:100%">
+<table id="datatableForRelated" class="table table-striped table-bordered" style="width:100%">
   <thead>
     <tr>
       <th>Тип документа</th>
