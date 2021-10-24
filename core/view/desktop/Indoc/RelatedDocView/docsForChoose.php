@@ -34,7 +34,9 @@ $where = Where::Cond()
 $doc_steps = Indoc::getList($where);
 
 foreach ($doc_steps as $key => $item) {
-  $doc_steps_ready[$item->object->doc_id] = $item;
+  if (!is_null($item->object->id)) {
+    $doc_steps_ready[$item->object->doc_id] = $item;
+  }
 }
 $doc_steps_name = Indoc::getRouteStatuses();
 
@@ -53,6 +55,7 @@ $doc_steps_name = Indoc::getRouteStatuses();
     <tr>
       <th>Тип документа</th>
       <th>Имя документа</th>
+      <th>id</th>
       <th>№ Регистрации</th>
       <th>Дата регистрации</th>
       <th></th>
@@ -67,6 +70,7 @@ $doc_steps_name = Indoc::getRouteStatuses();
         <tr>
           <td><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?></td>
           <td><?= $item->object->name_doc ?></td>
+          <td><?= $item->object->id ?></td>
           <td><?= $item->object->reg_number ?></td>
           <td><?= $item->object->reg_date ?></td>
           <td>

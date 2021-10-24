@@ -25,7 +25,7 @@ $r = '<script src="/core/view/desktop/Indoc/js/popupAddingRelatedDoc.js"></scrip
     <div class="col col-md-12">
     <label for="reg_date" class="form-control-label">
     Связанные документы</label></div>';
-$r .= '<div id="tags_1_tagsinput" class="form-control col col-md-12" style="width: auto; min-height: 100px; height: 100px;">';
+$r .= '<div id="tags_1_tagsinput" class="form-control col col-md-12" style="width: 100%; min-height: 100px; height: 100px;">';
 foreach ($relateddocs as $key => $item) {
     $item = $item->object;
     $r .= '

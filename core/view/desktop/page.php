@@ -123,13 +123,13 @@ use RedCore\Controller;
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
-                    <li><a href="/indocitems-list-draft">Черновики 
+                    <li><a href="/indocitems-list?my_doc_step=1">Черновики 
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list-agreement">На согласование
+                    <li><a href="/indocitems-list?my_doc_step=2">На согласование
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list-approval">На утверждение
+                    <li><a href="/indocitems-list?my_doc_step=3">На утверждение
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list-adoption">На принятие
+                    <li><a href="//indocitems-list?my_doc_step=4">На принятие
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
                   </ul>
                 </li>

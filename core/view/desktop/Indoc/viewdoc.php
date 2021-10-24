@@ -189,10 +189,10 @@ $current_step = $current_route_step->object->step;
                         </td>
                       </tr>
                       <tr>
-                        <td><b>Связанные документы</b></td>
-                        <td>
+                        <!-- <td><b>Связанные документы</b></td> -->
+                        <td colspan="2">
                         <?php 
-                          Session::set("s_relateddoc_id", $oindoc_item->object->id);
+                          Session::set("s_relateddoc_id", $item->object->id);
                           $relateddocs = require('RelatedDocView/generateRelatedDocView.php'); 
                           Session::delete("s_relateddoc_id");
                         ?>

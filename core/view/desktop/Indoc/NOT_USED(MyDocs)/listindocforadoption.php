@@ -1,8 +1,9 @@
 <?php
-
 use RedCore\Indoc\Collection as Indoc;
 use RedCore\Where;
 use RedCore\Users\Collection as Users;
+use RedCore\Request as Request;
+
 
 Users::setObject("user");
 $user_role = Users::getAuthRole();
