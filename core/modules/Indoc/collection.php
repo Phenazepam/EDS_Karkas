@@ -139,8 +139,8 @@ class Collection extends \RedCore\Base\Collection
             if ($params["oindoc"]["id"]) {
                 self::registerDocLog($params["oindoc"]["id"], 3, "", $user_id);
             }
+            self::UnsetCurrentStep($params["oindoc"]["id"]);
             self::setObject("oindoc");
-    
             parent::delete($params);
         }
 
@@ -303,6 +303,13 @@ class Collection extends \RedCore\Base\Collection
     public static function CanUserEditDocs($doc_id = -1, $user_role = -1, $user_id = -1) {
         if (-1 == $doc_id || -1 == $user_role  || -1 == $user_id ) return;
 
+        Users::setObject('user');
+        $admin = Users::getAuthRole();
+        
+        if(2 == $admin) {
+            return true;
+        }
+        
         self::setObject('odocroute');
         $lb_params = array(
             'doc_id' => $doc_id,
@@ -310,7 +317,7 @@ class Collection extends \RedCore\Base\Collection
         );
         $route = self::loadBy($lb_params);
         $route = $route->object;
-
+        
         if (1 == $route->step) {
             if (0 == $route->user_id) {
                 if ($user_role == $route->role_id) {
@@ -323,7 +330,7 @@ class Collection extends \RedCore\Base\Collection
                 }
             }
         }    
-        return false;    
+        return false; 
     }
 
     public static function NumberDocs($step = -1, $user_role, $user_id)
@@ -426,6 +433,33 @@ class Collection extends \RedCore\Base\Collection
     public static function getActionDoc()
     {
         return self::$actionDoc;
+    }
+
+    public static function GetProgressPercent($doc_id) {
+        self::setObject("oindoc");
+        $document = self::loadBy(array('id' => $doc_id));
+        $document = $document->object;
+        
+        Users::setObject("doctyperolematrix");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("doctype", "=", $document->params->doctypes)
+            ->parse();
+        $steps = Users::getList($where);
+        $step_count = count((array)$steps);
+
+        self::setObject("odocroute");
+        $lb_params = array(
+            'doc_id' => $document->id,
+            'iscurrent' => '1' 
+        );
+        $current_step = self::loadBy($lb_params);
+        $current_step = $current_step->object;
+
+        $percent = round(($current_step->step_order / $step_count)*100);
+
+        return $percent;
     }
 }
 ?>
