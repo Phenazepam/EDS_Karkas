@@ -71,6 +71,7 @@ class Sql {
 				id,
 				doc_id,
 				relateddoc_id,
+				type,
                 _updated,
                 _deleted
 			FROM

@@ -64,6 +64,7 @@ if (is_null($doc_type)) {
 }
 Session::set("s_relateddoc_id", $oindoc_item->object->id);
 $relateddocs = require('RelatedDocView/generateRelatedDocView.php');
+Session::delete("s_relateddoc_id", $oindoc_item->object->id);
 
 
 $form = Forms::Create()

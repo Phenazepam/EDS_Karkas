@@ -23,6 +23,7 @@ class objectRelatedDocs extends \RedCore\Base\ObjectBase {
 			"id"         => "Number",
 			"doc_id"   => "Number",
 			"relateddoc_id"   => "Number",
+			"type"   => "Number",
 			"_updated"   => "Timestamp",
 			"_deleted"   => "Number",
 		);

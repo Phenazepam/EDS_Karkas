@@ -55,6 +55,34 @@ class Collection extends \RedCore\Base\Collection
         "10" => "Документ просмотрен"
     );
 
+    private static $relatedDocsReference = array(
+        "1" => array(
+            'name' => 'document',
+            'reference' => '/indocitems-form-addupdate?oindoc_id=',
+            'columnName' => 'name_doc',
+        ),
+        "2" => array(
+            'name' => 'infodocsagents',
+            'reference' => '/infodocs-agentsform?oinfodocsagents_id=',
+            'columnName' => 'name',
+        ),
+        "3" => array(
+            'name' => 'infodocsworks',
+            'reference' => '/infodocs-worksform?oinfodocsworks_id=',
+            'columnName' => 'name',
+        ),
+        "4" => array(
+            'name' => 'infodocsmaterials',
+            'reference' => '/infodocs-materialsform?oinfodocsmaterials_id=',
+            'columnName' => 'gruppa',
+        ),
+        "5" => array(
+            'name' => 'infodocsstandarts',
+            'reference' => '/infodocs-standartsform?oinfodocsstandarts_id=',
+            'columnName' => 'name',
+        ),
+    );
+
     /**
      *
      * @method \RedCore\Base\Collection setObject()
@@ -411,10 +439,12 @@ class Collection extends \RedCore\Base\Collection
         
         $doc_id = $tmp["doc_id"];
         $relateddoc_id = $tmp["relateddoc_id"];
+        $type = $tmp["type"];
 
         $params["orelateddocs"] = array(
             'doc_id'=>$doc_id,
-            'relateddoc_id' => $relateddoc_id
+            'relateddoc_id' => $relateddoc_id,
+            'type' => $type
         );
         // var_dump($params);
         // exit();
@@ -460,6 +490,10 @@ class Collection extends \RedCore\Base\Collection
         $percent = round(($current_step->step_order / $step_count)*100);
 
         return $percent;
+    }
+
+    public static function GetRelatedDocsReference(){
+        return self::$relatedDocsReference;
     }
 }
 ?>

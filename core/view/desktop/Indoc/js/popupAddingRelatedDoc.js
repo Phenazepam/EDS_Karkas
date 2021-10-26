@@ -14,8 +14,13 @@ async function popupAddingRelatedDoc(docId) {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
         width: 1000,
+        heightAuto: false,
         didOpen: () => {
             $('#datatableForRelated').DataTable();
+            $('#datatableForRelatedAgents').DataTable();
+            $('#datatableForRelatedWorks').DataTable();
+            $('#datatableForRelatedMaterials').DataTable();
+            $('#datatableForRelatedStandarts').DataTable();
         },
         preConfirm: async () => {
             let formData = new FormData(
