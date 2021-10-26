@@ -23,7 +23,7 @@ class ObjectMaterials extends \RedCore\Base\ObjectBase {
 			"id"         => "Number",
 			"su"      => "String",
 			"code"   => "String",
-			"group"   => "String",
+			"gruppa"   => "String",
 			"material"   => "String",
 			"izm"   => "String",
 			"params" => array(
@@ -34,9 +34,22 @@ class ObjectMaterials extends \RedCore\Base\ObjectBase {
 		);
 
 	}
-
-
-
+	public function getId($name = "") {
+		    $oFS = array();
+		    
+		    switch ($name) {
+		        case 'materials':
+		            $oFS = array(
+		               'id' => $this->object->id,
+	            );
+		            break;
+		        default:
+		            $oFS = array();
+		            break;
+	    }
+	    
+	    return (object)$oFS;
+	}
 }
 
 

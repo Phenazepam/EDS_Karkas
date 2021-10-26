@@ -79,9 +79,14 @@ use RedCore\Controller;
               <?php
 
               use RedCore\Users\Collection as Users;
+              use RedCore\Indoc\Collection as Indoc;
 
               Users::setObject("user");
+              $role_user = Users::getAuthRole();
+              $user = Users::getRolesList();
               $c_user = Users::getAuthToken();
+              $user_role = Users::getAuthRole();
+              $user_id = Users::getAuthId();
 
               $lb_params = array(
                 "token_key" => $c_user
@@ -90,6 +95,8 @@ use RedCore\Controller;
               $c_user = Users::loadBy($lb_params);
               ?>
               <h2><?= $c_user->object->params->f ?> <?= $c_user->object->params->i ?></h2>
+              <br>
+              <h2><?= $user[$role_user]?></h2>
             </div>
           </div>
           <!-- /menu profile quick info -->
@@ -101,12 +108,29 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Мониторинг</h3>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-file"></i> Мои документы <span class="fa fa-chevron-down"></span></a>
+				<li>
+					<a href="/">
+                    <i class="fa fa-dashboard"></i> Дашбоард
+                  </a>
+           
+                </li>
+			  
+                <li>
+					
+                  <a>
+                    <i class="fa fa-file"></i> Мои документы 
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
+                    <span class="fa fa-chevron-down"></span>
+                  </a>
                   <ul class="nav child_menu">
-                    <li><a href="/indocitems-list-draft">Черновики</a></li>
-                    <li><a href="/indocitems-list-agreement">На согласование</a></li>
-                    <li><a href="/indocitems-list-approval">На утверждение</a></li>
-                    <li><a href="/indocitems-list-adoption">На принятие</a></li>
+                    <li><a href="/indocitems-list?my_doc_step=1">Черновики 
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1,  $user_role, $user_id);?></span></a></li>
+                    <li><a href="/indocitems-list?my_doc_step=2">На согласование
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
+                    <li><a href="/indocitems-list?my_doc_step=3">На утверждение
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
+                    <li><a href="//indocitems-list?my_doc_step=4">На принятие
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
                   </ul>
                 </li>
               </ul>
@@ -125,7 +149,7 @@ use RedCore\Controller;
               <h3>Данные</h3>
               <?php 
                 $mainPageModules = require('MainPageModules.php');
-                $user_role = Users::getAuthRole();
+                Users::setObject("user");
                 foreach($mainPageModules as $moduleKey => $module):
                   if(Users::CanUserSeeModule($user_role, $moduleKey)):
               ?>
@@ -145,61 +169,6 @@ use RedCore\Controller;
                 </li>
               </ul>
               <?endforeach;?>
-              <!-- <?php
-                $user_role = Users::getAuthRole();
-                if($user_role == "2" or $user_role == "3" or $user_role == "4" or $user_role == "5" ):
-              ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-building"></i> Отдел продаж <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "SalesDep");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul>
-              <?php endif; ?>
-              <?php
-                // $user_role = Users::getAuthRole();
-                if($user_role == "2" or $user_role == "3" or $user_role == "4" or $user_role == "5" or $user_role == "6" ):
-              ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-calculator"></i> Бюджетирование <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "bookkeeping");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul>
-              <?php endif; ?>
-              <ul class="nav side-menu">
-                <li><a><i class="fa fa-database"></i> Справочники <span class="fa fa-chevron-down"></span></a>
-                  <ul class="nav child_menu">
-                    <?php
-                    $menu = Controller::Search("pages", "sprav");
-
-                    foreach ($menu as $item) :
-                    ?>
-                      <li><a href="/<?= $item["url"] ?>"><?= $item["title"] ?></a></li>
-                    <?php
-                    endforeach;
-                    ?>
-                  </ul>
-                </li>
-              </ul> -->
 
             </div>
           </div>
@@ -331,6 +300,10 @@ use RedCore\Controller;
   <script src="/template/general/vendors/moment/min/moment.min.js"></script>
   <script src="/template/general/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+<!-- jQuery Knob -->
+    <script src="/template/general/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+
+
   <!-- Custom Theme Scripts -->
   <script src="/template/general/build/js/custom.min.js"></script>
 
@@ -348,7 +321,7 @@ use RedCore\Controller;
   <script src="/template/general/vendors/search-select/bootstrap-select.min.js"></script>
   <link rel="stylesheet" href="/template/general/vendors/search-select/bootstrap-select.css">
   <!-- Datatables -->
- <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/template/general/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="/template/general/vendors/datatables.net/js/any-number.js"></script>
   <script src="/template/general/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>

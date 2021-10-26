@@ -61,7 +61,7 @@ foreach($matrix_ready as $k => $doctypes){
 
             
               <!-- <a class="btn btn-primary" href="/users-form">Добавить <i class="fa fa-plus"></i></a> -->
-              <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+              <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                   <tr>
                     <th></th>

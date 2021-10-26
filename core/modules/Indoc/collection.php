@@ -4,28 +4,28 @@
  * @author Darkas
  * @copyright REDUIT Co.
  */
-
 namespace RedCore\Indoc;
 
-use \RedCore\Where as Where;
+use RedCore\Where as Where;
 use RedCore\Files;
 use RedCore\Session;
 use RedCore\Controller;
 use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Users\Collection as Users;
+require_once ('sql.php');
+require_once ('objectIndoc.php');
+require_once ('objectDocTypes.php');
+require_once ('objectDocLog.php');
+require_once ('objectDocRoute.php');
+require_once ('objectRelatedDocs.php');
 
-require_once('sql.php');
-require_once('objectIndoc.php');
-require_once('objectDocTypes.php');
-require_once('objectDocLog.php');
+class Collection extends \RedCore\Base\Collection
+{
 
-class Collection extends \RedCore\Base\Collection { 
-    
-    
     private static $list = array(
         "0" => "Не выбран",
-        
+
         "1" => "Черновик",
         "2" => "Зарегистрирован",
         "3" => "Предварительное рассмотрение",
@@ -34,14 +34,14 @@ class Collection extends \RedCore\Base\Collection {
         "6" => "В деле",
         "7" => "В архиве"
     );
-     
+
     private static $routeStatuses = array(
         "1" => "Черновик",
         "2" => "Согласование",
         "3" => "Утверждение",
-        "4" => "Принятие",
+        "4" => "Принятие"
     );
-    
+
     private static $actionDoc = array(
         "1" => "Черновик создан",
         "2" => "Черновик изменен",
@@ -52,6 +52,35 @@ class Collection extends \RedCore\Base\Collection {
         "7" => "Направлен на утверждение",
         "8" => "Утвержден",
         "9" => "Принят",
+        "10" => "Документ просмотрен"
+    );
+
+    private static $relatedDocsReference = array(
+        "1" => array(
+            'name' => 'document',
+            'reference' => '/indocitems-form-addupdate?oindoc_id=',
+            'columnName' => 'name_doc',
+        ),
+        "2" => array(
+            'name' => 'infodocsagents',
+            'reference' => '/infodocs-agentsform?oinfodocsagents_id=',
+            'columnName' => 'name',
+        ),
+        "3" => array(
+            'name' => 'infodocsworks',
+            'reference' => '/infodocs-worksform?oinfodocsworks_id=',
+            'columnName' => 'name',
+        ),
+        "4" => array(
+            'name' => 'infodocsmaterials',
+            'reference' => '/infodocs-materialsform?oinfodocsmaterials_id=',
+            'columnName' => 'gruppa',
+        ),
+        "5" => array(
+            'name' => 'infodocsstandarts',
+            'reference' => '/infodocs-standartsform?oinfodocsstandarts_id=',
+            'columnName' => 'name',
+        ),
     );
 
     /**
@@ -76,6 +105,10 @@ class Collection extends \RedCore\Base\Collection {
             self::$object = "odocroute";
             self::$sql = Sql::$sqlDocRoute;
             self::$class = "RedCore\Indoc\ObjectDocRoute";
+        } elseif ("orelateddocs" == $obj) {
+            self::$object = "orelateddocs";
+            self::$sql = Sql::$sqlRelatedDocs;
+            self::$class = "RedCore\Indoc\objectRelatedDocs";
         }
     }
 
@@ -134,14 +167,21 @@ class Collection extends \RedCore\Base\Collection {
             if ($params["oindoc"]["id"]) {
                 self::registerDocLog($params["oindoc"]["id"], 3, "", $user_id);
             }
+            self::UnsetCurrentStep($params["oindoc"]["id"]);
             self::setObject("oindoc");
-    
             parent::delete($params);
         }
 
         if ("odoctypes" == key($params)) {
             self::setObject("odoctypes");
             parent::delete($params);
+        
+        }
+        if ("orelateddocs" == key($params)) {
+            self::setObject("orelateddocs");
+            parent::delete($params);
+            var_dump($params);
+            exit();
         }
 
     }
@@ -291,6 +331,13 @@ class Collection extends \RedCore\Base\Collection {
     public static function CanUserEditDocs($doc_id = -1, $user_role = -1, $user_id = -1) {
         if (-1 == $doc_id || -1 == $user_role  || -1 == $user_id ) return;
 
+        Users::setObject('user');
+        $admin = Users::getAuthRole();
+        
+        if(2 == $admin) {
+            return true;
+        }
+        
         self::setObject('odocroute');
         $lb_params = array(
             'doc_id' => $doc_id,
@@ -298,7 +345,7 @@ class Collection extends \RedCore\Base\Collection {
         );
         $route = self::loadBy($lb_params);
         $route = $route->object;
-
+        
         if (1 == $route->step) {
             if (0 == $route->user_id) {
                 if ($user_role == $route->role_id) {
@@ -311,7 +358,7 @@ class Collection extends \RedCore\Base\Collection {
                 }
             }
         }    
-        return false;    
+        return false; 
     }
 
     public static function NumberDocs($step = -1, $user_role, $user_id)
@@ -385,9 +432,68 @@ class Collection extends \RedCore\Base\Collection {
         return $count;
     }
 
+    public static function AddRelatedDoc($params)
+    {   
+        $tmp = $params["relateddoc"];
+        
+        
+        $doc_id = $tmp["doc_id"];
+        $relateddoc_id = $tmp["relateddoc_id"];
+        $type = $tmp["type"];
+
+        $params["orelateddocs"] = array(
+            'doc_id'=>$doc_id,
+            'relateddoc_id' => $relateddoc_id,
+            'type' => $type
+        );
+        // var_dump($params);
+        // exit();
+        self::setObject("orelateddocs");
+        self::store($params);
+        Controller::Redirect("/indocitems-form-addupdate?oindoc_id=".$doc_id);
+    }
+
+    public static function ajaxDeleteRelatedDoc($params)
+    {   
+        self::setObject("orelateddocs");
+        self::delete($params);
+        exit();
+    }
+
     public static function getActionDoc()
     {
         return self::$actionDoc;
+    }
+
+    public static function GetProgressPercent($doc_id) {
+        self::setObject("oindoc");
+        $document = self::loadBy(array('id' => $doc_id));
+        $document = $document->object;
+        
+        Users::setObject("doctyperolematrix");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("doctype", "=", $document->params->doctypes)
+            ->parse();
+        $steps = Users::getList($where);
+        $step_count = count((array)$steps);
+
+        self::setObject("odocroute");
+        $lb_params = array(
+            'doc_id' => $document->id,
+            'iscurrent' => '1' 
+        );
+        $current_step = self::loadBy($lb_params);
+        $current_step = $current_step->object;
+
+        $percent = round(($current_step->step_order / $step_count)*100);
+
+        return $percent;
+    }
+
+    public static function GetRelatedDocsReference(){
+        return self::$relatedDocsReference;
     }
 }
 ?>

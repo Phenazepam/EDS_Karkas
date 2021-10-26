@@ -1,13 +1,16 @@
 <?php
 
-use \RedCore\Infodocs\Collection as Test;
+use \RedCore\Infodocs\Collection as Agents;
 
-Test::setObject("oinfodocsagents");
-$items = Test::getList();
+Agents::setObject("oinfodocsagents");
+$items = Agents::getList();
 
 ?>
-
-<a class="btn btn-primary" href="/infodocs-form">Добавить</a>
+	<div class="x_title">
+        <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень контрагентов/корреспондентов</small></h2>
+        <div class="clearfix"></div>
+    </div>
+<a class="btn btn-primary" href="/infodocs-agentsform">Добавить</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
@@ -19,6 +22,7 @@ $items = Test::getList();
 			<th>Материал</th>
 			<th>Ответственный</th>
 			<th>Примечание</th>
+			<th>Действия</th>
 		
 		</tr>
 	</thead>
@@ -36,12 +40,24 @@ $items = Test::getList();
 		<td><?= $item->object->material ?></td>
 		<td><?= $item->object->main_worker ?></td>
 		<td><?= $item->object->other ?></td>
-		<td><a class="badge badge-primary" href="/infodocs-form?otest_id=<?=$item->object->id?>">Редактировать</a></td>
+		<td>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Действия
+                </button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/infodocs-agentsform?oinfodocsagents_id=<?=$item->object->id?>">Редактировать</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="/infodocs-agents?action=oinfodocsagents.delete.do&oinfodocsagents[id]=<?= $item->object->id ?>">Удалить</a>
+				</div>
+            </div>
+        </td>
+		
+		
+		<!--<td><a class="badge badge-primary" href="/infodocs-agentsform?oinfodocsagents_id=<?=$item->object->id?>">Редактировать</a></td>-->
 	</tr>
-	
 <?
 endforeach;	
-
 ?>
 </tbody>
 </table>

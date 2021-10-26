@@ -16,12 +16,12 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 
 	public function __construct() {
 		
-		$this->table = "infodocsmaterials";
+		$this->table = "infodocsworks";
 
 		$this->properties = array(
 		
 			"id"         => "Number",
-			"group"      => "String",
+			"gruppa"      => "String",
 			"name"   => "String",
 			"izm"   => "String",
 			"krd"   => "String",
@@ -38,6 +38,22 @@ class ObjectWorks extends \RedCore\Base\ObjectBase {
 		    "_deleted" => "Number",
 		);
 
+	}
+	public function getId($name = "") {
+		    $oFS = array();
+		    
+		    switch ($name) {
+		        case 'works':
+		            $oFS = array(
+		               'id' => $this->object->id,
+	            );
+		            break;
+		        default:
+		            $oFS = array();
+		            break;
+	    }
+	    
+	    return (object)$oFS;
 	}
 
 

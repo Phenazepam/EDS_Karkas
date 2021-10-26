@@ -16,8 +16,6 @@ class Sql {
 				name_doc,
 				reg_number,
                 reg_date,
-                step,
-                step_role,
 				params,
                 _updated,
                 _deleted
@@ -48,6 +46,36 @@ class Sql {
                 _deleted
 			FROM
 				eds_karkas__doclog
+		';
+
+	   public static
+	   $sqlDocRoute = '
+			SELECT
+				id,
+				doc_id,
+				doc_type,
+				role_id,
+				user_id,
+				step,
+				step_order,
+				iscurrent,
+                _updated,
+                _deleted
+			FROM
+				eds_karkas__docroute
+		';
+
+	   public static
+	   $sqlRelatedDocs = '
+			SELECT
+				id,
+				doc_id,
+				relateddoc_id,
+				type,
+                _updated,
+                _deleted
+			FROM
+				eds_karkas__relateddocs
 		';
 	
 

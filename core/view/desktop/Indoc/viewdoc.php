@@ -4,8 +4,13 @@ use RedCore\Indoc\Collection as Indoc;
 use RedCore\Request;
 use RedCore\Where;
 use RedCore\Users\Collection as Users;
+use RedCore\Session as Session;
 
 Indoc::setObject("oindoc");
+
+$action = Indoc::getActionDoc();
+
+
 
 $lb_params = array(
   "id" => Request::vars("oindoc_id")
@@ -34,23 +39,34 @@ $log = Where::Cond()
 $doclog = Indoc::getList($log);
 
 Users::setObject("user");
-
+$user_id = Users::getAuthId();
+$user_role = Users::getAuthRole();
 $fio_user = Users::getList();
 
 $doc_id = $item->object->id;
-$current_step = $item->object->step;
-$current_role = $item->object->step_role;
+$doc_type = $item->object->params->doctypes;
+
+Indoc::setObject('odocroute');
+$lb_params = array(
+  'doc_id' => $doc_id,
+  'iscurrent' => '1'
+);
+$current_route_step = Indoc::loadBy($lb_params);
+$current_step_order = $current_route_step->object->step_order;
+$current_role = $current_route_step->object->role_id;
+$current_step = $current_route_step->object->step;
+
+// var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
+<script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
 <div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>
-          ДОКУМЕНТЫ<small>форма просмотра</small>
-        </h2>
-
-        <div class="clearfix"></div>
+        <div class="clearfix">
+                <h2><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?>:</b> <?= $item->object->name_doc ?></h2>
+        </div>
       </div>
       <div class="x_content">
         <div class="row">
@@ -58,40 +74,47 @@ $current_role = $item->object->step_role;
             <div class="card-box table-responsive">
               <div class="row">
                 <div class="col">
-                  <h2><b>Имя документ:</b> <?= $item->object->name_doc ?></h2>
                 </div>
-                <div class="col">
-                  <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, <?= $current_step ?>, <?= $current_role ?> )">
-                    Отправить документ далее
-                  </button>
+                <div class="col"> 
                 </div>
               </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item"><a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Маршрут документа</a></li>
-                <li class="nav-item"><a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Просмотр</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" 
+                      data-toggle="tab" href="#home" role="tab" 
+                      aria-controls="home" aria-selected="true">
+                    Маршрут документа</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" 
+                      data-toggle="tab" href="#profile" role="tab" 
+                      aria-controls="profile" aria-selected="false"
+                      onclick="saveDocViewEvent(<?=$doc_id?>, <?=$user_id?>)">
+                    Просмотр</a>
+                </li>
               </ul>
               <div class="tab-content">
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row">
-                    <div class="col">
+                    <div class="col-5">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
                             <th>Шаг №</th>
                             <th>Роль</th>
                             <th>Статус</th>
+                            <th>Ответственный</th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php
-                          $tstep = $item->object->step; // шаг документа
-                          $trole = $item->object->step_role; // роль для документа
-                          $t = Users::GetDocRoute($item->object->params->doctypes);
+                          $t = Users::GetDocRoute($item->object->params->doctypes, $doc_id);
                           foreach ($t as $key => $value) :
-                            if ($value['role'] == $trole && $value['step'] == $tstep) {
+                            if (1 == $value["iscurrent"]) {
                               $current = "current";
-                            } else {
-                              $current = "";
+                            } 
+                            else {
+                              $current = "path";
                             }
 
                           ?>
@@ -99,12 +122,13 @@ $current_role = $item->object->step_role;
                               <td><?= $key ?></td>
                               <td><?= $user_roles[$value['role']] ?></td>
                               <td><?= $doc_steps[$value['step']] ?></td>
+                              <td><?= Users::getUserNameById($value['user_id']) ?></td>
                             </tr>
                           <?php endforeach; ?>
                         </tbody>
                       </table>
                     </div>
-                    <div class="col">
+                    <div class="col-7">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
                           <tr>
@@ -123,14 +147,13 @@ $current_role = $item->object->step_role;
                           foreach ($doclog as $log) :
                           ?>
                           <tr>
-                            <td><?= $log->object->action ?></td>
+                            <td><?= $action[$log->object->action] ?></td>
                             <td><?= $fio_user[$log->object->user_id]->object->params->f ?> <?=$fio_user[$log->object->user_id]->object->params->i?></td>
                             <td><?= $log->object->comment ?></td>
                             <td><?= $log->object->_updated ?></td>
                           </tr>
                           <?
                           endforeach;
-                          
                           ?>
                         </tbody>
                       </table>
@@ -139,7 +162,7 @@ $current_role = $item->object->step_role;
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
                 <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                  <table border=1 id="datatable" class="table table-striped table-bordered" style="width: 100%">
+                  <table border=1 id="datatable1" class="table table-striped table-bordered" style="width: 100%">
                     <tbody>
                       <tr>
                         <td><b>Тип документа</b></td>
@@ -159,11 +182,42 @@ $current_role = $item->object->step_role;
                       </tr>
                       <tr>
                         <td><b>Файл</b></td>
-                        <td><img src="<?= IMAGES . SEP . $item->object->params->file_title ?>"></td>
+                        <td>
+                        <? if (!empty($item->object->params->file_title)): ?>
+                        <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+                        <? endif; ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <!-- <td><b>Связанные документы</b></td> -->
+                        <td colspan="2">
+                        <?php 
+                          Session::set("s_relateddoc_id", $item->object->id);
+                          $relateddocs = require('RelatedDocView/generateRelatedDocView.php'); 
+                          Session::delete("s_relateddoc_id");
+                        ?>
+                          <?= $relateddocs ?>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
+                  <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
+                  <? endif;?>
+                  <?php 
+                    if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)
+                      && !Users::IsLastStep($doc_type, $current_step_order)):
+                  ?>
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
+                    Отправить документ далее
+                  </button>
+                  <? endif; ?>
+                  <?php if(Users::CanUserMoveRouteBack($doc_type, $current_role, $current_step)
+                    && !Users::IsFirstStep($doc_type, $current_step_order)):?>
+                   <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, 1)">
+                    Вернуть на доработку
+                  </button>
+                  <? endif;?>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>
@@ -178,5 +232,9 @@ $current_role = $item->object->step_role;
 <style>
   .current {
     background-color: lightblue;
+    font-weight: bold;
+  }
+  .path {
+    color: rgba(0,0,0,0.5);
   }
 </style>
