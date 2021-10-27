@@ -55,4 +55,3 @@ class ObjectMaterials extends \RedCore\Base\ObjectBase {
 
 
 ?>
-

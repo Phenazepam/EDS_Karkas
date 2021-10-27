@@ -39,4 +39,3 @@ class ObjectMain extends \RedCore\Base\ObjectBase {
 
 
 ?>
-

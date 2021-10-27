@@ -7,11 +7,10 @@ Search::setObject("osearch");
 
 $items = Search::getList();
 
-$filterlist = Search::getStatuslist();
 
 ?>
 
-<a class="btn btn-primary" href="/searchitems-download">Экспорт</a>
+<a class="btn btn-primary" href="/searchitems-download">Выгрузить в Excel</a>
 
 <p>
   <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -48,18 +47,27 @@ $filterlist = Search::getStatuslist();
   </div>
 </div>
 
+<form name="form" action="osearch.searchall.do" method="post">
+  <table>
+    <tr>
+      <td><input type="text" name="doc_name" /> </td>
+    </tr>
+	 <tr>
+      <td>
+        <input type="submit" name="search" value="Искать" />
+      </td>
+    </tr>
+  </table>
+</form>
 
 <table id="datatable" class="table table-striped table-bordered" style="width:100%">
   <thead>
 
     <tr>
-      <th>Имя</th>
-      <th>Рег. Номер</th>
-      <th>Дата изменения</th>
-      <th>Статус</th>
-
+    
     </tr>
   </thead>
+  
   <tbody>
 
 
@@ -70,10 +78,6 @@ $filterlist = Search::getStatuslist();
     ?>
 
       <tr>
-        <td><?= $item->object->name ?></td>
-        <td><?= $item->object->reg_number ?></td>
-        <td><?= $item->object->date_create ?></td>
-        <td><?= $item->object->Status ?></td>
       </tr>
 
 

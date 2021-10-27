@@ -10,6 +10,7 @@ namespace RedCore\Users;
 
 use \RedCore\Logger\Collection as Logger;
 use \RedCore\Users\Collection as Users;
+use \RedCore\Indoc\Collection as Indoc;
 use \RedCore\Controller as Controller;
 use RedCore\Validator as Vladik;
 use \RedCore\Core as Core;
@@ -206,6 +207,12 @@ class Collection extends \RedCore\Base\Collection {
 		return false;
 	}
 
+	public static function getUserNameById($user_id){
+		self::setObject('user');
+		$users_list = Users::getList();
+		return $users_list[$user_id]->object->params->f . ' ' . $users_list[$user_id]->object->params->i;
+	}
+
 	public static function accessmatrixStore($params = array()){
 		// var_dump($params["accessmatrix"]);
 		$items = $params["accessmatrix"];
@@ -249,17 +256,97 @@ class Collection extends \RedCore\Base\Collection {
 		$step = $tmp['step'];
 		$role = $tmp["role_id"];
 
-		$params["doctyperolematrix"] = array(
-			'doctype' => $doc_type,
-			'step_order' => $step_order,
-			'step' => $step,
-			'role' => $role
-		);
+		if (is_null($step) || is_null($role)) {
+			$out = array(
+				'errorCode' => '2',
+				'errorText' => 'Нельзя добавить пустой шаг.'
+			);
+		}
+		else
+		if (!self::CheckStepExistence($doc_type, $step, $role)) {
+			$params["doctyperolematrix"] = array(
+				'doctype' => $doc_type,
+				'step_order' => $step_order,
+				'step' => $step,
+				'role' => $role
+			);
 
-		self::setObject("doctyperolematrix");
-		self::store($params);
+			$out = array(
+				'errorCode' => '0',
+				'errorText' => ''
+			);
+			self::setObject("doctyperolematrix");
+			self::store($params);
+		}
+		else{
+			$out = array(
+				'errorCode' => '1',
+				'errorText' => 'Данный шаг уже добавлен.'
+			);
+		}
+		echo json_encode($out);
 		exit();
 	}
+	public static function ajaxDocTypeRoleMatrixDelete($params){
+		// var_dump($params);
+		$tmp = $params["doctyperolematrix"];
+		$doc_type = $tmp["doctype_id"];
+		$stepOrder = $tmp['stepOrder'];
+
+		self::setObject("doctyperolematrix");
+		$lb_params = array(
+			'doctype' => $doc_type,
+			'step_order' => $stepOrder
+		);
+		$stepForDelete = self::loadBy($lb_params);
+		$paramsForDelete["doctyperolematrix"] = array(
+			'id' => $stepForDelete->object->id,
+		);
+	
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$stepForUpd = self::getList($where);
+
+		$flag = false;
+		foreach($stepForUpd as $key => $item) {
+			$item = $item->object;
+			if ($flag) {
+				$paramsForUpd["doctyperolematrix"] = array(
+					'id' => $item->id,
+					'step_order' => $item->step_order - 1 
+				);
+				self::store($paramsForUpd);
+			}
+			if ($item->step_order == $stepOrder) {
+				$flag = true;
+			}
+		}
+
+		parent::delete($paramsForDelete);
+
+		$out = array(
+			'errorCode' => '0',
+			'errorText' => ''
+		);
+		echo json_encode($out);
+		exit();
+	}
+
+	public static function CheckStepExistence($doc_type, $step, $role) {
+		self::setObject("doctyperolematrix");
+		$lb_params = array(
+			'doctype' => $doc_type,
+			'step' => $step,
+			'role' => $role,
+		);
+		$data = self::loadBy($lb_params);
+		if (!empty($data)) return true;
+		else return false;
+	}
+
 	private static function getLastStepOrder($doc_type){
 		$lastStep = 0;
 		self::setObject("doctyperolematrix");
@@ -344,8 +431,8 @@ class Collection extends \RedCore\Base\Collection {
 	 * @return array [step] => next step, [role] => next role of document route
 	 * 
 	 */
-	public static function GetNextStep($doc_type = -1, $current_step = -1, $current_role = -1) {
-		if (-1 == $doc_type || -1 == $current_step || -1 == $current_role) return; 
+	public static function GetNextStep($doc_type = -1, $current_step_order = -1) {
+		if (-1 == $doc_type || -1 == $current_step_order) return; 
 
 		self::setObject("doctyperolematrix");
 		$where = Where::Cond()
@@ -364,13 +451,15 @@ class Collection extends \RedCore\Base\Collection {
 			);
 			$matrix_ordered[$item->step_order] = $tmpItem;
 		}
-		$current_step_order = $matrix_ready[$current_step][$current_role];
+		// $current_step_order = $matrix_ready[$current_step][$current_role];
 		$i = 1;
 
 		while(true) {
 			if ($matrix_ordered[$current_step_order + $i]['step'] != '1') {
 				$result['step'] = $matrix_ordered[$current_step_order + $i]['step'];
 				$result['role'] = $matrix_ordered[$current_step_order + $i]['role'];
+				$result['step_order'] = $current_step_order + $i;
+				$result['user_id'] = 0;
 				break;
 			}
 			else {
@@ -380,13 +469,46 @@ class Collection extends \RedCore\Base\Collection {
 		return $result;
 	}
 
+	public static function GetPrevStep($doc_id = -1, $current_step_order = -1) {
+		if (-1 == $doc_id || -1 == $current_step_order) return; 
+
+		self::setObject("odocroute");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doc_id", "=", $doc_id)
+			->parse();
+		$route = self::getList($where);
+
+		// var_dump($current_step_order);
+		foreach($route as $key => $item) {
+			$item = $item->object;
+			$route_ready[$item->step_order] = $item;
+		}
+
+		$i = 1;
+		while($i < 20){
+			if (isset($route_ready[$current_step_order - $i])) {
+				$result['step'] = $route_ready[$current_step_order - $i]->step;
+				$result['role'] = $route_ready[$current_step_order - $i]->role_id;
+				$result['step_order'] =$route_ready[$current_step_order - $i]->step_order;
+				$result['user_id'] =$route_ready[$current_step_order - $i]->user_id;
+				break;
+			}
+			$i++;
+		}
+		
+		// var_dump(isset($route_ready[$current_step_order - 2]));
+		return $result;
+	}
+
 	/**
 	 * @method \RedCore\Users\Collection GetDocRoute()
 	 *
 	 * @return array key => step order, values => steps and roles of document route
 	 * 
 	 */
-	public static function GetDocRoute($doc_type = -1) {
+	public static function GetDocRoute($doc_type = -1, $doc_id = -1) {
 		if (-1 == $doc_type) return;
 
 		self::setObject("doctyperolematrix");
@@ -396,19 +518,143 @@ class Collection extends \RedCore\Base\Collection {
 			->add("doctype", "=", $doc_type)
 			->parse();
 		$matrix = self::getList($where);
+
+		Indoc::setObject("odocroute");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doc_id", "=", $doc_id)
+			->parse();
+		$routes = self::getList($where);
+
+		foreach ($routes as $item) {
+			$item = $item->object;
+			$tmpArray = array(
+				'step' => $item->step,
+				'role' => $item->role_id,
+				'user_id' => $item->user_id,
+				'iscurrent' => $item->iscurrent
+			);
+			$routes_ready[$item->step_order] =  $tmpArray;
+		}
+
+		// var_dump($routes_ready);
 		
 		foreach ($matrix as $key => $item) {
 			$item=$item->object;
-			$tmpArray = array(
-				'step' => $item->step,
-				'role' => $item->role
-			);
-			$result[$item->step_order] = $tmpArray;
+			// var_dump($routes_ready[$item->step_order]);
+			if (!empty($routes_ready[$item->step_order])) {
+				$result[$item->step_order] = $routes_ready[$item->step_order];
+			}
+			else {
+				$tmpArray = array(
+					'step' => $item->step,
+					'role' => $item->role,
+					'user_id' => 0,
+					'iscurrent' => 0
+				);
+				$result[$item->step_order] = $tmpArray;
+			}
 		}
-
 		ksort($result);
 		return $result;
 	}
+
+	public static function CanUserMoveRoute($doc_type = -1, $user_role = -1, $step = -1){
+		if (-1 == $doc_type || -1 == $user_role || -1 ==$step) return;
+
+		Users::setObject("user");
+		$current_role = Users::getAuthRole();
+		if('2' == $current_role || '1' == $current_role) return true;
+
+		if ($user_role == $current_role) {
+			return true;
+		}
+		return false;
+	}
+	public static function CanUserMoveRouteBack($doc_type = -1){
+		if (-1 == $doc_type) return;
+		
+		Users::setObject("user");
+		$current_role = Users::getAuthRole();
+		if (1 == $current_role || 2 == $current_role) return true;
+		
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+		->add("_deleted", "=", "0")
+		->add("and")
+		->add("doctype", "=", $doc_type)
+		->parse();
+		$matrix = self::getList($where);
+		
+		foreach($matrix as $key => $item) {
+			$item = $item->object;
+			$matrix_ordered[$item->step_order] = $item->role;
+		}
+
+		if (in_array($current_role, $matrix_ordered)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function IsLastStep($doc_type = -1, $current_step_order){
+		if (-1 == $doc_type || -1 == $current_step_order) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		$max_order = -1;
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$max_order = $item->step_order > $max_order ? $item->step_order : $max_order;
+		}
+		if ($current_step_order == $max_order) {
+			return true;
+		}
+		return false;
+	}
+	public static function IsFirstStep($doc_type = -1, $current_step_order){
+		if (-1 == $doc_type || -1 == $current_step_order) return;
+
+		if (1 == $current_step_order ) return true;
+
+		return false;
+	}
+
+	public static function CanUserReadDocs($doctypes = array()){
+		self::setObject('user');
+		$user_role = self::getAuthRole();
+
+		if (in_array($user_role, ['1', '2'])) {
+			foreach($doctypes as $key => $item) {
+				$res[$item] =  true;
+			}
+			return $res;
+		}
+
+		self::setObject("accessmatrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		$accessList = self::getList($where);
+		foreach($accessList as $item){
+			$accessResult[$item->object->doctype] = json_decode($item->object->roles->access);
+		}
+
+		foreach($doctypes as $key => $item){
+			$res[$item] = in_array($user_role, $accessResult[$item]) ? true : false;
+		}
+	
+		return $res;
+	}
+
+
+
 
 
 }

@@ -8,7 +8,7 @@
 namespace RedCore;
 
 ini_set('display_errors','On');
-//ini_set('display_errors','Off').*
+// ini_set('display_errors','Off').*
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT ^ E_WARNING ^ E_DEPRECATED );
 if(isset($_REQUEST["test-info"])) {
 	ini_set('display_errors','On');
@@ -26,6 +26,7 @@ define('CMS_MODULE'   , CMS_DIR . SEP . 'modules');
 define('CMS_VIEW'     , CMS_DIR . SEP . 'view');
 define('IMAGES'       , SEP . 'images');
 define('NO_IMAGE'     , IMAGES . SEP . 'nophoto.jpg');
+define('ICONS'       , IMAGES . SEP . 'icons');
 
 
 require_once(CMS_DIR    . SEP . 'config.php');
@@ -50,6 +51,7 @@ require_once(CMS_HELPER . SEP . 'files.php');
 require_once(CMS_MODULE . SEP . 'Users/collection.php');
 require_once(CMS_MODULE . SEP . 'Indoc/collection.php');
 require_once(CMS_MODULE . SEP . 'Infodocs/collection.php');
+require_once(CMS_MODULE . SEP . 'Search/collection.php');
 
 require_once(CMS_MODULE . SEP . 'logger/collection.php');
 

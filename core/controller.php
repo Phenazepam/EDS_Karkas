@@ -67,7 +67,7 @@ class Controller
 			array(
 				"title"    => "Авторизация",
 				"url"      => "auth",
-				"view"     => "desktop/users/auth.php",
+				"view"     => "desktop/Users/auth.php",
 				"content"  => "",
 				"tag"      => array(),
 				"auth"     => true,
@@ -81,7 +81,7 @@ class Controller
 				"tag"      => array("top"),
 				"default"  => true,
 				"access"   => array(
-					"role" => array(1, 2, 3, 4, 5, 6),
+					"role" => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
 				)
 			),
 
@@ -106,7 +106,7 @@ class Controller
 				"title"    => "Форма - Пользователи",
 				"url"      => "users-form",
 				"view"     => "desktop/page.php",
-				"content"  => "desktop/users/form.php",
+				"content"  => "desktop/Users/form.php",
 				"tag"      => array(),
 				"access"   => array(
 					"role" => array(1, 2, 19),
@@ -178,6 +178,42 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Черновик'",
+		        "url"      => "indocitems-list-draft",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocfordraft.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Согласование'",
+		        "url"      => "indocitems-list-agreement",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforagreement.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Утверждение'",
+		        "url"      => "indocitems-list-approval",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforapproval.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
+		    
+		    array(
+		        "title"    => "Документы типа: 'Принятие'",
+		        "url"      => "indocitems-list-adoption",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/Indoc/MyDocs/listindocforadoption.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 		    array(
 		        "title"    => "Модальное окно для отправки по маршруту",
@@ -185,6 +221,14 @@ class Controller
 		        "view"     => "desktop/Indoc/ajax/popupMovingRoute.php",
 		        "content"  => "",
 		        "tag"      => array(),
+		    ),
+		    
+		    array(
+		        "title"    => "Скачивание документов",
+		        "url"      => "docs-download",
+		        "view"     => "desktop/Indoc/download.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
 		    ),
 
 			//Тип документов
@@ -206,8 +250,6 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
-		    
-		    
 		    array(
 		        "title"    => "Тип документов форма удаления",
 		        "url"      => "doctypes-form-delete",
@@ -215,6 +257,13 @@ class Controller
 		        "content"  => "desktop/Indoc/formdoctypes.delete.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
+		    ),
+		    array(
+		        "title"    => "",
+		        "url"      => "ajax-docsforchoose",
+		        "view"     => "desktop/Indoc/RelatedDocView/docsForChoose.php",
+		        "content"  => "",
+		        "tag"      => array(),
 		    ),
 
 			// Поиск
@@ -227,10 +276,18 @@ class Controller
 				"default"  => false,
 		        "tag"      => array("top", "docs"),
 		    ),
+		    array(
+		        "title"    => "Поиск-форма-document",
+		        "url"      => "searchitems-form_document",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/form_search_doc.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 			array(
-		        "title"    => "Выгрузка",
+		        "title"    => "Выгрузка в Excel",
 		        "url"      => "searchitems-download",
-		        "view"     => "desktop/download/download.php",
+		        "view"     => "desktop/Search/download.php",
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
@@ -242,6 +299,14 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+		    array(
+		        "title"    => "Тест-Поиск",
+		        "url"      => "searchtest-list",
+		        "view"     => "desktop/page.php",
+		        "content"  => "desktop/search/testsearch.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+            ),
 
 			//Information documents module
 			/*
@@ -255,36 +320,36 @@ class Controller
 		    ),*/
 
 			array(
-		        "title"    => "Нормативно-справочная документация. Контрагенты",
+		        "title"    => "Контрагенты",
 		        "url"      => "infodocs-agents",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/agents_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Виды работ",
+		        "title"    => "Виды работ",
 		        "url"      => "infodocs-works",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/works_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
             array(
-		        "title"    => "Нормативно-справочная документация. Материалы",
+		        "title"    => "Материалы",
 		        "url"      => "infodocs-materials",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/materials_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 			array(
-		        "title"    => "Нормативно-справочная документация. Нормы",
+		        "title"    => "Нормы",
 		        "url"      => "infodocs-standarts",
 		        "view"     => "desktop/page.php",
 		        "content"  => "desktop/infodocs/standarts_list.php",
 				"default"  => false,
-		        "tag"      => array("top", "dictionary"),
+		        "tag"      => array("top", "infodoc"),
 		    ),
 
 			
@@ -455,6 +520,14 @@ class Controller
 		            "doctyperolematrix",
 		        ),
 			),
+			array(
+		        "name"   => "doctyperolematrix.delete.do",
+		        "module" => "RedCore\Users\Collection",
+		        "method" => "ajaxDocTypeRoleMatrixDelete",
+		        "params" => array(
+		            "doctyperolematrix",
+		        ),
+			),
 			//Infodocs actions
 			
 			array(
@@ -557,6 +630,33 @@ class Controller
 		            "oindoc",
 		        ),
 		    ),
+
+			array(
+		        "name"   => "doclog.ajaxRegisterDocLog.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxRegisterDocLog",
+		        "params" => array(
+		            "doclog",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.addrelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "AddRelatedDoc",
+		        "params" => array(
+		            "relateddoc",
+		        ),
+		    ),
+
+			array(
+		        "name"   => "relateddoc.deleterelateddoc.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxDeleteRelatedDoc",
+		        "params" => array(
+		            "orelateddocs",
+		        ),
+		    ),
 			//DocType actions
 		    array(
 		        "name"   => "odoctypes.store.do",
@@ -575,28 +675,17 @@ class Controller
 		            "odoctypes",
 		        ),
 		    ),
-
-			//Infodocs actions
-			array(
-		        "name"   => "oinfodocs.store.do",
-		        "module" => "RedCore\infodocs\Collection",
-		        "method" => "store",
+		   
+	 	    //Search action)
+		    array(
+		        "name"   => "osearch.searchall.do",
+		        "module" => "RedCore\Search\Collection",
+		        "method" => "searchall",
 		        "params" => array(
-		            "oinfodocs",
+		            "oseacrh",
 		        ),
 		    ),
-
-			array(
-		        "name"   => "oinfodocs.delete.do",
-		        "module" => "RedCore\infdocs\Collection",
-		        "method" => "delete",
-		        "params" => array(
-		            "oinfodocs",
-		        ),
-		    ),
-			
-
-		)
+	    )
 	);
 
 
