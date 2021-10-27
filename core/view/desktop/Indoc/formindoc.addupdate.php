@@ -59,6 +59,22 @@ if (is_null(Request::vars("oindoc_id"))) {
     $step_role = $user_role;
 }
 
+//  disabling reg_data 
+$dis_reg_data = "disabled";
+
+if( $user_role == "2" ) {
+	$dis_reg_data = "";
+}
+if( $user_role == "1" ) {
+	$dis_reg_data = "";
+}
+if( $user_role == "19" ) {
+	$dis_reg_data = "";
+}
+
+
+
+
 if (is_null($doc_type)) {
     $doc_type = $oindoc_item->object->params->doctypes;
 }
@@ -77,7 +93,7 @@ $form = Forms::Create()
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $doc_type, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
     ->add("reg_number", "№ Регистрации", "text", $html_object . "[reg_number]", $oindoc_item->object->reg_number)
-    ->add("reg_date", "Дата регистрации", "text", $html_object . "[reg_date]", $oindoc_item->object->reg_date)
+    ->add("reg_date", "Дата регистрации", "text", $html_object . "[reg_date]", $oindoc_item->object->reg_date, "", "", "", $dis_reg_data)
 
     ->add("html", "", "html", "", '<src="' . CMS_TMP . SEP . $oindoc_item->object->params->file_title . '">')
     ->add("file", "Файл", "file", $html_object . "[file]")
