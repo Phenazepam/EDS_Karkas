@@ -41,14 +41,20 @@ $user_id = $tmp['user_id'];
 if (0 != $user_id) {
     $name = ' ('.$users_list[$user_id]->object->params->f . ' ' . $users_list[$user_id]->object->params->i.')';
 }
-
+$isFinalStep = Users::IsLastStep($doc_type, $current_step_order) ? 1 : 0;
 ?>
+<?php
+    if (1 == $isFinalStep) :
+?>
+<h3>Выполнить <?= $doc_steps[$current_step->object->step] ?> документа?</h3>
+<?else:?>
 <h3>Отправить документ на </h3>
 <h5 style="text-align: center;">
     <b><?= $doc_steps[$next_step] ?></b> для <b><?= $user_roles[$next_role] ?></b>
     <br>
     <b><?= $name ?></b>
 </h5>
+<?endif;?>
 <hr>
 <form action="/indocitems-form-view?action=oindoc.ajaxMoveRoute.do" 
     method="post" id="popup" name="oindoc"> 
@@ -60,6 +66,7 @@ if (0 != $user_id) {
         <input type="hidden" name="oindoc[doc_type]" value="<?=$doc_type?>">
         <input type="hidden" name="oindoc[user_id]" value="<?=$user_id?>">
         <input type="hidden" name="oindoc[isback]" value="<?=$isBack?>">
+        <input type="hidden" name="oindoc[isFinalStep]" value="<?=$isFinalStep?>">
         <div style="min-width: 200px; text-align: center;">
             Комментарий: <br>
             <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;font-size:medium"></textarea>

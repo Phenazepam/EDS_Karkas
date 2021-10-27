@@ -560,8 +560,13 @@ class Collection extends \RedCore\Base\Collection {
 		return $result;
 	}
 
-	public static function CanUserMoveRoute($doc_type = -1, $user_role = -1, $step = -1){
-		if (-1 == $doc_type || -1 == $user_role || -1 ==$step) return;
+	public static function CanUserMoveRoute($doc_id = -1, $user_role = -1, $step = -1){
+		if (-1 == $doc_id || -1 == $user_role || -1 ==$step) return;
+
+		Indoc::setObject("oindoc");
+		$document = Indoc::loadBy(array('id' => $doc_id));
+
+		if(5 == $document->object->status || 6 == $document->object->status) return false;
 
 		Users::setObject("user");
 		$current_role = Users::getAuthRole();
@@ -572,9 +577,15 @@ class Collection extends \RedCore\Base\Collection {
 		}
 		return false;
 	}
-	public static function CanUserMoveRouteBack($doc_type = -1){
-		if (-1 == $doc_type) return;
-		
+	public static function CanUserMoveRouteBack($doc_id = -1){
+		if (-1 == $doc_id) return;
+
+		Indoc::setObject("oindoc");
+		$document = Indoc::loadBy(array('id' => $doc_id));
+		$doc_type = $document->object->params->doctypes;
+
+		if(5 == $document->object->status || 6 == $document->object->status) return false;
+
 		Users::setObject("user");
 		$current_role = Users::getAuthRole();
 		if (1 == $current_role || 2 == $current_role) return true;
