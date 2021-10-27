@@ -54,10 +54,13 @@ $step = $oindoc_item->object->step;
 
 $step_role = $oindoc_item->object->step_role;
 
-if (is_null(Request::vars("oindoc_id"))) {
-    $step = "1";
-    $step_role = $user_role;
-}
+$status_id = $oindoc_item->object->params->status_id;
+if (is_null($status_id)) $status_id = "1";
+
+// if (is_null(Request::vars("oindoc_id"))) {
+//     $step = "1";
+//     $step_role = $user_role;
+// }
 
 if (is_null($doc_type)) {
     $doc_type = $oindoc_item->object->params->doctypes;
@@ -72,7 +75,7 @@ $form = Forms::Create()
     ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
 
     ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
-    ->add("step", "step", "hidden", $html_object . "[step]", $step)
+    ->add("status_id", "status_id", "hidden", $html_object . "[params][status_id]", $status_id)
     ->add("step_role", "step_role", "hidden", $html_object . "[step_role]", $step_role)
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $doc_type, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)

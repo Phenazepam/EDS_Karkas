@@ -38,6 +38,8 @@ $log = Where::Cond()
 
 $doclog = Indoc::getList($log);
 
+$docStatus = Indoc::getStatuslist();
+
 Users::setObject("user");
 $user_id = Users::getAuthId();
 $user_role = Users::getAuthRole();
@@ -181,6 +183,10 @@ $current_step = $current_route_step->object->step;
                         <td><?= $item->object->reg_date ?></td>
                       </tr>
                       <tr>
+                        <td><b>Статус документа</b></td>
+                        <td><?= $docStatus[$item->object->status] ?></td>
+                      </tr>
+                      <tr>
                         <td><b>Файл</b></td>
                         <td>
                         <? if (!empty($item->object->params->file_title)): ?>
@@ -201,18 +207,23 @@ $current_step = $current_route_step->object->step;
                       </tr>
                     </tbody>
                   </table>
-                  <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)):?>
+                  <? if (Indoc::CanUserEditDocs($doc_id, $user_role, $user_id)):?>
                   <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
                   <? endif;?>
                   <?php 
-                    if(Users::CanUserMoveRoute($doc_type, $current_role, $current_step)
-                      && !Users::IsLastStep($doc_type, $current_step_order)):
+                    if(Users::CanUserMoveRoute($doc_id, $current_role, $current_step)):
+                      if (!Users::IsLastStep($doc_type, $current_step_order)):
                   ?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
                     Отправить документ далее
                   </button>
+                  <? else: ?>
+                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
+                      Утвердить / Принять
+                    </button>
                   <? endif; ?>
-                  <?php if(Users::CanUserMoveRouteBack($doc_type, $current_role, $current_step)
+                  <? endif; ?>
+                  <?php if(Users::CanUserMoveRouteBack($doc_id)
                     && !Users::IsFirstStep($doc_type, $current_step_order)):?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?>, 1)">
                     Вернуть на доработку

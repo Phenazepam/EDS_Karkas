@@ -24,9 +24,9 @@ class ObjectIndoc extends \RedCore\Base\ObjectBase {
 			"name_doc"   => "String",
 			"reg_number" => "Number",
 		    "reg_date"   => "Timestamp",
+			"status"  => "Number",
 			"params" => array(
 				"file_title" => "String",
-			    "status_id"  => "Number",
 			    "doctypes" => "Number",
 			),
 			"_updated" => "Timestamp",
