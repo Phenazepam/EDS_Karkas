@@ -23,15 +23,15 @@ require_once ('objectRelatedDocs.php');
 class Collection extends \RedCore\Base\Collection
 {
 
-    private static $list = array(
+    private static $statuses = array(
         "0" => "Не выбран",
 
         "1" => "Черновик",
-        "2" => "Зарегистрирован",
-        "3" => "Предварительное рассмотрение",
-        "4" => "Рассмотрение",
-        "5" => "Исполнение",
-        "6" => "В деле",
+        "2" => "На согласовании",
+        "3" => "На утверждении",
+        "4" => "На принятии",
+        "5" => "Утвержден",
+        "6" => "Принят",
         "7" => "В архиве"
     );
 
@@ -143,8 +143,9 @@ class Collection extends \RedCore\Base\Collection
             if ($title = Files::upload("oindoc", "file")) {
                 $params["oindoc"]["params"]["file_title"] = $title;
             }
-            if (! empty($params["oindoc"]["id"])) {
-                self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
+            if (!empty($params["oindoc"]["id"])) {
+                if (1 == $params["oindoc"]["status"])
+                    self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
             } else {
                 self::setObject("oindoc");
                 $lastId = parent::store($params)->object->id;
@@ -188,7 +189,7 @@ class Collection extends \RedCore\Base\Collection
 
     public static function getStatuslist()
     {
-        return self::$list;
+        return self::$statuses;
     }
 
     public static function getRouteStatuses()
@@ -216,10 +217,13 @@ class Collection extends \RedCore\Base\Collection
             exit();
         $params = $params["doclog"];
         self::setObject("odoclog");
-        $where = Where::Cond()->add("doc_id", "=", $params["id"])->parse();
+        $where = Where::Cond()
+            ->add("doc_id", "=", $params["id"])
+            ->parse();
         $data = self::getList($where);
         // var_dump(end($data));
-        if ('10' == end($data)->object->action) {
+        // var_dump($params["doclog"]["user_id"]);
+        if ('10' == end($data)->object->action && $params["user_id"] == end($data)->object->user_id) {
             exit();
         }
         self::registerDocLog($params["id"], $params["action"], $params["comment"], $params["user_id"]);
@@ -238,7 +242,8 @@ class Collection extends \RedCore\Base\Collection
         return $res;
     }
 
-    public static function MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent = '1', $comment = '', $isBack = '0')
+    public static function MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, 
+        $step_order, $isCurrent = '1', $comment = '', $isBack = '0', $isFinalStep = '0')
     {
         self::setObject("odocroute");
         $lb_params = array(
@@ -249,54 +254,89 @@ class Collection extends \RedCore\Base\Collection
 
         Users::setObject("user");
         $current_user = Users::getAuthId();
-        
+
         $current_step = $item->object->step;
-        if ('1' == $isBack) {
-            self::registerDocLog($doc_id, 5, $comment, $user_id);
-        } else {
 
-            if ('1' == $current_step && '2' == $step) {
-                self::registerDocLog($doc_id, 4, $comment, $user_id);
+        if (1 == $isFinalStep) {
+            if (3 == $current_step) {
+                self::registerDocLog($doc_id, 8, $comment, $current_user);
+                self::ChangeDocumentStatus($doc_id, 5);
+            }
+            if (4 == $current_step) {
+                self::registerDocLog($doc_id, 9, $comment, $current_user);
+                self::ChangeDocumentStatus($doc_id, 6);
+            }
+            self::setObject("odocroute");
+            $params["odocroute"] = array(
+                'id' => $item->object->id,
+                'user_id' => $current_user,
+                'iscurrent' => '0'
+            );
+            self::store($params);
+        } 
+        else {
+            if ('1' == $isBack) {
+                self::registerDocLog($doc_id, 5, $comment, $user_id);
+            } else {
+
+                if ('1' == $current_step && '2' == $step) {
+                    self::registerDocLog($doc_id, 4, $comment, $current_user);
+                }
+
+                if ('2' == $current_step) {
+                    self::registerDocLog($doc_id, 6, $comment, $current_user);
+                }
+
+                if ('3' == $current_step) {
+                    self::registerDocLog($doc_id, 8, $comment, $current_user);
+                }
+
+                if ('2' == $current_step) {
+                    self::registerDocLog($doc_id, 4, $comment, $current_user);
+                }
+                if ('3' == $current_step) {
+                    self::registerDocLog($doc_id, 7, $comment, $current_user);
+                }
             }
 
-            if ('2' == $current_step) {
-                self::registerDocLog($doc_id, 6, $comment, $user_id);
-            }
+            self::setObject("odocroute");
+            // self::UnsetCurrentStep($doc_id);
+            $params["odocroute"] = array(
+                'id' => $item->object->id,
+                'user_id' => $current_user,
+                'iscurrent' => '0'
+            );
+            // var_dump($params);
+            // exit();
+            self::store($params);
 
-            if ('3' == $current_step) {
-                self::registerDocLog($doc_id, 8, $comment, $user_id);
-            }
+            $params["odocroute"] = array(
+                'doc_id' => $doc_id,
+                'doc_type' => $doc_type,
+                'role_id' => $role_id,
+                'user_id' => $user_id,
+                'step' => $step,
+                'step_order' => $step_order,
+                'iscurrent' => $isCurrent
+            );
+            // var_dump($params["oindoc"]);
+            self::store($params);
 
-            if ('2' == $current_step) {
-                self::registerDocLog($doc_id, 4, $comment, $user_id);
-            }
-            if ('3' == $current_step) {
-                self::registerDocLog($doc_id, 7, $comment, $user_id);
+            switch ($step) {
+                case 1:
+                    self::ChangeDocumentStatus($doc_id, 1);
+                    break;
+                case 2:
+                    self::ChangeDocumentStatus($doc_id, 2);
+                    break;
+                case 3:
+                    self::ChangeDocumentStatus($doc_id, 3);
+                    break;
+                case 4:
+                    self::ChangeDocumentStatus($doc_id, 4);
+                    break;
             }
         }
-
-        self::setObject("odocroute");
-        // self::UnsetCurrentStep($doc_id);
-        $params["odocroute"] = array(
-            'id' => $item->object->id,
-            'user_id' => $current_user,
-            'iscurrent' => '0'
-        );
-        // var_dump($params);
-        // exit();
-        self::store($params);
-
-        $params["odocroute"] = array(
-            'doc_id' => $doc_id,
-            'doc_type' => $doc_type,
-            'role_id' => $role_id,
-            'user_id' => $user_id,
-            'step' => $step,
-            'step_order' => $step_order,
-            'iscurrent' => $isCurrent
-        );
-        // var_dump($params["oindoc"]);
-        self::store($params);
     }
 
     public static function ajaxMoveRoute($params = array())
@@ -311,13 +351,23 @@ class Collection extends \RedCore\Base\Collection
         $user_id = $params["user_id"];
         $step = $params["step"];
         $step_order = $params["step_order"];
+        $isFinalStep = $params["isFinalStep"];
         $isCurrent = '1';
         $comment = $params["comment"];
 
         $isBack = $params["isback"];
 
-        self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack);
+        self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
         exit();
+    }
+
+    public static function ChangeDocumentStatus($doc_id, $status){
+        $params["oindoc"] = array(
+            'id' => $doc_id,
+            'status' => $status,
+        );
+        self::setObject("oindoc");
+        self::store($params);
     }
 
     protected static function UnsetCurrentStep($doc_id = - 1)
@@ -331,12 +381,9 @@ class Collection extends \RedCore\Base\Collection
     public static function CanUserEditDocs($doc_id = -1, $user_role = -1, $user_id = -1) {
         if (-1 == $doc_id || -1 == $user_role  || -1 == $user_id ) return;
 
-        Users::setObject('user');
-        $admin = Users::getAuthRole();
-        
-        if(2 == $admin) {
-            return true;
-        }
+        self::setObject("oindoc");
+		$document = self::loadBy(array('id' => $doc_id));
+		if(5 == $document->object->status || 6 == $document->object->status) return false;
         
         self::setObject('odocroute');
         $lb_params = array(
@@ -345,7 +392,14 @@ class Collection extends \RedCore\Base\Collection
         );
         $route = self::loadBy($lb_params);
         $route = $route->object;
-        
+
+
+        Users::setObject('user');
+        $admin = Users::getAuthRole();
+        if(2 == $admin || 1 == $admin) {
+            return true;
+        }
+
         if (1 == $route->step) {
             if (0 == $route->user_id) {
                 if ($user_role == $route->role_id) {
@@ -469,6 +523,8 @@ class Collection extends \RedCore\Base\Collection
         self::setObject("oindoc");
         $document = self::loadBy(array('id' => $doc_id));
         $document = $document->object;
+
+        if (5 == $document->status || 6 == $document->status) return 100;
         
         Users::setObject("doctyperolematrix");
         $where = Where::Cond()
@@ -487,7 +543,7 @@ class Collection extends \RedCore\Base\Collection
         $current_step = self::loadBy($lb_params);
         $current_step = $current_step->object;
 
-        $percent = round(($current_step->step_order / $step_count)*100);
+        $percent = round(($current_step->step_order / ($step_count + 1))*100);
 
         return $percent;
     }
