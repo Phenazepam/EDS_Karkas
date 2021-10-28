@@ -331,7 +331,7 @@ jQuery(document).ready(function () {
   
 
   
-
+	<a href="/indocitems-list?my_doc_step=1">
     <div class="col-md-3 widget widget_tally_box">
 
 		<div style="background-color: #311b92; min-height: 320px;" class="x_panel bg-gradient text-white">
@@ -363,9 +363,9 @@ jQuery(document).ready(function () {
 		</div>
 
 	</div>
-
+	</a>
 	
-
+	<a href="/indocitems-list?my_doc_step=2">
 	<div class="col-md-3 widget widget_tally_box">
 
 		<div style="background-color: #0dcaf0; min-height: 320px;" class="x_panel bg-gradient text-white">
@@ -397,9 +397,9 @@ jQuery(document).ready(function () {
 		</div>
 
 	</div>
-
+	</a>
 	
-
+	<a href="/indocitems-list?my_doc_step=3">
 	<div class="col-md-3 widget widget_tally_box">
 
 		<div style="background-color: #20c997;  min-height: 320px;"  class="x_panel bg-gradient text-white">
@@ -431,9 +431,9 @@ jQuery(document).ready(function () {
 		</div>
 
 	</div>
-
+	</a>
 	
-
+	<a href="/indocitems-list?my_doc_step=4">
 	<div class="col-md-3 widget widget_tally_box ">
 
 		<div style="background-color: #d63384;  min-height: 320px;"  class="x_panel bg-gradient text-white">
@@ -465,9 +465,9 @@ jQuery(document).ready(function () {
 		</div>
 
 	</div>
-
+	</a>
 	
-
+	<a href="/indocitems-list?my_doc_step=0">
 	<div class="col-md-3 widget widget_tally_box">
 
 		<div style="background-color: #fd7e14;  min-height: 320px;"  class="x_panel bg-gradient text-white">
@@ -496,17 +496,8 @@ jQuery(document).ready(function () {
 		</div>
 
 	</div>
-
+	</a>
 	</div>
-
 	</div>
-
 	</div>
-
-	
-
-	
-
   </div>
-
-</div>

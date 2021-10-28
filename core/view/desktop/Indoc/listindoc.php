@@ -46,6 +46,7 @@ foreach ($doc_steps as $key => $item) {
 }
 
 $doc_steps_name = Indoc::getRouteStatuses();
+$doc_status_name = Indoc::GetNameStatuses();
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
 Users::setObject("user");
@@ -80,6 +81,7 @@ if (!is_null($my_doc_step)) {
     }
   }
 }
+
 else {
   foreach ($all_docs as $item) {
     if ($read_doc[$item->object->params->doctypes]) {
@@ -106,11 +108,8 @@ if (-1 !== $session_doctypes) {
   }
   $items = $tmp;
 }
-
-
 // Search::setObject("osearch");
 // Search::export($items);
-
 ?>
 <?
 require 'listindoc.filter.php';
@@ -124,7 +123,7 @@ require 'listindoc.filter.php';
       <th>№ Регистрации</th>
       <th>Назначено</th>
       <th>Прогресс</th>
-      <th>Шаг</th>
+      <th>Статус</th>
       <th>Действие</th>
     </tr>
   </thead>
@@ -132,25 +131,22 @@ require 'listindoc.filter.php';
 
     <?
     foreach ($items as $key => $item) :
-        
     ?>
-
         <tr>
           <td>
             <a><?= $item->object->name_doc ?></a>
             <br>
             <small><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?></b></small>
-            <br>
+            (
             <small><?= $item->object->reg_date ?></small>
+            )
           </td>
           <td><?= $item->object->reg_number ?></td>
           <td>
             <ul class="list-inline">
               <li>
                 <img src="<?= ICONS . SEP . 'user.png' ?>" class="avatar" alt="Avatar" title="
-						<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?>
-            			<?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?>
-            			<?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
+					<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
               </li>
             </ul>
           </td>
@@ -163,12 +159,15 @@ require 'listindoc.filter.php';
             </div>
             <small><?= $prc ?>% Пройдено</small>
           </td>
-          <td><button type="button" class="btn btn-success btn-xs"><?= $doc_steps_name[$doc_steps_ready[$item->object->id]->object->step] ?></button></td>
-          <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Просмотреть </a>
+          <td><button type="button" class="btn btn-success btn-sm"><?= $doc_status_name[$item->object->status] ?></button></td>
+          <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Просмотреть </a>
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
-              <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Редактировать </a>
+              <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
-            <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Удалить </a>
+            <? if($item->object->status == 5 || $item->object->status == 6) : ?>
+              <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+            <? endif; ?>
+            <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
         </tr>
 
