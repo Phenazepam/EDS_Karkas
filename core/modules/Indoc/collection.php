@@ -551,5 +551,9 @@ class Collection extends \RedCore\Base\Collection
     public static function GetRelatedDocsReference(){
         return self::$relatedDocsReference;
     }
+    
+    public static function GetNameStatuses(){
+        return self::$statuses;
+    }
 }
 ?>

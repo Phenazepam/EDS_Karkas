@@ -129,9 +129,14 @@ use RedCore\Controller;
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_step=3">На утверждение
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="//indocitems-list?my_doc_step=4">На принятие
+                    <li><a href="/indocitems-list?my_doc_step=4">На принятие
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
                   </ul>
+                </li>
+                <li>
+					<a href="/indocitems-list?my_doc_step=0">
+                    	<i class="fa fa-file"></i> Хранилище документов
+                  	</a>
                 </li>
               </ul>
             </div>
