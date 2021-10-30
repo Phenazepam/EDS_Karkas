@@ -584,16 +584,16 @@ class Collection extends \RedCore\Base\Collection
 			$stp_ordr = $item->object->step_order;
 			
 			if ($user == $user_id) {
-				if ( $step_order == "1" ) {
+				if ( $stp_ordr == "1" ) {
 					$chern++;
 				}
-				if ( $step_order == "2" ) {
+				if ( $stp_ordr == "2" ) {
 					$sogl++;
 				}
-				if ( $step_order == "3" ) {
+				if ( $stp_ordr == "3" ) {
 					$utv++;
 				}
-				if ( $step_order == "4" ) {
+				if ( $stp_ordr == "4" ) {
 					$prin++;
 				}
 			}
