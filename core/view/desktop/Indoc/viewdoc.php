@@ -133,6 +133,7 @@ $current_step = $current_route_step->object->step;
                     <div class="col-7">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
+                         <? if ($user_role == 2) : ?>
                           <tr>
                             <th>Резолюция</th>
                           </tr>
@@ -156,6 +157,7 @@ $current_step = $current_route_step->object->step;
                           </tr>
                           <?
                           endforeach;
+                          endif;
                           ?>
                         </tbody>
                       </table>

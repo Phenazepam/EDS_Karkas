@@ -13,6 +13,8 @@ use RedCore\Controller;
 use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Users\Collection as Users;
+use RedCore\Validator as Validator;
+
 require_once ('sql.php');
 require_once ('objectIndoc.php');
 require_once ('objectDocTypes.php');

@@ -1,74 +1,47 @@
 <?php
+use RedCore\Users\Collection as Users;
 
+use RedCore\Indoc\Collection as Indoc;
 
+Users::setObject("user");
 
-  use RedCore\Users\Collection as Users;
+$c_user = Users::getAuthToken();
 
-  use RedCore\Indoc\Collection as Indoc;
+$user_role = Users::getAuthRole();
 
+$user_id = Users::getAuthId();
 
+$lb_params = array(
 
-  Users::setObject("user");
+    "token_key" => $c_user
+);
 
-  $c_user = Users::getAuthToken();
+$c_user = Users::loadBy($lb_params);
 
-  $user_role = Users::getAuthRole();
+Indoc::setObject("odoctypes");
 
-  $user_id = Users::getAuthId();
+$DocTypes = Indoc::getList($where);
 
+$DocTypesid = array();
 
+foreach ($DocTypes as $id => $temp) {
 
-  $lb_params = array(
+    $DocTypesid[$id] = $temp->object->id;
+}
 
-	"token_key" => $c_user
+$DocTypesAcceess = Users::GetDocTypesByUser($DocTypesid);
 
-  );
+$DocTypesResult = array();
 
+// $DocTypesResult["list"][0] = "Не выбрано";
 
+foreach ($DocTypesAcceess as $key => $item) {
 
-  $c_user = Users::loadBy($lb_params);
+    if ($item) {
 
-  
-
-  
-
-  
-
-  Indoc::setObject("odoctypes");
-
-
-
-	$DocTypes = Indoc::getList($where);
-
-
-
-	$DocTypesid = array();
-
-	foreach ($DocTypes as $id => $temp) {
-
-		$DocTypesid[$id] = $temp->object->id;
-
-	}
-
-
-
-	$DocTypesAcceess = Users::GetDocTypesByUser($DocTypesid);
-
-	$DocTypesResult = array();
-
-	//$DocTypesResult["list"][0] = "Не выбрано";
-
-	foreach ($DocTypesAcceess as $key => $item) {
-
-		if ($item) {
-
-			$DocTypesResult[$key] = $DocTypes[$key]->object->title;
-
-		}
-
-	}
-
-  
+        $DocTypesResult[$key] = $DocTypes[$key]->object->title;
+    }
+}
 
 ?>
 
@@ -76,103 +49,106 @@
 
 <div class="container">
 
-  <div class="row">
+	<div class="row">
 
-	<div class="x_panel">
+		<div class="x_panel">
 
-		<div class="x_title">
+			<div class="x_title">
 
-		  <h2>Создание документов</h2>
+				<h2>Создание документов</h2>
 
-		  <div class="clearfix"></div>
+				<div class="clearfix"></div>
 
-		</div>
+			</div>
 
-		<div class="x_content">
+			<div class="x_content">
 
-		  <!--p>Add the class <code>.btn .btn-app</code> tag</p-->
+				<!--p>Add the class <code>.btn .btn-app</code> tag</p-->
 
 
 
 			<?php
 
-				foreach($DocTypesResult as $key => $item):
+foreach ($DocTypesResult as $key => $item) :
 
-			?>
+    ?>
 
 			
 
-				<a style=" width: 100px; height: 120px" class="btn btn-app bg-gradient" href="/indocitems-form-addupdate?type=<?=$key?>">
-
-					<i style="font-size: 3em; margin-bottom: 10px; color:#79dfc1 " class="fa fa-file-text"></i>
+				<a style="width: 100px; height: 120px"
+					class="btn btn-app bg-gradient"
+					href="/indocitems-form-addupdate?type=<?=$key?>"> <i
+					style="font-size: 3em; margin-bottom: 10px; color: #79dfc1"
+					class="fa fa-file-text"></i>
 
 					<div style="font-size: 0.9em"><?=$item?></div>
 
-			    </a>
+				</a>
 
 				
 
-			<?	
+			<?
+endforeach
+;
 
-				endforeach;
-
-			?>
-
-
-
-		</div>
-
-	  </div>
-
-
-
-
-
-
-
-<div class="x_panel">
-
-		<div class="x_title">
-
-		  <h2>Моя аналитика</h2>
-
-		  <div class="clearfix"></div>
-
-		</div>
-
-		<div class="x_content">
-
-			
-
-			<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
+?>
 
 
 
 		</div>
 
-</div>
+		</div>
 
 
 
-<script>
+
+
+
+
+		<div class="x_panel">
+
+			<div class="x_title">
+
+				<h2>Моя аналитика</h2>
+
+				<div class="clearfix"></div>
+
+			</div>
+
+			<div class="x_content">
+				<canvas style="max-width: 150px;" id="canvasDoughnut1"
+					class="canvasDoughnut1"></canvas>
+				<canvas style="max-width: 150px;" id="canvasDoughnut1"
+					class="canvasDoughnut1"></canvas>
+				<canvas style="max-width: 150px;" id="canvasDoughnut1"
+					class="canvasDoughnut1"></canvas>
+				<canvas style="max-width: 150px;" id="canvasDoughnut1"
+					class="canvasDoughnut1"></canvas>
+				<canvas style="max-width: 150px;" id="canvasDoughnut1"
+					class="canvasDoughnut1"></canvas>
+			</div>
+
+		</div>
+
+
+
+		<script>
 
 jQuery(document).ready(function () {
 
 	<?
 
-		$all_docs = 50;
+$all_docs = 50;
 
-		$today = 5;
+$today = 5;
 
-		$days3 = 10;
+$days3 = 10;
 
-		$days7 = 15;
+$days7 = 15;
 
-		$days30 = 20;
+$days30 = 20;
 
-	?>
-
- 
+?>
 
 	var chart_doughnut_settings = {
 
@@ -193,7 +169,7 @@ jQuery(document).ready(function () {
                 datasets: [{
 
                     data: [15, 85],
-
+					
                     backgroundColor: [
 
                         "#BDC3C7",
@@ -285,219 +261,214 @@ jQuery(document).ready(function () {
 		  }
 
 		});
-
-
-
-	  
-
 });
-
-
-
-
 
 </script>
 
-  
 
-  <style>
 
-  .count {
+		<style>
+.count {
+	font-size: 60px;
+	line-height: 67px;
+	font-weight: 600;
+}
+</style>
 
-    font-size: 60px;
 
-    line-height: 67px;
 
-    font-weight: 600;
+		<div class="x_panel">
 
-	}
+			<div class="x_title">
 
-  </style>
+				<h2>Мои документы</h2>
 
-  
+				<div class="clearfix"></div>
 
-  <div class="x_panel">
+			</div>
 
-		<div class="x_title">
+			<div class="x_content">
 
-		  <h2>Мои документы</h2>
 
-		  <div class="clearfix"></div>
 
-		</div>
 
-		<div class="x_content">
+				<a href="/indocitems-list?my_doc_status=1">
+					<div class="col-md-3 widget widget_tally_box">
 
-  
+						<div style="background-color: #311b92; min-height: 320px;"
+							class="x_panel bg-gradient text-white">
 
-  
-	<a href="/indocitems-list?my_doc_step=1">
-    <div class="col-md-3 widget widget_tally_box">
+							<div class="x_title">
 
-		<div style="background-color: #311b92; min-height: 320px;" class="x_panel bg-gradient text-white">
+								<h2 style="font-size: 26px">
+									<i class="fa fa-file-o"></i> Черновики
+								</h2>
 
-		  <div class="x_title">
+								<div class="clearfix"></div>
 
-			<h2 style="font-size: 26px"><i class="fa fa-file-o"></i> Черновики</h2>
+							</div>
 
-			<div class="clearfix"></div>
-
-		  </div>
-
-		  <div class="x_content">
+							<div class="x_content">
 
 		    <?php
 
-				$doc_count = Indoc::NumberDocs(1, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocs(1, $user_role, $user_id);
 
-			?>
+    ?>
 
 			<h1 class="count" style="padding-right: 20px"><?=$doc_count?></h1>
 
-			
 
-			Подготовка и согласование проектов документов, подписание документов, формирование документов по шаблону, передача документов на рассмотрение, ознакомление и отправка 
 
-		  </div>
+								Подготовка и согласование проектов документов, подписание
+								документов, формирование документов по шаблону, передача
+								документов на рассмотрение, ознакомление и отправка
 
-		</div>
+							</div>
 
-	</div>
-	</a>
-	
-	<a href="/indocitems-list?my_doc_step=2">
-	<div class="col-md-3 widget widget_tally_box">
+						</div>
 
-		<div style="background-color: #0dcaf0; min-height: 320px;" class="x_panel bg-gradient text-white">
+					</div>
+				</a> <a href="/indocitems-list?my_doc_status=2">
+					<div class="col-md-3 widget widget_tally_box">
 
-		  <div class="x_title">
+						<div style="background-color: #0dcaf0; min-height: 320px;"
+							class="x_panel bg-gradient text-white">
 
-			<h2 style="font-size: 26px"><i class="fa fa-file-o"></i> На согласовании</h2>
+							<div class="x_title">
 
-			<div class="clearfix"></div>
+								<h2 style="font-size: 26px">
+									<i class="fa fa-file-o"></i> На согласовании
+								</h2>
 
-		  </div>
+								<div class="clearfix"></div>
 
-		  <div class="x_content">
+							</div>
 
-		    <?php
-
-				$doc_count = Indoc::NumberDocs(2, $user_role, $user_id);
-
-			?>
-
-			<h1 class="count" style=" padding-right: 20px"><?=$doc_count?></h1>
-
-			
-
-			Содержит перечень документов, отправленных или полученных для электронного согласования 
-
-		  </div>
-
-		</div>
-
-	</div>
-	</a>
-	
-	<a href="/indocitems-list?my_doc_step=3">
-	<div class="col-md-3 widget widget_tally_box">
-
-		<div style="background-color: #20c997;  min-height: 320px;"  class="x_panel bg-gradient text-white">
-
-		  <div class="x_title">
-
-			<h2 style="font-size: 26px"><i class="fa fa-file-o"></i> На утверждении</h2>
-
-			<div class="clearfix"></div>
-
-		  </div>
-
-		  <div class="x_content">
+							<div class="x_content">
 
 		    <?php
 
-				$doc_count = Indoc::NumberDocs(3, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocs(2, $user_role, $user_id);
 
-			?>
+    ?>
 
-			<h1 class="count" style=" padding-right: 20px"><?=$doc_count?></h1>
+			<h1 class="count" style="padding-right: 20px"><?=$doc_count?></h1>
 
-			
 
-			Перечень переданных документов на утверждение 
 
-		  </div>
+								Содержит перечень документов, отправленных или полученных для
+								электронного согласования
 
-		</div>
+							</div>
 
-	</div>
-	</a>
-	
-	<a href="/indocitems-list?my_doc_step=4">
-	<div class="col-md-3 widget widget_tally_box ">
+						</div>
 
-		<div style="background-color: #d63384;  min-height: 320px;"  class="x_panel bg-gradient text-white">
+					</div>
+				</a> <a href="/indocitems-list?my_doc_status=3">
+					<div class="col-md-3 widget widget_tally_box">
 
-		  <div class="x_title">
+						<div style="background-color: #20c997; min-height: 320px;"
+							class="x_panel bg-gradient text-white">
 
-			<h2 style="font-size: 26px"><i class="fa fa-file-o"></i> К принятию</h2>
+							<div class="x_title">
 
-			<div class="clearfix"></div>
+								<h2 style="font-size: 26px">
+									<i class="fa fa-file-o"></i> На утверждении
+								</h2>
 
-		  </div>
+								<div class="clearfix"></div>
 
-		  <div class="x_content">
+							</div>
+
+							<div class="x_content">
 
 		    <?php
 
-				$doc_count = Indoc::NumberDocs(4, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocs(3, $user_role, $user_id);
 
-			?>
+    ?>
 
-			<h1 class="count" style=" padding-right: 20px"><?=$doc_count?></h1>
+			<h1 class="count" style="padding-right: 20px"><?=$doc_count?></h1>
 
-			
 
-			Перечень подготовленных документов для принятия в работу 
 
-		  </div>
+								Перечень переданных документов на утверждение
 
-		</div>
+							</div>
 
-	</div>
-	</a>
-	
-	<a href="/indocitems-list?my_doc_step=0">
-	<div class="col-md-3 widget widget_tally_box">
+						</div>
 
-		<div style="background-color: #fd7e14;  min-height: 320px;"  class="x_panel bg-gradient text-white">
+					</div>
+				</a> <a href="/indocitems-list?my_doc_status=4">
+					<div class="col-md-3 widget widget_tally_box ">
 
-		  <div class="x_title">
+						<div style="background-color: #d63384; min-height: 320px;"
+							class="x_panel bg-gradient text-white">
 
-			<h2 style="font-size: 26px"><i class="fa fa-file-o"></i> Хранилище</h2>
+							<div class="x_title">
 
-			<div class="clearfix"></div>
+								<h2 style="font-size: 26px">
+									<i class="fa fa-file-o"></i> К принятию
+								</h2>
 
-		  </div>
+								<div class="clearfix"></div>
 
-		  <div class="x_content">
+							</div>
+
+							<div class="x_content">
+
+		    <?php
+
+    $doc_count = Indoc::NumberDocs(4, $user_role, $user_id);
+
+    ?>
+
+			<h1 class="count" style="padding-right: 20px"><?=$doc_count?></h1>
+
+
+
+								Перечень подготовленных документов для принятия в работу
+
+							</div>
+
+						</div>
+
+					</div>
+				</a> <a href="/indocitems-list?my_doc_status=5">
+					<div class="col-md-3 widget widget_tally_box">
+
+						<div style="background-color: #fd7e14; min-height: 320px;"
+							class="x_panel bg-gradient text-white">
+
+							<div class="x_title">
+
+								<h2 style="font-size: 26px">
+									<i class="fa fa-file-o"></i> Хранилище
+								</h2>
+
+								<div class="clearfix"></div>
+
+							</div>
+
+							<div class="x_content">
 
 		  <?php
 				$doc_count = Indoc::NumberDocs(-1, $user_role, $user_id);
 			?>
-			<h1 class="count" style=" padding-right: 20px"><?= $doc_count ?></h1>
+			<h1 class="count" style="padding-right: 20px"><?= $doc_count ?></h1>
 
-			
 
-			Общее хранилище документов
 
-		  </div>
+								Общее хранилище документов
 
+							</div>
+
+						</div>
+
+					</div>
+				</a>
+			</div>
 		</div>
-
 	</div>
-	</a>
-	</div>
-	</div>
-	</div>
-  </div>
+</div>

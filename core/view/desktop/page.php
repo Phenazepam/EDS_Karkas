@@ -123,18 +123,18 @@ use RedCore\Controller;
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
-                    <li><a href="/indocitems-list?my_doc_step=1">Черновики 
+                    <li><a href="/indocitems-list?my_doc_status=1">Черновики 
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list?my_doc_step=2">На согласование
+                    <li><a href="/indocitems-list?my_doc_status=2">На согласование
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list?my_doc_step=3">На утверждение
+                    <li><a href="/indocitems-list?my_doc_status=3">На утверждение
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
-                    <li><a href="/indocitems-list?my_doc_step=4">На принятие
+                    <li><a href="/indocitems-list?my_doc_status=4">На принятие
                     	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
                   </ul>
                 </li>
                 <li>
-					<a href="/indocitems-list?my_doc_step=0">
+					<a href="/indocitems-list?my_doc_status=5">
                     	<i class="fa fa-file"></i> Хранилище документов
                   	</a>
                 </li>

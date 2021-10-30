@@ -50,6 +50,10 @@ Users::setObject("user");
 
 $user_role = Users::getAuthRole();
 
+$user_id = $oindoc_item->object->user_id;
+if (is_null($user_id))$user_id = Users::getAuthId();
+
+
 $step = $oindoc_item->object->step;
 
 $step_role = $oindoc_item->object->step_role;
@@ -96,6 +100,7 @@ $form = Forms::Create()
 
     ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
     ->add("status_id", "status_id", "hidden", $html_object . "[params][status_id]", $status_id)
+    ->add("user_id", "user_id", "hidden", $html_object . "[user_id]", $user_id)
     ->add("step_role", "step_role", "hidden", $html_object . "[step_role]", $step_role)
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $doc_type, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)

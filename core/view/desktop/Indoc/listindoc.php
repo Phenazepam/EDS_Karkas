@@ -7,7 +7,7 @@ use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
 use RedCore\Request as Request;
 
-$my_doc_step = Request::vars("my_doc_step");
+$my_doc_status = Request::vars("my_doc_status");
 
 Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
 Session::bind("filter_doc_step_id", "general_filter_doc_step_id", -1);
@@ -56,41 +56,38 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
-
-if (!is_null($my_doc_step)) {
-  foreach ($doc_steps as $key => $item) {
-    $item = $item->object;
-    if (0 != $item->user_id || 1 == $user_role || 2 == $user_role) {
-      if ($user_id == $item->user_id || 1 == $user_role || 2 == $user_role) {
-        if ($item->step == $my_doc_step) { 
-          $items[$item->id]= $all_docs[$item->doc_id];
-          // $items[$item->id]["step"] = $item->step;
-          // $items[$item->id]["role"] = $item->role_id;
-          // $items[$item->id]["user_id"] = $item->user_id;
+if (!is_null($my_doc_status)) {
+    foreach ($doc_steps as $key => $item) {
+        $item = $item->object;
+        if (0 != $item->user_id || 1 == $user_role || 2 == $user_role) {
+            if ($user_id == $item->user_id || 1 == $user_role || 2 == $user_role) {
+                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+                    $items[$item->id]= $all_docs[$item->doc_id];
+                    // $items[$item->id]["step"] = $item->step;
+                    // $items[$item->id]["role"] = $item->role_id;
+                    // $items[$item->id]["user_id"] = $item->user_id;
+                }
+            }
+        } else {
+            if ($user_role == $item->role_id || 1 == $user_role || 2 == $user_role) {
+                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+                    $items[$item->id] = $all_docs[$item->doc_id];
+                    // $items[$item->id]["step"] = $item->step;
+                    // $items[$item->id]["role"] = $item->role_id;
+                    // $items[$item->id]["user_id"] = $item->user_id;
+                }
+            }
         }
-      }
-    } else {
-      if ($user_role == $item->role_id || 1 == $user_role || 2 == $user_role) {
-        if ($item->step == $my_doc_step) { 
-          $items[$item->id] = $all_docs[$item->doc_id];
-          // $items[$item->id]["step"] = $item->step;
-          // $items[$item->id]["role"] = $item->role_id;
-          // $items[$item->id]["user_id"] = $item->user_id;
-        }
-      }
     }
-  }
 }
 
 else {
-  foreach ($all_docs as $item) {
-    if ($read_doc[$item->object->params->doctypes]) {
-      $items[] = $item;
+    foreach ($all_docs as $item) {
+        if ($read_doc[$item->object->params->doctypes]) {
+            $items[] = $item;
+        }
     }
-  }
 }
-// var_dump($items);
-
 
 if (-1 !== $session_doc_step) {
   foreach ($items as $document) {
