@@ -58,6 +58,13 @@ $current_step_order = $current_route_step->object->step_order;
 $current_role = $current_route_step->object->role_id;
 $current_step = $current_route_step->object->step;
 
+Indoc::setObject('odocfile');
+$lb_params = array(
+  'doc_id' => $doc_id,
+  'iscurrent' => '1'
+);
+$doc_file = Indoc::loadBy($lb_params);
+var_dump($doc_file->object->id);
 // var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
@@ -191,6 +198,8 @@ $current_step = $current_route_step->object->step;
                       <tr>
                         <td><b>Файл</b></td>
                         <td>
+                        <!-- <? var_dump($doc_file->object->id) ?> -->
+                          <a href="/docs-download?file_id=<?= $doc_file->object->id ?>">ссылка на файл</a>
                         <? if (!empty($item->object->params->file_title)): ?>
                         <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
                         <? endif; ?>

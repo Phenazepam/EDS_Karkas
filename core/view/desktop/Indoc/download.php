@@ -2,22 +2,25 @@
 use RedCore\Request;
 use RedCore\Indoc\Collection as Indoc;
 
-Indoc::setObject("oindoc");
+Indoc::setObject("odocfile");
+
+$file_id = Request::vars('file_id');
 
 $lb_params = array(
-    "id" => Request::vars("oindoc_id")
+    "id" => $file_id
 );
 
 $item = Indoc::loadBy($lb_params);
 
-$file = CMS_TMP . SEP . $item->object->params->file_title;
+$filename = $item->object->name;//.' от '. $item->object->_updated;
+$directory = $item->object->directory;
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename=' . basename($file));
+header('Content-Disposition: attachment; filename=' . basename($filename));
 header('Content-Transfer-Encoding: binary');
-header('Content-Length: ' . filesize($file));
+header('Content-Length: ' . filesize($directory));
 
-readfile($file);
+readfile($directory);
 exit();
 ?>

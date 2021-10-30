@@ -44,7 +44,7 @@ if (0 != $user_id) {
 $isFinalStep = Users::IsLastStep($doc_type, $current_step_order) ? 1 : 0;
 ?>
 <?php
-    if (1 == $isFinalStep) :
+    if (1 == $isFinalStep && 1 != $isBack) :
 ?>
 <h3>Выполнить <?= $doc_steps[$current_step->object->step] ?> документа?</h3>
 <?else:?>
@@ -71,6 +71,8 @@ $isFinalStep = Users::IsLastStep($doc_type, $current_step_order) ? 1 : 0;
             Комментарий: <br>
             <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;font-size:medium"></textarea>
         </div>
+        <label for="oindoc[file]" style="margin-top: 10px; text-align:center;">Загрузить файл замечаний</label>
+        <input class="form-control" type="file" name="oindoc[file]" id="oindoc[file]">
     </div>
 </form>
 <style lang="css">
