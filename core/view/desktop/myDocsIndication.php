@@ -15,24 +15,31 @@ $where = $where = Where::Cond()
 
 // get table oindoc
 Indoc::setObject("oindoc");
-$docs = Indoc::getList();
+$where = Where::Cond()
+->add("_deleted", "=", "0")
+->parse();
+
+$docs = Indoc::getList($where);
 
 $chern = array();
 $sogl = array();
 $utv = array();
 $prin = array();
 
+$user_role = Users::getAuthRole();
 
 // sort by statuses
     foreach($docs as $item) {
-		if ( $item->object->status == "1" ) {
-			array_push($chern, $item->object->status);
-		}elseif ( $item->object->status == "2" ) {
-			array_push($sogl, $item->object->status);
-		}elseif ( $item->object->status == "3" ) {
-			array_push($utv, $item->object->status);
-		}elseif ( $item->object->status == "4" ) {
-			array_push($prin, $item->object->status);
+		if ( $item->object->user_id == $user_role ){
+			if ( $item->object->status == "1" ) {
+				array_push($chern, $item->object->status);
+			}elseif ( $item->object->status == "2" ) {
+				array_push($sogl, $item->object->status);
+			}elseif ( $item->object->status == "3" ) {
+				array_push($utv, $item->object->status);
+			}elseif ( $item->object->status == "4" ) {
+				array_push($prin, $item->object->status);
+			}
 		}
 	}
 
