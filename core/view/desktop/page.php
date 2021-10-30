@@ -266,10 +266,7 @@ use RedCore\Controller;
       <footer>
         <div class="pull-right">
           FOOTER 
-		  <?php 
-		  $q = Indoc::GetMyDocsInfo();
-		  echo  $q;
-		  ?>
+		  
         </div>
         <div class="clearfix"></div>
       </footer>

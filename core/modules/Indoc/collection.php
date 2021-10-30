@@ -563,12 +563,12 @@ class Collection extends \RedCore\Base\Collection
 		$user_id = Users::getAuthId();
 		
 		
-		self::setObject("docroute");
-		$where = Where::Cond()
+		
+		$where = $where = Where::Cond()
 			->add("_deleted", "=", "0")
 			->parse();
 		
-		
+		self::setObject('odocroute');
 		$docs = self::getList($where);
 
 		$chern = 0;
@@ -580,20 +580,20 @@ class Collection extends \RedCore\Base\Collection
 		
 				// sort by statuses
 		foreach($docs as $item) {
-			$user = $item->object->user_id ;
-			$stp_ordr = $item->object->step_order;
+			$user = $item->user_id ;
+			$stp_ordr = $item->step_order;
 			
 			if ($user == $user_id) {
-				if ( $stp_ordr == "1" ) {
+				if ( $stp_ordr == 1 ) {
 					$chern++;
 				}
-				if ( $stp_ordr == "2" ) {
+				if ( $stp_ordr == 2 ) {
 					$sogl++;
 				}
-				if ( $stp_ordr == "3" ) {
+				if ( $stp_ordr == 3 ) {
 					$utv++;
 				}
-				if ( $stp_ordr == "4" ) {
+				if ( $stp_ordr == 4 ) {
 					$prin++;
 				}
 			}
@@ -607,7 +607,7 @@ class Collection extends \RedCore\Base\Collection
 		$retResult[3] = (string) $prin;
 
 
-		return $sogl;
+		return $retResult;
 	}
 	
 }
