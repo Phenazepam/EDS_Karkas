@@ -557,5 +557,58 @@ class Collection extends \RedCore\Base\Collection
     public static function GetNameStatuses(){
         return self::$statuses;
     }
+	
+	public static function GetMyDocsInfo() {
+		
+		$user_id = Users::getAuthId();
+		
+		
+		self::setObject("docroute");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		
+		
+		$docs = self::getList($where);
+
+		$chern = 0;
+		$sogl = 0;
+		$utv = 0;
+		$prin = 0;
+
+		
+		
+				// sort by statuses
+		foreach($docs as $item) {
+			$user = $item->object->user_id ;
+			$stp_ordr = $item->object->step_order;
+			
+			if ($user == $user_id) {
+				if ( $step_order == "1" ) {
+					$chern++;
+				}
+				if ( $step_order == "2" ) {
+					$sogl++;
+				}
+				if ( $step_order == "3" ) {
+					$utv++;
+				}
+				if ( $step_order == "4" ) {
+					$prin++;
+				}
+			}
+		}
+		
+
+		$retResult = array();
+		$retResult[0] = (string) $chern;
+		$retResult[1] = (string) $sogl;
+		$retResult[2] = (string) $utv;
+		$retResult[3] = (string) $prin;
+
+
+		return $sogl;
+	}
+	
 }
 ?>

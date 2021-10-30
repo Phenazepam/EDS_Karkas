@@ -87,7 +87,9 @@ use RedCore\Controller;
               $c_user = Users::getAuthToken();
               $user_role = Users::getAuthRole();
               $user_id = Users::getAuthId();
-
+				
+			  
+			  
               $lb_params = array(
                 "token_key" => $c_user
               );
@@ -263,7 +265,11 @@ use RedCore\Controller;
       <!-- footer content -->
       <footer>
         <div class="pull-right">
-          FOOTER
+          FOOTER 
+		  <?php 
+		  $q = Indoc::GetMyDocsInfo();
+		  echo  $q;
+		  ?>
         </div>
         <div class="clearfix"></div>
       </footer>

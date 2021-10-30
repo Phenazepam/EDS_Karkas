@@ -30,7 +30,7 @@ $user_role = Users::getAuthRole();
 
 // sort by statuses
     foreach($docs as $item) {
-		if ( $item->object->user_id == $user_role ){
+		//if ( $item->object->user_id == $user_role ){
 			if ( $item->object->status == "1" ) {
 				array_push($chern, $item->object->status);
 			}elseif ( $item->object->status == "2" ) {
@@ -40,7 +40,7 @@ $user_role = Users::getAuthRole();
 			}elseif ( $item->object->status == "4" ) {
 				array_push($prin, $item->object->status);
 			}
-		}
+		//}
 	}
 
 //return result
