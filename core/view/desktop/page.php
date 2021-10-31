@@ -121,18 +121,18 @@ use RedCore\Controller;
 					
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php $q = Indoc::GetMyDocsInfo(); echo $q[4]; ?></span>
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php ?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list?my_doc_status=1">Черновики 
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[0];?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::GetMyDocsInfo(1);?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=2">На согласование
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[1];?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::GetMyDocsInfo(2);?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=3">На утверждение
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[2];?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::GetMyDocsInfo(3);?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=4">На принятие
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[3];?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::GetMyDocsInfo(4);?></span></a></li>
                   </ul>
                 </li>
                 <li>

@@ -673,56 +673,19 @@ class Collection extends \RedCore\Base\Collection
         return self::$statuses;
     }
 	
-	public static function GetMyDocsInfo() {
-		
+	public static function GetMyDocsInfo($step) {
+				
+				
 		Users::setObject("user");
 		$user_id = Users::getAuthId();
 		
-		$where = $where = Where::Cond()
-			->add("_deleted", "=", "0")
-			->parse();
-		
-		self::setObject('odocroute');
-		$docs = self::getList($where);
-		
-		$count = 0;
-		$chern = 0;
-		$sogl = 0;
-		$utv = 0;
-		$prin = 0;
-
-		
-				// sort by statuses
-		foreach($docs as $item) {
-			$user = $item->object->user_id ;
-			$stp_ordr = $item->object->step_order;
-			$count = $count +1;
-			if ($user == $user_id) {
-				if ( $stp_ordr == 1 ) {
-					$chern++;
-				}
-				if ( $stp_ordr == 2 ) {
-					$sogl++;
-				}
-				if ( $stp_ordr == 3 ) {
-					$utv++;
-				}
-				if ( $stp_ordr == 4 ) {
-					$prin++;
-				}
-			}
+		$mydocs = self::GetMyDocs($user_id, $step);
+		$count = 1;
+		foreach ($mydocs as $item ) {
+			$count = $count + 1;
 		}
-		
 
-		$retResult = array();
-		$retResult[0] = (string) $chern;
-		$retResult[1] = (string) $sogl;
-		$retResult[2] = (string) $utv;
-		$retResult[3] = (string) $prin;
-		$retResult[4] = (string) $count;
-
-
-		return $retResult;
+		return $count;
 	}
 	
 	public static function getRegNumber() {
