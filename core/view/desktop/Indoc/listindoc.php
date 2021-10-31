@@ -57,22 +57,25 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
+Indoc::GetMyDocs($user_id, 3);
+
 if (!is_null($my_doc_status)) {
-    foreach ($doc_steps as $key => $item) {
-        $item = $item->object;
-        if (1 == $user_role || 2 == $user_role) {
-            if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                $items[$item->doc_id] = $all_docs[$item->doc_id];
-            }
-        }
-        else {
-            if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
-                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                    $items[$item->doc_id] = $all_docs[$item->doc_id];
-                }
-            }
-        }
-    }
+  $items = Indoc::GetMyDocs($user_id, $my_doc_status);
+    // foreach ($doc_steps as $key => $item) {
+    //     $item = $item->object;
+    //     if (1 == $user_role || 2 == $user_role) {
+    //         if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+    //             $items[$item->doc_id] = $all_docs[$item->doc_id];
+    //         }
+    //     }
+    //     else {
+    //         if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
+    //             if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+    //                 $items[$item->doc_id] = $all_docs[$item->doc_id];
+    //             }
+    //         }
+    //     }
+    // }
 }
 else {
   foreach ($all_docs as $item) {

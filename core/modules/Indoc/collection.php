@@ -677,8 +677,6 @@ class Collection extends \RedCore\Base\Collection
 		
 		$user_id = Users::getAuthId();
 		
-		
-		
 		$where = $where = Where::Cond()
 			->add("_deleted", "=", "0")
 			->parse();
@@ -726,7 +724,7 @@ class Collection extends \RedCore\Base\Collection
 	}
 	
 	public static function getRegNumber() {
-		$where = $where = Where::Cond()
+		$where = Where::Cond()
 			->add("_deleted", "=", "0")
 			->parse();
 
@@ -750,5 +748,40 @@ class Collection extends \RedCore\Base\Collection
 
 		return $stringNewNum;
 	}		
+
+    public static function GetMyDocs($user_id, $status = -1) {
+        self::setObject("odocroute");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("user_id", "=", $user_id)
+            ->add("and")
+            ->add("step_order", "=", 1)
+            ->parse();
+        $routes = self::getList($where);
+        // var_dump($routes);
+
+        self::setObject("oindoc");
+        if (-1 == $status) {
+            $where = Where::Cond()
+                ->add("_deleted", "=", "0")
+                ->parse();
+        }
+        else {
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", $status)
+            ->parse();
+        }
+        $documents = self::getList($where);
+
+        foreach($routes as $key => $route) {
+            if (isset($documents[$route->object->doc_id]))
+            $result[$route->object->doc_id] = $documents[$route->object->doc_id];
+        }
+
+        return $result;
+    }
 }
 ?>
