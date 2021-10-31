@@ -61,6 +61,14 @@ Indoc::GetMyDocs($user_id, 3);
 
 if (!is_null($my_doc_status)) {
   $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
+  if ($my_doc_status == 6 || $my_doc_status == 5) {
+    foreach ($documents as $item) {
+      if ($read_doc[$item->object->params->doctypes]) {
+        $tmp[] = $item;
+      }
+    }
+    $documents = $tmp;
+  }
 }
 else if (!is_null($indoc_status)) {
   $documents = Indoc::GetInDocs($user_id, $user_role, $indoc_status);
