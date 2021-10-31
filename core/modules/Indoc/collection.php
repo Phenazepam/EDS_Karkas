@@ -147,18 +147,21 @@ class Collection extends \RedCore\Base\Collection
             Users::setObject("user");
             $user_id = Users::getAuthId();
             $role_id = Users::getAuthRole();
-            if ($title = Files::upload("oindoc", "file")) {
-                $params["oindoc"]["params"]["file_title"] = $title;
-            }
+            $file = $_FILES["oindoc"];
             if (!empty($params["oindoc"]["id"])) {
                 if (1 == $params["oindoc"]["status"])
-                    self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
+                self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
+                if ($file["tmp_name"]["file"] != "" ) {
+                    self::storeFile($file, $params["oindoc"]["id"]);
+                }
             } else {
                 self::setObject("oindoc");
                 $lastId = parent::store($params)->object->id;
                 self::registerDocLog($lastId, 1, "", $user_id);
                 self::MoveRoute($lastId, $params['oindoc']['params']['doctypes'], $role_id, $user_id, '1', '1');
-
+                if ($file["tmp_name"]["file"] != "" ) {
+                    self::storeFile($file, $lastId);
+                }
                 return;
             }
             self::setObject("oindoc");
@@ -245,6 +248,8 @@ class Collection extends \RedCore\Base\Collection
         } else {
             // var_dump($filename);
             // var_dump($destination);
+            Users::setObject('user');
+            $user_id = Users::getAuthId();
             if(move_uploaded_file($filename, $destination)) {
                 self::setObject('odocfile');
                 self::UnsetCurrentDocFile($doc_id);
@@ -252,7 +257,8 @@ class Collection extends \RedCore\Base\Collection
                     'name' => $file['name']['file'],
                     'directory' => $destination,
                     'doc_id' => $doc_id,
-                    'iscurrent' => 1
+                    'iscurrent' => 1,
+                    'uploadedbyuser' => $user_id
                 );
                 self::store($params);
             }
@@ -348,7 +354,7 @@ class Collection extends \RedCore\Base\Collection
 
         $current_step = $item->object->step;
 
-        if (1 == $isFinalStep) {
+        if (1 == $isFinalStep && 1 != $isBack) {
             if (3 == $current_step) {
                 self::registerDocLog($doc_id, 8, $comment, $current_user);
                 self::ChangeDocumentStatus($doc_id, 5);
@@ -432,11 +438,12 @@ class Collection extends \RedCore\Base\Collection
 
     public static function ajaxMoveRoute($params = array())
     {
-        // var_dump($params);
         $file = $_FILES["oindoc"];
+        // var_dump($file);
         $params = $params["oindoc"];
 
         Users::setObject('user');
+
 
         $doc_id = $params["id"];
         $doc_type = $params["doc_type"];
@@ -450,9 +457,24 @@ class Collection extends \RedCore\Base\Collection
 
         $isBack = $params["isback"];
 
-        $out = self::storeFile($file, $doc_id);
-        echo json_encode($out);
-        // self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+        if ($file["tmp_name"]["file"] != "") {
+            $out = self::storeFile($file, $doc_id);
+            if ($out["errorCode"] != 0) {
+                echo json_encode($out);
+            }
+            else {
+                echo json_encode($out);
+                self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+            } 
+        }  
+        else {
+            $out = array(
+                'errorCode' => '0',
+                'errorText' => ''
+            );
+            echo json_encode($out);
+            self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+        }
         exit();
     }
 

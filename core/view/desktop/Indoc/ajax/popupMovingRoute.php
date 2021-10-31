@@ -71,8 +71,10 @@ $isFinalStep = Users::IsLastStep($doc_type, $current_step_order) ? 1 : 0;
             Комментарий: <br>
             <textarea type="textarea" name="oindoc[comment]" id="comment" cols="50" rows="8" style="min-width: 350px;font-size:medium"></textarea>
         </div>
+        <? if (1 == $isBack) : ?>
         <label for="oindoc[file]" style="margin-top: 10px; text-align:center;">Загрузить файл замечаний</label>
         <input class="form-control" type="file" name="oindoc[file]" id="oindoc[file]">
+        <?endif;?>
     </div>
 </form>
 <style lang="css">

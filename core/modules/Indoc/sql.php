@@ -88,6 +88,7 @@ class Sql {
 				 directory,
 				 doc_id,
 				 iscurrent,
+				 uploadedbyuser,
 				 _updated,
 				 _deleted
 			 FROM

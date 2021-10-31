@@ -64,8 +64,13 @@ $lb_params = array(
   'iscurrent' => '1'
 );
 $doc_file = Indoc::loadBy($lb_params);
-var_dump($doc_file->object->id);
-// var_dump(Users::CanUserMoveRoute($doc_type, $current_role, $current_step));
+$where = Where::Cond()
+  ->add("_deleted", "=", "0")
+  ->add("and")
+  ->add("doc_id", "=", $doc_id)
+  ->parse();
+$all_files = Indoc::getList($where);
+
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
 <script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
@@ -101,6 +106,14 @@ var_dump($doc_file->object->id);
                       onclick="saveDocViewEvent(<?=$doc_id?>, <?=$user_id?>)">
                     Просмотр</a>
                 </li>
+                <? if (1 == $user_role || 2 == $user_role): ?>
+                <li class="nav-item">
+                    <a class="nav-link" id="files-tab" 
+                      data-toggle="tab" href="#files" role="files" 
+                      aria-controls="files" aria-selected="false">
+                    История изменения файлов</a>
+                </li>
+                <?endif?>
               </ul>
               <div class="tab-content">
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -198,10 +211,9 @@ var_dump($doc_file->object->id);
                       <tr>
                         <td><b>Файл</b></td>
                         <td>
-                        <!-- <? var_dump($doc_file->object->id) ?> -->
-                          <a href="/docs-download?file_id=<?= $doc_file->object->id ?>">ссылка на файл</a>
-                        <? if (!empty($item->object->params->file_title)): ?>
-                        <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+                        <? if (!empty($doc_file->object->id)): ?>
+                          <p><b><?=$doc_file->object->name?> от <?=date('d.m.Y', strtotime($doc_file->object->_updated))?></b></p>
+                        <a class="btn btn-info btn-sm" href = "/docs-download?file_id=<?= $doc_file->object->id ?>">Скачать документ</a>
                         <? endif; ?>
                         </td>
                       </tr>
@@ -219,7 +231,7 @@ var_dump($doc_file->object->id);
                     </tbody>
                   </table>
                   <? if (Indoc::CanUserEditDocs($doc_id, $user_role, $user_id)):?>
-                  <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>">Редактировать</a>
+                  <a class="btn btn-primary" href="/indocitems-form-addupdate?oindoc_id=<?= $doc_id ?>">Редактировать</a>
                   <? endif;?>
                   <?php 
                     if(Users::CanUserMoveRoute($doc_id, $current_role, $current_step)):
@@ -240,6 +252,41 @@ var_dump($doc_file->object->id);
                     Вернуть на доработку
                   </button>
                   <? endif;?>
+                  <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
+                </div>
+                <div class="tab-pane" id="files" role="tabpanel" aria-labelledby="files-tab">
+                  <div class="row">
+                    <div class="col">
+                      <table class="table table-bordered" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th>Наименование файла</th>
+                            <th>Дата загрузки</th>
+                            <th>Загружен пользователем</th>
+                            <th>Текущий</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                          
+                          foreach ($all_files as $key => $value) :
+                            $value=$value->object;
+                          ?>
+                            <tr class="<?= $value->iscurrent == 1 ? 'current' : '' ?>">
+                              <td>
+                                <a href = "/docs-download?file_id=<?= $value->id ?>">
+                                  <?= $value->name ?>
+                                </a>
+                              </td>
+                              <td><?= $value->_updated ?></td>
+                              <td><?= Users::getUserNameById($value->uploadedbyuser) ?></td>
+                              <td><?= $value->iscurrent == 1 ? 'Да' : 'Нет' ?></td>
+                            </tr>
+                          <?php endforeach; ?>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
               </div>
