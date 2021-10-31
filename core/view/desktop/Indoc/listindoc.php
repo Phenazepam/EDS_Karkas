@@ -109,7 +109,6 @@ if( !is_null($indoc_status))
 	$items = Indoc::getList($where);
 	
 	foreach ($items as $document)
-	   $document = $document->object;
 	   {
 		if ($document->object->status == $indoc_status) {
 			$tmp1[] = $document;
