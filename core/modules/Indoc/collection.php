@@ -673,18 +673,9 @@ class Collection extends \RedCore\Base\Collection
         return self::$statuses;
     }
 	
-	public static function GetMyDocsInfo($step) {
-				
-				
-		Users::setObject("user");
-		$user_id = Users::getAuthId();
-
-		$mydocs = self::GetMyDocs($user_id, $step);
-		$count = 1;
-		foreach ($mydocs as $item ) {
-			$count = $count + 1;
-
+	public static function GetMyDocsInfo() {
 		
+		$user_id = Users::getAuthId();
 		
 		$where = $where = Where::Cond()
 			->add("_deleted", "=", "0")
@@ -692,19 +683,19 @@ class Collection extends \RedCore\Base\Collection
 		
 		self::setObject('odocroute');
 		$docs = self::getList($where);
-		
-		$count = 0;
+
 		$chern = 0;
 		$sogl = 0;
 		$utv = 0;
 		$prin = 0;
 
 		
+		
 				// sort by statuses
 		foreach($docs as $item) {
-			$user = $item->object->user_id ;
-			$stp_ordr = $item->object->step_order;
-			$count = $count +1;
+			$user = $item->user_id ;
+			$stp_ordr = $item->step_order;
+			
 			if ($user == $user_id) {
 				if ( $stp_ordr == 1 ) {
 					$chern++;
@@ -719,14 +710,21 @@ class Collection extends \RedCore\Base\Collection
 					$prin++;
 				}
 			}
-
 		}
+		
 
-		return $count;
+		$retResult = array();
+		$retResult[0] = (string) $chern;
+		$retResult[1] = (string) $sogl;
+		$retResult[2] = (string) $utv;
+		$retResult[3] = (string) $prin;
+
+
+		return $retResult;
 	}
 	
 	public static function getRegNumber() {
-		$where = $where = Where::Cond()
+		$where = Where::Cond()
 			->add("_deleted", "=", "0")
 			->parse();
 
@@ -750,5 +748,83 @@ class Collection extends \RedCore\Base\Collection
 
 		return $stringNewNum;
 	}		
+
+    public static function GetMyDocs($user_id, $status = -1) {
+        self::setObject("odocroute");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("user_id", "=", $user_id)
+            ->add("and")
+            ->add("step_order", "=", 1)
+            ->parse();
+        $routes = self::getList($where);
+        // var_dump($routes);
+
+        self::setObject("oindoc");
+        if (-1 == $status) {
+            $where = Where::Cond()
+                ->add("_deleted", "=", "0")
+                ->parse();
+        }
+        else {
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", $status)
+            ->parse();
+        }
+        $documents = self::getList($where);
+
+        
+        if (5 == $status || 6 == $status) {
+            return $documents;
+        }
+
+        foreach($routes as $key => $route) {
+            if (isset($documents[$route->object->doc_id]))
+            $result[$route->object->doc_id] = $documents[$route->object->doc_id];
+        }
+
+        return $result;
+    }
+
+    public static function GetInDocs($user_id, $user_role, $status = -1) {
+        self::setObject("odocroute");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("iscurrent", "=", 1)
+            ->add("and")
+            ->add("role_id", "=", $user_role)
+            ->parse();
+        $routes = self::getList($where);
+
+        self::setObject("oindoc");
+        if (-1 == $status) {
+            $where = Where::Cond()
+                ->add("_deleted", "=", "0")
+                ->parse();
+        }
+        else {
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", $status)
+            ->parse();
+        }
+        $documents = self::getList($where);
+
+        foreach ($routes as $key => $item) {
+            $item = $item->object;
+            
+            if ($user_id == $item->user_id || (0 == $item->user_id && $user_role == $item->role_id)) {
+                if (isset($documents[$item->doc_id])) {
+                    $result[$item->doc_id] = $documents[$item->doc_id];
+                }
+            }   
+        }
+        return $result;
+    }
 }
 ?>

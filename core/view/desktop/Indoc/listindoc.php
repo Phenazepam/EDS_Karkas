@@ -57,27 +57,26 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
+Indoc::GetMyDocs($user_id, 3);
+
 if (!is_null($my_doc_status)) {
-    foreach ($doc_steps as $key => $item) {
-        $item = $item->object;
-        if (1 == $user_role || 2 == $user_role) {
-            if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                $items[$item->doc_id] = $all_docs[$item->doc_id];
-            }
-        }
-        else {
-            if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
-                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                    $items[$item->doc_id] = $all_docs[$item->doc_id];
-                }
-            }
-        }
+  $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
+  if ($my_doc_status == 6 || $my_doc_status == 5) {
+    foreach ($documents as $item) {
+      if ($read_doc[$item->object->params->doctypes]) {
+        $tmp[] = $item;
+      }
     }
+    $documents = $tmp;
+  }
+}
+else if (!is_null($indoc_status)) {
+  $documents = Indoc::GetInDocs($user_id, $user_role, $indoc_status);
 }
 else {
   foreach ($all_docs as $item) {
     if ($read_doc[$item->object->params->doctypes]) {
-      $items[] = $item;
+      $documents[] = $item;
     }
   }
 }
@@ -88,7 +87,7 @@ if (-1 !== $session_doc_step) {
       $tmp[] = $document;
     }
   }
-  $items = $tmp;
+  $documents = $tmp;
 }
 if (-1 !== $session_doctypes) {
   foreach ($items as $document) {
@@ -96,7 +95,7 @@ if (-1 !== $session_doctypes) {
       $tmp[] = $document;
     }
   }
-  $items = $tmp;
+  $documents = $tmp;
 }
 
 //for indocs filtration
@@ -104,12 +103,13 @@ if( !is_null($indoc_status))
 {
 	Indoc::setObject("oindoc");
 	$where = Where::Cond()
-		->add("_deleted", "=", "0")
-		->parse();
+	->add("_deleted", "=", "0")
+	->parse();
 
 	$items = Indoc::getList($where);
 	
 	foreach ($items as $document)
+	   $document = $document->object;
 	   {
 		if ($document->object->status == $indoc_status) {
 			$tmp1[] = $document;
@@ -140,7 +140,7 @@ require 'listindoc.filter.php';
   <tbody>
 
     <?
-    foreach ($items as $key => $item) :
+    foreach ($documents as $key => $item) :
     ?>
         <tr>
           <td>
@@ -175,7 +175,7 @@ require 'listindoc.filter.php';
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
             <? if($item->object->status == 5 || $item->object->status == 6) : ?>
-              <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+              <a class="btn btn-info btn-sm" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
             <? endif; ?>
             <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
