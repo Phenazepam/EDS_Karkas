@@ -776,6 +776,11 @@ class Collection extends \RedCore\Base\Collection
         }
         $documents = self::getList($where);
 
+        
+        if (5 == $status || 6 == $status) {
+            return $documents;
+        }
+
         foreach($routes as $key => $route) {
             if (isset($documents[$route->object->doc_id]))
             $result[$route->object->doc_id] = $documents[$route->object->doc_id];
