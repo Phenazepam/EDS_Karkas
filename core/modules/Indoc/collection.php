@@ -672,5 +672,83 @@ class Collection extends \RedCore\Base\Collection
     public static function GetNameStatuses(){
         return self::$statuses;
     }
+	
+	public static function GetMyDocsInfo() {
+		
+		$user_id = Users::getAuthId();
+		
+		
+		
+		$where = $where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+		
+		self::setObject('odocroute');
+		$docs = self::getList($where);
+
+		$chern = 0;
+		$sogl = 0;
+		$utv = 0;
+		$prin = 0;
+
+		
+		
+				// sort by statuses
+		foreach($docs as $item) {
+			$user = $item->user_id ;
+			$stp_ordr = $item->step_order;
+			
+			if ($user == $user_id) {
+				if ( $stp_ordr == 1 ) {
+					$chern++;
+				}
+				if ( $stp_ordr == 2 ) {
+					$sogl++;
+				}
+				if ( $stp_ordr == 3 ) {
+					$utv++;
+				}
+				if ( $stp_ordr == 4 ) {
+					$prin++;
+				}
+			}
+		}
+		
+
+		$retResult = array();
+		$retResult[0] = (string) $chern;
+		$retResult[1] = (string) $sogl;
+		$retResult[2] = (string) $utv;
+		$retResult[3] = (string) $prin;
+
+
+		return $retResult;
+	}
+	
+	public static function getRegNumber() {
+		$where = $where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+
+
+		// get table oindoc
+		self::setObject("oindoc");
+		$docs = self::getList();
+
+		// get registration numbers from table
+		$a = array();
+		foreach($docs as $item) {
+			$c = $item->object->reg_number;
+			array_push($a, $c);
+		}
+
+		//searching max value and increment it
+		$max = max($a);
+		$new_number = $max +1;
+		$stringNewNum = (string) $new_number;
+
+
+		return $stringNewNum;
+	}		
 }
 ?>
