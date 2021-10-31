@@ -531,9 +531,12 @@ class Collection extends \RedCore\Base\Collection
         }    
         return false; 
     }
+    
+   
 
     public static function NumberDocs($step = -1, $user_role, $user_id)
     {   
+        
         self::setObject('odocroute');
         if ( -1 == $step) {
             $where = Where::Cond()
@@ -826,5 +829,38 @@ class Collection extends \RedCore\Base\Collection
         }
         return $result;
     }
+
+    public static function NumberDocsIndicator($status = -1, $user_role, $user_id, $type = 1)
+    {
+        //if ($status != -1) {
+        
+        if ($type != 1) {
+            $IndCount=self::GetInDocs($user_id, $user_role, $status); 
+            return count($IndCount);}
+        
+        else {
+            $IndCount=self::GetMyDocs($user_id, $status);
+            return count($IndCount);}
+            
+            
+            /* }
+       
+        else {
+            
+            if ($type != 1) {
+                $IndCount=self::GetInDocs($user_id, $user_role, $status);
+                return count($IndCount);}
+                
+                else {
+                    $IndCount=self::GetMyDocs($user_id, $status);
+                    return count($IndCount);}
+        }
+        */    
+            
+        
+    }
 }
+
+
+
 ?>
