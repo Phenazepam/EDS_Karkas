@@ -8,6 +8,7 @@ use RedCore\Search\Collection as Search;
 use RedCore\Request as Request;
 
 $my_doc_status = Request::vars("my_doc_status");
+$indoc_status = Request::vars("indoc_status");
 
 Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
 Session::bind("filter_doc_step_id", "general_filter_doc_step_id", -1);
@@ -105,6 +106,26 @@ if (-1 !== $session_doctypes) {
   }
   $items = $tmp;
 }
+
+//for indocs filtration
+if( !is_null($indoc_status))
+{
+	Indoc::setObject("oindoc");
+	$where = Where::Cond()
+	->add("_deleted", "=", "0")
+	->parse();
+
+	$items = Indoc::getList($where);
+	
+	foreach ($items as $document)
+	{
+		if ($document->object->status == $indoc_status ) {
+			$tmp1[] = $document;
+		}
+	}
+	$items = $tmp1;
+}
+
 // Search::setObject("osearch");
 // Search::export($items);
 ?>
