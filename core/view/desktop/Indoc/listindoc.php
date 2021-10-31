@@ -61,19 +61,25 @@ if (!is_null($my_doc_status)) {
     foreach ($doc_steps as $key => $item) {
         $item = $item->object;
         if (1 == $user_role || 2 == $user_role) {
-            if ($all_docs[$item->id]->object->status == $my_doc_status) {
-                $items[$item->id] = $all_docs[$item->doc_id];
+            if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+                $items[$item->doc_id] = $all_docs[$item->doc_id];
             }
         }
         else {
             if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
                 if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                    $items[$item->id] = $all_docs[$item->doc_id];
+                    $items[$item->doc_id] = $all_docs[$item->doc_id];
                 }
             }
         }
     }
-    
+}
+else {
+  foreach ($all_docs as $item) {
+    if ($read_doc[$item->object->params->doctypes]) {
+      $items[] = $item;
+    }
+  }
 }
 
 if (-1 !== $session_doc_step) {
@@ -164,7 +170,7 @@ require 'listindoc.filter.php';
             </div>
             <small><?= $prc ?>% Пройдено</small>
           </td>
-          <td><button type="button" class="btn btn-success btn-sm"><?= $doc_status_name[$item->object->status] ?></button></td>
+          <td><?= $doc_status_name[$item->object->status] ?></td>
           <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Просмотреть </a>
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>

@@ -94,6 +94,27 @@ if (is_null($reg_number)) {
 	$reg_number = $auto_reg_number;
 }
 
+Indoc::setObject('odocfile');
+$lb_params = array(
+  'doc_id' => $doc_id,
+  'iscurrent' => '1'
+);
+$doc_file = Indoc::loadBy($lb_params);
+if (!empty($doc_file->object->id)){
+    $downloadBtn = '<div class="row form-group" style="margin-top: 15px;"><div class="col col-md-12"><label for="" class="form-control-label">Прикрепленный файл</label></div>
+                        <div class="col col-md-12">
+                            <div class="row form-control">
+                                <div class="col col-md-4">
+                                    <div style="font-size: 17px; font-weight:600" >'.$doc_file->object->name.' от '.date('d.m.Y', strtotime($doc_file->object->_updated)).'</div>
+                                </div>
+                                <div class="col col-md-8">
+                                    <a class="btn btn-info btn-sm" href = "/docs-download?file_id='.$doc_file->object->id .'">Скачать документ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+}
+
 $form = Forms::Create()
     ->add("action", "action", "hidden", "action", $html_object . ".store.do", 6, false)
     ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
@@ -109,6 +130,7 @@ $form = Forms::Create()
 
     ->add("html", "", "html", "", '<src="' . CMS_TMP . SEP . $oindoc_item->object->params->file_title . '">')
     ->add("file", "Файл", "file", $html_object . "[file]")
+    ->add("html", "", "html", "", $downloadBtn)
     ->add("html", "", "html", "", $relateddocs)
     ->parse();
 ?>
@@ -145,3 +167,8 @@ $form = Forms::Create()
         </div>
     </div>
 </div>
+<style lang="css">
+    .dov{
+        border-width: 1px;
+    }
+</style>
