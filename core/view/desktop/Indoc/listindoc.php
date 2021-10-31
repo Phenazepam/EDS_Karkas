@@ -167,7 +167,7 @@ require 'listindoc.filter.php';
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
             <? if($item->object->status == 5 || $item->object->status == 6) : ?>
-              <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+              <a class="btn btn-info btn-sm" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
             <? endif; ?>
             <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
