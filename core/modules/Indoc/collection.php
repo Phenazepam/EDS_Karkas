@@ -783,5 +783,43 @@ class Collection extends \RedCore\Base\Collection
 
         return $result;
     }
+
+    public static function GetInDocs($user_id, $user_role, $status = -1) {
+        self::setObject("odocroute");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("iscurrent", "=", 1)
+            ->add("and")
+            ->add("role_id", "=", $user_role)
+            ->parse();
+        $routes = self::getList($where);
+
+        self::setObject("oindoc");
+        if (-1 == $status) {
+            $where = Where::Cond()
+                ->add("_deleted", "=", "0")
+                ->parse();
+        }
+        else {
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", $status)
+            ->parse();
+        }
+        $documents = self::getList($where);
+
+        foreach ($routes as $key => $item) {
+            $item = $item->object;
+            
+            if ($user_id == $item->user_id || (0 == $item->user_id && $user_role == $item->role_id)) {
+                if (isset($documents[$item->doc_id])) {
+                    $result[$item->doc_id] = $documents[$item->doc_id];
+                }
+            }   
+        }
+        return $result;
+    }
 }
 ?>
