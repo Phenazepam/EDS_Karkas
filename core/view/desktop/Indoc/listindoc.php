@@ -57,27 +57,18 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
+Indoc::GetMyDocs($user_id, 3);
+
 if (!is_null($my_doc_status)) {
-    foreach ($doc_steps as $key => $item) {
-        $item = $item->object;
-        if (1 == $user_role || 2 == $user_role) {
-            if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                $items[$item->doc_id] = $all_docs[$item->doc_id];
-            }
-        }
-        else {
-            if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
-                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                    $items[$item->doc_id] = $all_docs[$item->doc_id];
-                }
-            }
-        }
-    }
+  $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
+}
+else if (!is_null($indoc_status)) {
+  $documents = Indoc::GetInDocs($user_id, $user_role, $indoc_status);
 }
 else {
   foreach ($all_docs as $item) {
     if ($read_doc[$item->object->params->doctypes]) {
-      $items[] = $item;
+      $documents[] = $item;
     }
   }
 }
@@ -88,7 +79,7 @@ if (-1 !== $session_doc_step) {
       $tmp[] = $document;
     }
   }
-  $items = $tmp;
+  $documents = $tmp;
 }
 if (-1 !== $session_doctypes) {
   foreach ($items as $document) {
@@ -96,7 +87,7 @@ if (-1 !== $session_doctypes) {
       $tmp[] = $document;
     }
   }
-  $items = $tmp;
+  $documents = $tmp;
 }
 
 //for indocs filtration
@@ -140,7 +131,7 @@ require 'listindoc.filter.php';
   <tbody>
 
     <?
-    foreach ($items as $key => $item) :
+    foreach ($documents as $key => $item) :
     ?>
         <tr>
           <td>
