@@ -610,5 +610,30 @@ class Collection extends \RedCore\Base\Collection
 		return $retResult;
 	}
 	
+	public static function getRegNumber() {
+		$where = $where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->parse();
+
+
+		// get table oindoc
+		self::setObject("oindoc");
+		$docs = self::getList();
+
+		// get registration numbers from table
+		$a = array();
+		foreach($docs as $item) {
+			$c = $item->object->reg_number;
+			array_push($a, $c);
+		}
+
+		//searching max value and increment it
+		$max = max($a);
+		$new_number = $max +1;
+		$stringNewNum = (string) $new_number;
+
+
+		return $stringNewNum;
+	}		
 }
 ?>

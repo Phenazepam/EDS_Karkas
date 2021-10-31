@@ -87,7 +87,7 @@ Session::set("s_relateddoc_id", $oindoc_item->object->id);
 $relateddocs = require('RelatedDocView/generateRelatedDocView.php');
 Session::delete("s_relateddoc_id", $oindoc_item->object->id);
 
-$auto_reg_number = require('RelatedDocView/autoRegNumber.php');
+$auto_reg_number = Indoc::getRegNumber();
 $reg_number = $oindoc_item->object->reg_number;
 if (is_null($reg_number)) {
 
