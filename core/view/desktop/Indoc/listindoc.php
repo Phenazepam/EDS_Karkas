@@ -7,7 +7,8 @@ use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
 use RedCore\Request as Request;
 
-$my_doc_step = Request::vars("my_doc_step");
+$my_doc_status = Request::vars("my_doc_status");
+$indoc_status = Request::vars("indoc_status");
 
 Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
 Session::bind("filter_doc_step_id", "general_filter_doc_step_id", -1);
@@ -46,6 +47,7 @@ foreach ($doc_steps as $key => $item) {
 }
 
 $doc_steps_name = Indoc::getRouteStatuses();
+$doc_status_name = Indoc::GetNameStatuses();
 $read_doc = Users::CanUserReadDocs($DocTypesid);
 
 Users::setObject("user");
@@ -55,40 +57,24 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
-
-if (!is_null($my_doc_step)) {
-  foreach ($doc_steps as $key => $item) {
-    $item = $item->object;
-    if (0 != $item->user_id || 1 == $user_role || 2 == $user_role) {
-      if ($user_id == $item->user_id || 1 == $user_role || 2 == $user_role) {
-        if ($item->step == $my_doc_step) { 
-          $items[$item->id]= $all_docs[$item->doc_id];
-          // $items[$item->id]["step"] = $item->step;
-          // $items[$item->id]["role"] = $item->role_id;
-          // $items[$item->id]["user_id"] = $item->user_id;
+if (!is_null($my_doc_status)) {
+    foreach ($doc_steps as $key => $item) {
+        $item = $item->object;
+        if (1 == $user_role || 2 == $user_role) {
+            if ($all_docs[$item->id]->object->status == $my_doc_status) {
+                $items[$item->id] = $all_docs[$item->doc_id];
+            }
         }
-      }
-    } else {
-      if ($user_role == $item->role_id || 1 == $user_role || 2 == $user_role) {
-        if ($item->step == $my_doc_step) { 
-          $items[$item->id] = $all_docs[$item->doc_id];
-          // $items[$item->id]["step"] = $item->step;
-          // $items[$item->id]["role"] = $item->role_id;
-          // $items[$item->id]["user_id"] = $item->user_id;
+        else {
+            if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
+                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
+                    $items[$item->id] = $all_docs[$item->doc_id];
+                }
+            }
         }
-      }
     }
-  }
+    
 }
-else {
-  foreach ($all_docs as $item) {
-    if ($read_doc[$item->object->params->doctypes]) {
-      $items[] = $item;
-    }
-  }
-}
-// var_dump($items);
-
 
 if (-1 !== $session_doc_step) {
   foreach ($items as $document) {
@@ -107,10 +93,28 @@ if (-1 !== $session_doctypes) {
   $items = $tmp;
 }
 
+//for indocs filtration
+if( !is_null($indoc_status))
+{
+	Indoc::setObject("oindoc");
+	$where = Where::Cond()
+	->add("_deleted", "=", "0")
+	->parse();
+
+	$items = Indoc::getList($where);
+	
+	foreach ($items as $document)
+	   $document = $document->object;
+	   {
+		if ($document->object->status == $indoc_status) {
+			$tmp1[] = $document;
+		}
+	}
+	$items = $tmp1;
+}
 
 // Search::setObject("osearch");
 // Search::export($items);
-
 ?>
 <?
 require 'listindoc.filter.php';
@@ -124,7 +128,7 @@ require 'listindoc.filter.php';
       <th>№ Регистрации</th>
       <th>Назначено</th>
       <th>Прогресс</th>
-      <th>Шаг</th>
+      <th>Статус</th>
       <th>Действие</th>
     </tr>
   </thead>
@@ -132,25 +136,22 @@ require 'listindoc.filter.php';
 
     <?
     foreach ($items as $key => $item) :
-        
     ?>
-
         <tr>
           <td>
             <a><?= $item->object->name_doc ?></a>
             <br>
             <small><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?></b></small>
-            <br>
+            (
             <small><?= $item->object->reg_date ?></small>
+            )
           </td>
           <td><?= $item->object->reg_number ?></td>
           <td>
             <ul class="list-inline">
               <li>
                 <img src="<?= ICONS . SEP . 'user.png' ?>" class="avatar" alt="Avatar" title="
-						<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?>
-            			<?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?>
-            			<?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
+					<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
               </li>
             </ul>
           </td>
@@ -166,9 +167,12 @@ require 'listindoc.filter.php';
           <td><?= $doc_status_name[$item->object->status] ?></td>
           <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Просмотреть </a>
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
-              <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Редактировать </a>
+              <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
-            <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Удалить </a>
+            <? if($item->object->status == 5 || $item->object->status == 6) : ?>
+              <a class="btn btn-info" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+            <? endif; ?>
+            <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
         </tr>
 

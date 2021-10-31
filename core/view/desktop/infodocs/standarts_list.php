@@ -1,9 +1,13 @@
 <?php
 
 use \RedCore\Infodocs\Collection as Standarts;
+use \RedCore\Where as Where;
 
 Standarts::setObject("oinfodocsstandarts");
-$items = Standarts::getList();
+$where = Where::Cond()
+  ->add("_deleted", "=", "0")
+  ->parse();
+$items = Standarts::getList($where);
 
 ?>
 

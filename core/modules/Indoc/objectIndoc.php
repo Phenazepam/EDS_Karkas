@@ -23,7 +23,7 @@ class ObjectIndoc extends \RedCore\Base\ObjectBase {
 			"id"         => "Number",
 			"name_doc"   => "String",
 			"reg_number" => "Number",
-		    "reg_date"   => "Timestamp",
+		    "reg_date"   => "Date",
 			"status"  => "Number",
 			"params" => array(
 				"file_title" => "String",

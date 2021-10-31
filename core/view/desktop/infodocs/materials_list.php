@@ -1,9 +1,13 @@
 <?php
 
 use \RedCore\Infodocs\Collection as Materials;
+use \RedCore\Where as Where;
 
 Materials::setObject("oinfodocsmaterials");
-$items = Materials::getList();
+$where = Where::Cond()
+  ->add("_deleted", "=", "0")
+  ->parse();
+$items = Materials::getList($where);
 
 ?>
 	<div class="x_title">
