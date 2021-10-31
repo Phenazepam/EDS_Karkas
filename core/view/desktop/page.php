@@ -155,9 +155,9 @@ use RedCore\Controller;
             <div class="menu_section">
               <h3>Данные</h3>
 			  <ul class="nav side-menu">
-				<li><a><i class="fa fa-info"></i> Входящие документы <span class="fa fa-chevron-down"></span></a>
+				<li><a><i class="fa fa-info"></i> Документы <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
-						<li><a href="/indocitems-list">Все документы
+						<li><a href="/indocitems-list">Входящие документы
 							<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1,  $user_role, $user_id);?></span></a></li>
 						<li><a href="/indocitems-list?indoc_status=2">На согласование
 							<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
