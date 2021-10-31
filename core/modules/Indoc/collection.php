@@ -21,6 +21,7 @@ require_once ('objectDocTypes.php');
 require_once ('objectDocLog.php');
 require_once ('objectDocRoute.php');
 require_once ('objectRelatedDocs.php');
+require_once ('objectDocFile.php');
 
 class Collection extends \RedCore\Base\Collection
 {
@@ -111,6 +112,10 @@ class Collection extends \RedCore\Base\Collection
             self::$object = "orelateddocs";
             self::$sql = Sql::$sqlRelatedDocs;
             self::$class = "RedCore\Indoc\objectRelatedDocs";
+        } elseif ("odocfile" == $obj) {
+            self::$object = "odocfile";
+            self::$sql = Sql::$sqlDocFile;
+            self::$class = "RedCore\Indoc\objectDocFile";
         }
     }
 
@@ -142,18 +147,21 @@ class Collection extends \RedCore\Base\Collection
             Users::setObject("user");
             $user_id = Users::getAuthId();
             $role_id = Users::getAuthRole();
-            if ($title = Files::upload("oindoc", "file")) {
-                $params["oindoc"]["params"]["file_title"] = $title;
-            }
+            $file = $_FILES["oindoc"];
             if (!empty($params["oindoc"]["id"])) {
                 if (1 == $params["oindoc"]["status"])
-                    self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
+                self::registerDocLog($params["oindoc"]["id"], 2, "", $user_id);
+                if ($file["tmp_name"]["file"] != "" ) {
+                    self::storeFile($file, $params["oindoc"]["id"]);
+                }
             } else {
                 self::setObject("oindoc");
                 $lastId = parent::store($params)->object->id;
                 self::registerDocLog($lastId, 1, "", $user_id);
                 self::MoveRoute($lastId, $params['oindoc']['params']['doctypes'], $role_id, $user_id, '1', '1');
-
+                if ($file["tmp_name"]["file"] != "" ) {
+                    self::storeFile($file, $lastId);
+                }
                 return;
             }
             self::setObject("oindoc");
@@ -188,6 +196,93 @@ class Collection extends \RedCore\Base\Collection
         }
 
     }
+
+    public static function storeFile($file = -1, $doc_id = -1) {
+        $out = array(
+            'errorCode' => '0',
+            'errorText' => ''
+        );
+
+        if (-1 == $file || -1 == $doc_id) return  
+            array(
+            'errorCode' => '1',
+            'errorText' => 'Файл не выбран или не заполнен id документа'
+        );
+
+        $dir_prefix = $doc_id;
+
+        $allowed_filetypes = array(
+            'doc',
+            'docx',
+            'pdf',
+            'xls',
+            'xlsx',
+            'txt'
+        );
+        $filename = $file["tmp_name"]["file"];
+        # Допустимый размер загружаемого файла
+        $max_filesize = 1382288;
+        # Директория для загрузки
+        $upload_path = '../doc_files/';
+        # Получаем расширение файла
+        $extension = pathinfo($file['name']['file'], PATHINFO_EXTENSION);
+        # Формируем имя файла
+        $destination = $upload_path . $dir_prefix.'_'.
+            Collection::getRandomFileName($upload_path, $extension) .
+            '.'. $extension;
+        if ($file['error']["file"]) {
+            $out = array(
+                'errorCode' => '2',
+                'errorText' => 'Файл загружен с ошибками'
+            );
+        } elseif (!in_array($extension, $allowed_filetypes)) {
+            $out = array(
+                'errorCode' => '3',
+                'errorText' => 'Некорректный формат файла'
+            );
+        } elseif ($file['size']['file'] > $max_filesize) {
+            $out = array(
+                'errorCode' => '3',
+                'errorText' => 'Превышен максимальный размер файла'
+            );
+        } else {
+            // var_dump($filename);
+            // var_dump($destination);
+            Users::setObject('user');
+            $user_id = Users::getAuthId();
+            if(move_uploaded_file($filename, $destination)) {
+                self::setObject('odocfile');
+                self::UnsetCurrentDocFile($doc_id);
+                $params["odocfile"] = array(
+                    'name' => $file['name']['file'],
+                    'directory' => $destination,
+                    'doc_id' => $doc_id,
+                    'iscurrent' => 1,
+                    'uploadedbyuser' => $user_id
+                );
+                self::store($params);
+            }
+		}
+        return $out;
+    }
+    private static function getRandomFileName($path, $extension='')
+    {
+        $extension = $extension ? '.' . $extension : '';
+        $path = $path ? $path . '/' : '';
+        do {
+            $name = md5(microtime() . rand(0, 9999));
+            $file = $path . $name . $extension;
+        } while (file_exists($file));
+        return $name;
+    }
+    private static function UnsetCurrentDocFile($doc_id = - 1)
+    {
+        if (- 1 == $doc_id)
+            return;
+        $sql = 'UPDATE `eds_karkas__docfile` SET iscurrent= 0 WHERE doc_id = ' . $doc_id;
+        Core::$db->execute($sql);
+    }
+
 
     public static function getStatuslist()
     {
@@ -259,7 +354,7 @@ class Collection extends \RedCore\Base\Collection
 
         $current_step = $item->object->step;
 
-        if (1 == $isFinalStep) {
+        if (1 == $isFinalStep && 1 != $isBack) {
             if (3 == $current_step) {
                 self::registerDocLog($doc_id, 8, $comment, $current_user);
                 self::ChangeDocumentStatus($doc_id, 5);
@@ -343,9 +438,12 @@ class Collection extends \RedCore\Base\Collection
 
     public static function ajaxMoveRoute($params = array())
     {
+        $file = $_FILES["oindoc"];
+        // var_dump($file);
         $params = $params["oindoc"];
 
         Users::setObject('user');
+
 
         $doc_id = $params["id"];
         $doc_type = $params["doc_type"];
@@ -359,7 +457,24 @@ class Collection extends \RedCore\Base\Collection
 
         $isBack = $params["isback"];
 
-        self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+        if ($file["tmp_name"]["file"] != "") {
+            $out = self::storeFile($file, $doc_id);
+            if ($out["errorCode"] != 0) {
+                echo json_encode($out);
+            }
+            else {
+                echo json_encode($out);
+                self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+            } 
+        }  
+        else {
+            $out = array(
+                'errorCode' => '0',
+                'errorText' => ''
+            );
+            echo json_encode($out);
+            self::MoveRoute($doc_id, $doc_type, $role_id, $user_id, $step, $step_order, $isCurrent, $comment, $isBack, $isFinalStep);
+        }
         exit();
     }
 

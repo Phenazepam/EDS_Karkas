@@ -17,6 +17,7 @@ class Sql {
 				reg_number,
                 reg_date,
 				status,
+                
 				params,
                 _updated,
                 _deleted
@@ -66,18 +67,33 @@ class Sql {
 				eds_karkas__docroute
 		';
 
-	   public static
-	   $sqlRelatedDocs = '
-			SELECT
-				id,
-				doc_id,
-				relateddoc_id,
-				type,
-                _updated,
-                _deleted
-			FROM
-				eds_karkas__relateddocs
-		';
-	
+		public static
+		$sqlRelatedDocs = '
+			 SELECT
+				 id,
+				 doc_id,
+				 relateddoc_id,
+				 type,
+				 _updated,
+				 _deleted
+			 FROM
+				 eds_karkas__relateddocs
+		 ';
+
+		public static
+		$sqlDocFile = '
+			 SELECT
+				 id,
+				 name,
+				 directory,
+				 doc_id,
+				 iscurrent,
+				 uploadedbyuser,
+				 _updated,
+				 _deleted
+			 FROM
+				 eds_karkas__docfile
+		 ';
+		
 
 }

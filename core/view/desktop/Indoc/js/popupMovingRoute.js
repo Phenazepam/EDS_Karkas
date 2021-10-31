@@ -23,9 +23,15 @@ async function popupMovingRoute(oindocId, isBack = 0) {
             };
             console.log(formData);
             const response = await fetch("/indocitems-form-view?action=oindoc.ajaxMoveRoute.do", option);
-            var text = await response.text();
-            // console.log(text);
-            location.reload();
+            var res = await response.json();
+            if (0 != res.errorCode) {
+              Swal.fire(
+                'Ошибка!',
+                res.errorText,
+                'error'
+              )
+            }
+            else location.reload();
         }
     })
 }
