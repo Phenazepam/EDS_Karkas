@@ -859,6 +859,18 @@ class Collection extends \RedCore\Base\Collection
             
         
     }
+	
+	public static function IndocsAllIndicator($user_role, $user_id)
+	{
+        $a = self::GetInDocs($user_id, $user_role, 2);
+		$b = self::GetInDocs($user_id, $user_role, 3);
+		$c = self::GetInDocs($user_id, $user_role, 4);
+		$sum = count($a) + count($b) + count($c);
+		
+		return $sum;
+        
+        
+	}
 }
 
 

@@ -138,7 +138,7 @@ use RedCore\Controller;
                 <li>
                   <a>
                     <i class="fa fa-file"></i> Входящие документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocsIndicator(-1, $user_role, $user_id, 2);?></span>
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::IndocsAllIndicator($user_role, $user_id);?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">

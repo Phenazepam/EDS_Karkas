@@ -312,7 +312,7 @@ $days30 = 20;
 
 		    <?php
 
-    $doc_count = Indoc::NumberDocs(1, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocsIndicator(1,  $user_role, $user_id);;
 
     ?>
 
@@ -349,7 +349,7 @@ $days30 = 20;
 
 		    <?php
 
-    $doc_count = Indoc::NumberDocs(2, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocsIndicator(2,  $user_role, $user_id, 2);
 
     ?>
 
@@ -385,7 +385,7 @@ $days30 = 20;
 
 		    <?php
 
-    $doc_count = Indoc::NumberDocs(3, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocsIndicator(3,  $user_role, $user_id, 2);
 
     ?>
 
@@ -420,7 +420,7 @@ $days30 = 20;
 
 		    <?php
 
-    $doc_count = Indoc::NumberDocs(4, $user_role, $user_id);
+    $doc_count = Indoc::NumberDocsIndicator(4,  $user_role, $user_id);
 
     ?>
 
