@@ -60,34 +60,20 @@ $user = Users::getRolesList();
 if (!is_null($my_doc_status)) {
     foreach ($doc_steps as $key => $item) {
         $item = $item->object;
-        if (0 != $item->user_id || 1 == $user_role || 2 == $user_role) {
-            if ($user_id == $item->user_id || 1 == $user_role || 2 == $user_role) {
-                if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
-                    $items[$item->id]= $all_docs[$item->doc_id];
-                    // $items[$item->id]["step"] = $item->step;
-                    // $items[$item->id]["role"] = $item->role_id;
-                    // $items[$item->id]["user_id"] = $item->user_id;
-                }
+        if (1 == $user_role || 2 == $user_role) {
+            if ($all_docs[$item->id]->object->status == $my_doc_status) {
+                $items[$item->id] = $all_docs[$item->doc_id];
             }
-        } else {
-            if ($user_role == $item->role_id || 1 == $user_role || 2 == $user_role) {
+        }
+        else {
+            if (($user_id == $item->user_id || $user_role == $item->role_id) and 1 == $item->step_order) {
                 if ($all_docs[$item->doc_id]->object->status == $my_doc_status) {
                     $items[$item->id] = $all_docs[$item->doc_id];
-                    // $items[$item->id]["step"] = $item->step;
-                    // $items[$item->id]["role"] = $item->role_id;
-                    // $items[$item->id]["user_id"] = $item->user_id;
                 }
             }
         }
     }
-}
-
-else {
-    foreach ($all_docs as $item) {
-        if ($read_doc[$item->object->params->doctypes]) {
-            $items[] = $item;
-        }
-    }
+    
 }
 
 if (-1 !== $session_doc_step) {
@@ -118,8 +104,9 @@ if( !is_null($indoc_status))
 	$items = Indoc::getList($where);
 	
 	foreach ($items as $document)
-	{
-		if ($document->object->status == $indoc_status ) {
+	   $document = $document->object;
+	   {
+		if ($document->object->status == $indoc_status) {
 			$tmp1[] = $document;
 		}
 	}

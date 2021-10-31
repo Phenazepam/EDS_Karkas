@@ -24,11 +24,6 @@
 */
 return
 array(
-    /*'document' => array(
-        'name' => 'Документы',
-        'tag' => 'docs',
-        'userAccess' => array()
-    ), */
     'admin' => array(
         'name' => 'Администрирование',
         'tag' => 'admin',
