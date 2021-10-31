@@ -121,18 +121,18 @@ use RedCore\Controller;
 					
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php $q = Indoc::GetMyDocsInfo(); echo $q[4]; ?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list?my_doc_status=1">Черновики 
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(1,  $user_role, $user_id);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[0];?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=2">На согласование
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[1];?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=3">На утверждение
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[2];?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=4">На принятие
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo $q[3];?></span></a></li>
                   </ul>
                 </li>
                 <li>
@@ -294,8 +294,7 @@ use RedCore\Controller;
       <!-- footer content -->
       <footer>
         <div class="pull-right">
-          FOOTER 
-		  
+          FOOTER 		  
         </div>
         <div class="clearfix"></div>
       </footer>

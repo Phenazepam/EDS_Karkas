@@ -675,6 +675,7 @@ class Collection extends \RedCore\Base\Collection
 	
 	public static function GetMyDocsInfo() {
 		
+		Users::setObject("user");
 		$user_id = Users::getAuthId();
 		
 		
@@ -685,19 +686,19 @@ class Collection extends \RedCore\Base\Collection
 		
 		self::setObject('odocroute');
 		$docs = self::getList($where);
-
+		
+		$count = 0;
 		$chern = 0;
 		$sogl = 0;
 		$utv = 0;
 		$prin = 0;
 
 		
-		
 				// sort by statuses
 		foreach($docs as $item) {
-			$user = $item->user_id ;
-			$stp_ordr = $item->step_order;
-			
+			$user = $item->object->user_id ;
+			$stp_ordr = $item->object->step_order;
+			$count = $count +1;
 			if ($user == $user_id) {
 				if ( $stp_ordr == 1 ) {
 					$chern++;
@@ -720,6 +721,7 @@ class Collection extends \RedCore\Base\Collection
 		$retResult[1] = (string) $sogl;
 		$retResult[2] = (string) $utv;
 		$retResult[3] = (string) $prin;
+		$retResult[4] = (string) $count;
 
 
 		return $retResult;
