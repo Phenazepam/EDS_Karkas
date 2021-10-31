@@ -136,6 +136,21 @@ use RedCore\Controller;
                   </ul>
                 </li>
                 <li>
+                  <a>
+                    <i class="fa fa-file"></i> Входящие документы 
+                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(-1, $user_role, $user_id);?></span>
+                    <span class="fa fa-chevron-down"></span>
+                  </a>
+                  <ul class="nav child_menu">
+                    <li><a href="/indocitems-list?indoc_status=2">На согласование
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(2,  $user_role, $user_id);?></span></a></li>
+                    <li><a href="/indocitems-list?indoc_status=3">На утверждение
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(3,  $user_role, $user_id);?></span></a></li>
+                    <li><a href="/indocitems-list?indoc_status=4">На принятие
+                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo Indoc::NumberDocs(4,  $user_role, $user_id);?></span></a></li>
+                  </ul>
+                </li>
+                <li>
 					<a href="/indocitems-list?my_doc_status=5">
                     	<i class="fa fa-file"></i> Хранилище документов
                   	</a>
