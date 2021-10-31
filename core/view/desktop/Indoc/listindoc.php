@@ -104,13 +104,13 @@ if( !is_null($indoc_status))
 {
 	Indoc::setObject("oindoc");
 	$where = Where::Cond()
-	->add("_deleted", "=", "0")
-	->parse();
+		->add("_deleted", "=", "0")
+		->parse();
 
 	$items = Indoc::getList($where);
 	
 	foreach ($items as $document)
-	   $document = $document->object;
+	   //$document = $document->object;
 	   {
 		if ($document->object->status == $indoc_status) {
 			$tmp1[] = $document;

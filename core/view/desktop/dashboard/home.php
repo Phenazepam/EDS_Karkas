@@ -329,7 +329,7 @@ $days30 = 20;
 						</div>
 
 					</div>
-				</a> <a href="/indocitems-list?my_doc_status=2">
+				</a> <a href="/indocitems-list?indoc_status=2">
 					<div class="col-md-3 widget widget_tally_box">
 
 						<div style="background-color: #0dcaf0; min-height: 320px;"
@@ -365,7 +365,7 @@ $days30 = 20;
 						</div>
 
 					</div>
-				</a> <a href="/indocitems-list?my_doc_status=3">
+				</a> <a href="/indocitems-list?indoc_status=3">
 					<div class="col-md-3 widget widget_tally_box">
 
 						<div style="background-color: #20c997; min-height: 320px;"
@@ -400,7 +400,7 @@ $days30 = 20;
 						</div>
 
 					</div>
-				</a> <a href="/indocitems-list?my_doc_status=4">
+				</a> <a href="/indocitems-list?indoc_status=4">
 					<div class="col-md-3 widget widget_tally_box ">
 
 						<div style="background-color: #d63384; min-height: 320px;"
