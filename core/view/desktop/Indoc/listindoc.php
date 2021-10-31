@@ -163,8 +163,8 @@ require 'listindoc.filter.php';
             </div>
             <small><?= $prc ?>% Пройдено</small>
           </td>
-          <td><button type="button" class="btn btn-success btn-xs"><?= $doc_steps_name[$doc_steps_ready[$item->object->id]->object->step] ?></button></td>
-          <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Просмотреть </a>
+          <td><?= $doc_status_name[$item->object->status] ?></td>
+          <td><a href="/indocitems-form-view?oindoc_id=<?= $item->object->id ?>" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Просмотреть </a>
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
