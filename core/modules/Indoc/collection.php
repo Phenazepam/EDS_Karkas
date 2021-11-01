@@ -785,7 +785,9 @@ class Collection extends \RedCore\Base\Collection
         }
 
         foreach($routes as $key => $route) {
-            if (isset($documents[$route->object->doc_id]))
+            if (isset($documents[$route->object->doc_id]) 
+                && $documents[$route->object->doc_id]->object->status != 5
+                && $documents[$route->object->doc_id]->object->status != 6)
             $result[$route->object->doc_id] = $documents[$route->object->doc_id];
         }
 
@@ -822,55 +824,16 @@ class Collection extends \RedCore\Base\Collection
             $item = $item->object;
             
             if ($user_id == $item->user_id || (0 == $item->user_id && $user_role == $item->role_id)) {
-                if (isset($documents[$item->doc_id])) {
+                if (isset($documents[$item->doc_id])
+                    && $documents[$item->doc_id]->object->status != 1
+                    && $documents[$item->doc_id]->object->status != 5
+                    && $documents[$item->doc_id]->object->status != 6) {
                     $result[$item->doc_id] = $documents[$item->doc_id];
                 }
             }   
         }
         return $result;
     }
-
-    public static function NumberDocsIndicator($status = -1, $user_role, $user_id, $type = 1)
-    {
-        //if ($status != -1) {
-        
-        if ($type != 1) {
-            $IndCount=self::GetInDocs($user_id, $user_role, $status); 
-            return count($IndCount);}
-        
-        else {
-            $IndCount=self::GetMyDocs($user_id, $status);
-            return count($IndCount);}
-            
-            
-            /* }
-       
-        else {
-            
-            if ($type != 1) {
-                $IndCount=self::GetInDocs($user_id, $user_role, $status);
-                return count($IndCount);}
-                
-                else {
-                    $IndCount=self::GetMyDocs($user_id, $status);
-                    return count($IndCount);}
-        }
-        */    
-            
-        
-    }
-	
-	public static function IndocsAllIndicator($user_role, $user_id)
-	{
-        $a = self::GetInDocs($user_id, $user_role, 2);
-		$b = self::GetInDocs($user_id, $user_role, 3);
-		$c = self::GetInDocs($user_id, $user_role, 4);
-		$sum = count($a) + count($b) + count($c);
-		
-		return $sum;
-        
-        
-	}
 }
 
 

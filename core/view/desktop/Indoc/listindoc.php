@@ -57,8 +57,6 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
-Indoc::GetMyDocs($user_id, 3);
-
 if (!is_null($my_doc_status)) {
   $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
   if ($my_doc_status == 6 || $my_doc_status == 5) {
@@ -117,8 +115,18 @@ if( !is_null($indoc_status))
 	$items = $tmp1;
 }
 
-// Search::setObject("osearch");
-// Search::export($items);
+Indoc::setObject('odocfile');
+$where = Where::Cond()
+->add("_deleted", "=", "0")
+->add("and")
+->add("iscurrent", "=", "1")
+->parse();
+$files = Indoc::getList($where);
+foreach($files as $file) {
+  $tmp[$file->object->doc_id] = $file;
+}
+$files = $tmp;
+
 ?>
 <?
 require 'listindoc.filter.php';
@@ -173,8 +181,9 @@ require 'listindoc.filter.php';
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
-            <? if($item->object->status == 5 || $item->object->status == 6) : ?>
-              <a class="btn btn-info btn-sm" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+            <? if(($item->object->status == 5 || $item->object->status == 6) 
+                && isset($files[$item->object->id])) : ?>
+              <a class="btn btn-info btn-sm" href = "/docs-download?file_id=<?= $files[$item->object->id]->object->id ?>">Скачать документ</a>
             <? endif; ?>
             <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
