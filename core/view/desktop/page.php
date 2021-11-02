@@ -121,33 +121,41 @@ use RedCore\Controller;
 					
                   <a>
                     <i class="fa fa-file"></i> Мои документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetMyDocs($user_id));?></span>
+                    <span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetMyDocs($user_id));?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list?my_doc_status=1">Черновики 
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetMyDocs($user_id, 1));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetMyDocs($user_id, 1)) > 0 ?
+                       count(Indoc::GetMyDocs($user_id, 1)) : '';?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=2">На согласование
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetMyDocs($user_id, 2));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetMyDocs($user_id, 2)) > 0 ?
+                      count(Indoc::GetMyDocs($user_id, 2)) : '';?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=3">На утверждение
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetMyDocs($user_id, 3));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetMyDocs($user_id, 3)) > 0 ?
+                      count(Indoc::GetMyDocs($user_id, 3)) : '';?></span></a></li>
                     <li><a href="/indocitems-list?my_doc_status=4">На принятие
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetMyDocs($user_id, 4));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetMyDocs($user_id, 4)) > 0 ?
+                      count(Indoc::GetMyDocs($user_id, 4)) : '';?></span></a></li>
                   </ul>
                 </li>
                 <li>
                   <a>
                     <i class="fa fa-file"></i> Входящие документы 
-                    <span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role));?></span>
+                    <span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role)) > 0 ?
+                      count(Indoc::GetInDocs($user_id, $user_role)) : '';?></span>
                     <span class="fa fa-chevron-down"></span>
                   </a>
                   <ul class="nav child_menu">
                     <li><a href="/indocitems-list?indoc_status=2">На согласование
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 2));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 2)) > 0 ?
+                        count(Indoc::GetInDocs($user_id, $user_role, 2)) : '';?></span></a></li>
                     <li><a href="/indocitems-list?indoc_status=3">На утверждение
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 3));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 3)) > 0 ?
+                        count(Indoc::GetInDocs($user_id, $user_role, 3)) : '';?></span></a></li>
                     <li><a href="/indocitems-list?indoc_status=4">На принятие
-                    	<span class="badge badge-light" style="margin-left: 20px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 4));?></span></a></li>
+                    	<span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role, 4)) > 0 ?
+                        count(Indoc::GetInDocs($user_id, $user_role, 4)) : '';?></span></a></li>
                   </ul>
                 </li>
                 <li>
