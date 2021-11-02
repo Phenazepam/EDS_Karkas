@@ -159,7 +159,7 @@ use RedCore\Controller;
                   </ul>
                 </li>
                 <li>
-					<a href="/indocitems-list?my_doc_status=5">
+                    <a href="/indocitems-list?my_doc_status=5">
                     	<i class="fa fa-file"></i> Хранилище документов
                   	</a>
                 </li>
