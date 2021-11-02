@@ -223,7 +223,7 @@ foreach ($DocTypesAcceess as $key => $item) {
 							</div>
 							<div class="x_content">
 								<?php
-								$doc_count = Indoc::NumberDocs(-1, $user_role, $user_id);
+								$doc_count = count(Indoc::GetApprovedDocs());
 								?>
 								<h1 class="count" style="padding-right: 20px"><?= $doc_count ?></h1>
 								Общее хранилище документов

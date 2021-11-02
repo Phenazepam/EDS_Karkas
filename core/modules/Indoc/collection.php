@@ -834,6 +834,42 @@ class Collection extends \RedCore\Base\Collection
         }
         return $result;
     }
+
+    public static function GetApprovedDocs() {    
+        self::setObject("oindoc");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", 5)
+            ->parse();
+        $where1 = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", 6)
+            ->parse();
+        
+        $documents = array_merge(self::getList($where), self::getList($where1));
+
+        self::setObject("odoctypes");
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->parse();
+        $DocTypes_list = self::getList($where);
+        $DocTypesid = array();
+        foreach ($DocTypes_list as $id => $temp) {
+            $DocTypesid[$id] = $temp->object->id;
+        }
+
+        $read_doc = Users::CanUserReadDocs($DocTypesid);
+        foreach ($documents as $item) {
+            if ($read_doc[$item->object->params->doctypes]) {
+              $tmp[] = $item;
+            }
+          }
+        $documents = $tmp;
+        
+        return $documents;
+    }
 }
 
 
