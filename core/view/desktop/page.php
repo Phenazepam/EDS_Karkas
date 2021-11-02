@@ -141,7 +141,7 @@ use RedCore\Controller;
                 </li>
                 <li>
                   <a>
-                    <i class="fa fa-file"></i> Входящие документы 
+                    <i class="fa fa-file"></i> Входящие 
                     <span span class="badge bg-danger" style="margin-left: 10px;"><?php echo count(Indoc::GetInDocs($user_id, $user_role)) > 0 ?
                       count(Indoc::GetInDocs($user_id, $user_role)) : '';?></span>
                     <span class="fa fa-chevron-down"></span>
