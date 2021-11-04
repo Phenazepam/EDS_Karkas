@@ -91,25 +91,6 @@ if (-1 !== $session_doctypes) {
   $documents = $tmp;
 }
 
-//for indocs filtration
-if( !is_null($indoc_status))
-{
-	Indoc::setObject("oindoc");
-	$where = Where::Cond()
-	->add("_deleted", "=", "0")
-	->parse();
-
-	$items = Indoc::getList($where);
-	
-	foreach ($items as $document)
-	   {
-		if ($document->object->status == $indoc_status) {
-			$tmp1[] = $document;
-		}
-	}
-	$items = $tmp1;
-}
-
 Indoc::setObject('odocfile');
 $where = Where::Cond()
 ->add("_deleted", "=", "0")
@@ -121,6 +102,9 @@ foreach($files as $file) {
   $tmp[$file->object->doc_id] = $file;
 }
 $files = $tmp;
+
+Users::setObject('doctyperolematrix');
+$responsible = Users::getList();
 
 ?>
 <?
@@ -156,10 +140,16 @@ require 'listindoc.filter.php';
           <td><?= $item->object->reg_number ?></td>
           <td>
             <ul class="list-inline">
+            <? foreach ($responsible as $role): 
+            if ($role->object->doctype == $item->object->params->doctypes):
+            ?>
               <li>
                 <img src="<?= ICONS . SEP . 'user.png' ?>" class="avatar" alt="Avatar" title="
-					<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
+					<?= $user[$role->object->role]?>"> 
               </li>
+            <?
+            endif;
+            endforeach;?>
             </ul>
           </td>
           <td class="project_progress">
