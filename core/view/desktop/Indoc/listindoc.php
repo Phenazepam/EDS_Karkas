@@ -75,15 +75,15 @@ else {
 }
 
 if (-1 !== $session_doc_step) {
-  foreach ($items as $document) {
-    if ($doc_steps_name[$doc_steps_ready[$document->object->id]->object->step] == $session_doc_step) {
+  foreach ($all_docs as $document) {
+    if ($document->object->status == $session_doc_step) {
       $tmp[] = $document;
     }
   }
   $documents = $tmp;
 }
 if (-1 !== $session_doctypes) {
-  foreach ($items as $document) {
+  foreach ($all_docs as $document) {
     if ($document->object->params->doctypes == $session_doctypes) {
       $tmp[] = $document;
     }
@@ -140,7 +140,7 @@ require 'listindoc.filter.php';
           <td><?= $item->object->reg_number ?></td>
           <td>
             <ul class="list-inline">
-            <? foreach ($responsible as $role): 
+            <? foreach ($responsible as $role):
             if ($role->object->doctype == $item->object->params->doctypes):
             ?>
               <li>
