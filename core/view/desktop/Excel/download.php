@@ -1,10 +1,10 @@
 <?php
 
-use RedCore\Search\Collection as Search;
+use RedCore\Excel\Collection as Excel;
 use RedCore\Session as Session;
 
-$items = Session::get('s_items');
-$header_array = Session::get('s_headers_array');
+$items = Session::get('s_excel_items');
+$header_array = Session::get('s_excel_headers');
 
 // var_dump($items);
 // exit();
@@ -16,8 +16,8 @@ header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
 
-Search::setObject('osearch');
-Search::export($items, $header_array);
+Excel::setObject('oexcel');
+Excel::export($items, $header_array);
 
 exit();
 

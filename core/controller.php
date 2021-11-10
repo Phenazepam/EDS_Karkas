@@ -285,13 +285,6 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),
 			array(
-		        "title"    => "Выгрузка в Excel",
-		        "url"      => "searchitems-download",
-		        "view"     => "desktop/Search/download.php",
-		        "default"  => false,
-		        "tag"      => array("top", ""),
-		    ),
-			array(
 		        "title"    => "Фильтр",
 		        "url"      => "searchitems-form",
 		        "view"     => "desktop/page.php",
@@ -307,6 +300,15 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
             ),
+
+			// Excel
+			array(
+		        "title"    => "Выгрузка в Excel",
+		        "url"      => "excel-download",
+		        "view"     => "desktop/Excel/download.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 			//Information documents module
 			/*

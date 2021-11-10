@@ -122,12 +122,28 @@ foreach($files as $file) {
 }
 $files = $tmp;
 
+$headers_for_excel = array('№ Регистрации', 'Имя документа', 'Тип документа', 'Дата создания', 'Статус', 'Прогресс');
+$i = 0;
+foreach ($documents as $item) {
+  $items_for_excel[$i][0] =  $item->object->reg_number;
+  $items_for_excel[$i][1] =  $item->object->name_doc;
+  $items_for_excel[$i][2] =  $DocTypes_list[$item->object->params->doctypes]->object->title;
+  $items_for_excel[$i][3] =  $item->object->reg_date;
+  $items_for_excel[$i][4] =  $doc_status_name[$item->object->status];
+  $items_for_excel[$i][5] =  Indoc::GetProgressPercent($item->object->id).'%';
+  $i++;
+}
+Session::set('s_excel_items', $items_for_excel);
+Session::set('s_excel_headers', $headers_for_excel);
 ?>
+
+
+
 <?
 require 'listindoc.filter.php';
 ?>
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
-<a class="btn btn-primary" href="/searchitems-download">Выгрузка</a>
+<a class="btn btn-primary" href="/excel-download">Выгрузка</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width: 100%">
   <thead>
@@ -150,9 +166,7 @@ require 'listindoc.filter.php';
             <a><?= $item->object->name_doc ?></a>
             <br>
             <small><b><?= $DocTypes_list[$item->object->params->doctypes]->object->title ?></b></small>
-            (
-            <small><?= $item->object->reg_date ?></small>
-            )
+            (<small><?=$item->object->reg_date?></small>)
           </td>
           <td><?= $item->object->reg_number ?></td>
           <td>
