@@ -118,13 +118,32 @@ if( !is_null($indoc_status))
 	$items = $tmp1;
 }
 
-// Search::setObject("osearch");
-// Search::export($items);
+Indoc::setObject('odocfile');
+$where = Where::Cond()
+->add("_deleted", "=", "0")
+->add("and")
+->add("iscurrent", "=", "1")
+->parse();
+$files = Indoc::getList($where);
+foreach($files as $file) {
+  $tmp[$file->object->doc_id] = $file;
+}
+$files = $tmp;
+
+foreach($documents as $i) {
+  $for_download[$i->object->id] = $i->object; 
+}
+var_dump($for_download);
+$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Статус');
+Session::set('s_items', $for_download);
+Session::set('s_headers_array', $header_array);
+
 ?>
 <?
 require 'listindoc.filter.php';
 ?>
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
+<a class="btn btn-primary" href="/searchitems-download">Выгрузка</a>
 
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width: 100%">
   <thead>
@@ -180,8 +199,6 @@ require 'listindoc.filter.php';
             <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>
         </tr>
-
-
     <?
     // endif;
     // endif;

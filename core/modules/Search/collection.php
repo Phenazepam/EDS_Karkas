@@ -104,13 +104,11 @@ class Collection extends \RedCore\Base\Collection {
 	 * 
 	 */
 	
-	public static function export($items) {
-	    $items = Indoc::getList();
+	public static function export($items, $header_array) {
+	    // $items = Indoc::getList();
 	    $status_list = Indoc::getStatuslist();
 	    Indoc::setObject('odoctypes');
 	    $DocTypes_list = Indoc::getList();
-	    
-	    $header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Статус');
 	    
 	    $objExcel = new \PHPExcel();
 	    $objExcel -> setActiveSheetIndex(0);
@@ -164,26 +162,26 @@ class Collection extends \RedCore\Base\Collection {
 	       $row_next = $row_start + $i;
 	      	    	       
 	       $active_sheet
-	           ->setCellValueByColumnAndRow(0, $row_next, $DocTypes_list[$val->object->params->doctypes]->object->title);
+	           ->setCellValueByColumnAndRow(0, $row_next, $DocTypes_list[$val->params->doctypes]->object->title);
 	       
 	       $active_sheet
-    	       ->setCellValueByColumnAndRow(1, $row_next, $val->object->name_doc)
+    	       ->setCellValueByColumnAndRow(1, $row_next, $val->name_doc)
     	       ->getColumnDimension('B')
     	       ->setWidth(20);
 	       
 	       $active_sheet
-    	       ->setCellValueByColumnAndRow(2, $row_next, $val->object->reg_number)
+    	       ->setCellValueByColumnAndRow(2, $row_next, $val->reg_number)
     	       ->getColumnDimension('C')
     	       ->setWidth(20);
 	       
 	       $active_sheet
-    	       ->setCellValueByColumnAndRow(3, $row_next, $val->object->reg_date)
+    	       ->setCellValueByColumnAndRow(3, $row_next, $val->reg_date)
     	       ->getColumnDimension('D')
     	       ->setWidth(20);
 	       
 	      
 	       $active_sheet
-    	       ->setCellValueByColumnAndRow(4, $row_next, $status_list[$val->object->params->status_id])
+    	       ->setCellValueByColumnAndRow(4, $row_next, $status_list[$val->status])
     	       ->getColumnDimension('E')
     	       ->setWidth(20);
 
@@ -191,9 +189,7 @@ class Collection extends \RedCore\Base\Collection {
 	   };
  
 	   $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
-	   //$objWriter -> save('php://output');
+	   $objWriter -> save('php://output');
 	  }
 	  
  }
-	
-
