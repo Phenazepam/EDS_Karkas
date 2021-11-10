@@ -57,17 +57,10 @@ $fio_user = Users::getList();
 
 $user = Users::getRolesList();
 
-Indoc::GetMyDocs($user_id, 3);
-
 if (!is_null($my_doc_status)) {
   $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
   if ($my_doc_status == 6 || $my_doc_status == 5) {
-    foreach ($documents as $item) {
-      if ($read_doc[$item->object->params->doctypes]) {
-        $tmp[] = $item;
-      }
-    }
-    $documents = $tmp;
+    $documents = Indoc::GetApprovedDocs();
   }
 }
 else if (!is_null($indoc_status)) {
@@ -109,7 +102,6 @@ if( !is_null($indoc_status))
 	$items = Indoc::getList($where);
 	
 	foreach ($items as $document)
-	   $document = $document->object;
 	   {
 		if ($document->object->status == $indoc_status) {
 			$tmp1[] = $document;
@@ -129,14 +121,6 @@ foreach($files as $file) {
   $tmp[$file->object->doc_id] = $file;
 }
 $files = $tmp;
-
-foreach($documents as $i) {
-  $for_download[$i->object->id] = $i->object; 
-}
-var_dump($for_download);
-$header_array = array('Тип документа','Имя документа','№ Регистрации','Дата регистрации','Статус');
-Session::set('s_items', $for_download);
-Session::set('s_headers_array', $header_array);
 
 ?>
 <?
@@ -193,8 +177,9 @@ require 'listindoc.filter.php';
             <? if (Indoc::CanUserEditDocs($item->object->id, $user_role, $user_id)) : ?>
               <a href="/indocitems-form-addupdate?oindoc_id=<?= $item->object->id ?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Редактировать </a>
             <? endif; ?>
-            <? if($item->object->status == 5 || $item->object->status == 6) : ?>
-              <a class="btn btn-info btn-sm" href = "/docs-download?oindoc_id=<?= $item->object->id ?>">Скачать документ</a>
+            <? if(($item->object->status == 5 || $item->object->status == 6) 
+                && isset($files[$item->object->id])) : ?>
+              <a class="btn btn-info btn-sm" href = "/docs-download?file_id=<?= $files[$item->object->id]->object->id ?>">Скачать документ</a>
             <? endif; ?>
             <a href="/indocitems-form-delete?oindoc_id=<?= $item->object->id ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Удалить </a>
           </td>

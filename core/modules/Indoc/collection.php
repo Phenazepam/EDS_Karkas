@@ -531,9 +531,12 @@ class Collection extends \RedCore\Base\Collection
         }    
         return false; 
     }
+    
+   
 
     public static function NumberDocs($step = -1, $user_role, $user_id)
     {   
+        
         self::setObject('odocroute');
         if ( -1 == $step) {
             $where = Where::Cond()
@@ -782,7 +785,9 @@ class Collection extends \RedCore\Base\Collection
         }
 
         foreach($routes as $key => $route) {
-            if (isset($documents[$route->object->doc_id]))
+            if (isset($documents[$route->object->doc_id]) 
+                && $documents[$route->object->doc_id]->object->status != 5
+                && $documents[$route->object->doc_id]->object->status != 6)
             $result[$route->object->doc_id] = $documents[$route->object->doc_id];
         }
 
@@ -819,12 +824,54 @@ class Collection extends \RedCore\Base\Collection
             $item = $item->object;
             
             if ($user_id == $item->user_id || (0 == $item->user_id && $user_role == $item->role_id)) {
-                if (isset($documents[$item->doc_id])) {
+                if (isset($documents[$item->doc_id])
+                    && $documents[$item->doc_id]->object->status != 1
+                    && $documents[$item->doc_id]->object->status != 5
+                    && $documents[$item->doc_id]->object->status != 6) {
                     $result[$item->doc_id] = $documents[$item->doc_id];
                 }
             }   
         }
         return $result;
     }
+
+    public static function GetApprovedDocs() {    
+        self::setObject("oindoc");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", 5)
+            ->parse();
+        $where1 = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "=", 6)
+            ->parse();
+        
+        $documents = array_merge(self::getList($where), self::getList($where1));
+
+        self::setObject("odoctypes");
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->parse();
+        $DocTypes_list = self::getList($where);
+        $DocTypesid = array();
+        foreach ($DocTypes_list as $id => $temp) {
+            $DocTypesid[$id] = $temp->object->id;
+        }
+
+        $read_doc = Users::CanUserReadDocs($DocTypesid);
+        foreach ($documents as $item) {
+            if ($read_doc[$item->object->params->doctypes]) {
+              $tmp[] = $item;
+            }
+          }
+        $documents = $tmp;
+        
+        return $documents;
+    }
 }
+
+
+
 ?>
