@@ -2,6 +2,7 @@
 
 use RedCore\Users\Collection as Users;
 use RedCore\Indoc\Collection as Indoc;
+use RedCore\Where as Where;
 
 Users::setObject("user");
 $c_user = Users::getAuthToken();
@@ -25,6 +26,18 @@ foreach ($DocTypesAcceess as $key => $item) {
 		$DocTypesResult[$key] = $DocTypes[$key]->object->title;
 	}
 }
+
+
+Indoc::setObject("oindoc");
+$where = Where::Cond()
+	->add("_deleted", "=", "0")
+	->add("and")
+	->add("status", "not in", '(5, 6)')
+	->parse();
+
+$all_docs = count((array)Indoc::getList($where));
+
+var_dump(Indoc::GetDelayedDocs());
 ?>
 <div class="container">
 	<div class="row">
@@ -61,12 +74,17 @@ foreach ($DocTypesAcceess as $key => $item) {
 		</div>
 		<script>
 			jQuery(document).ready(function() {
+				var all_docs = <?=$all_docs?>;
+				var today = <?=Indoc::GetDelayedDocs(0, 0)?>;
+				var days3 = <?=Indoc::GetDelayedDocs(-10000, -3)?>;
+				var days7 = <?=Indoc::GetDelayedDocs(-10000, -7)?>;
+				var days30 = <?=Indoc::GetDelayedDocs(-10000, -15)?>;
 				<?
-				$all_docs = 50;
-				$today = 5;
-				$days3 = 10;
-				$days7 = 15;
-				$days30 = 20;
+				// $all_docs = 50;
+				// $today = 5;
+				// $days3 = 10;
+				// $days7 = 15;
+				// $days30 = 20;
 				?>
 				var chart_doughnut_settings = {
 					type: 'doughnut',
@@ -77,7 +95,7 @@ foreach ($DocTypesAcceess as $key => $item) {
 							"0",
 						],
 						datasets: [{
-							data: [15, 85],
+							data: [100-days30/all_docs*100, days30/all_docs*100],
 							backgroundColor: [
 								"#BDC3C7",
 								"#9B59B6",
@@ -115,7 +133,7 @@ foreach ($DocTypesAcceess as $key => $item) {
 						var fontSize = (height / 114).toFixed(2);
 						ctx.font = fontSize + "em sans-serif";
 						ctx.textBaseline = "middle";
-						var text = "75%",
+						var text = Math.round(days30/all_docs*100) + "%",
 							textX = Math.round((width - ctx.measureText(text).width) / 2),
 							textY = height / 2;
 						ctx.fillText(text, textX, textY);

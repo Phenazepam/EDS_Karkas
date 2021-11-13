@@ -35,8 +35,8 @@ class Collection extends \RedCore\Base\Collection {
 	    // $status_list = Indoc::getStatuslist();
 	    // Indoc::setObject('odoctypes');
 	    // $DocTypes_list = Indoc::getList();
-		$cnt_headers = count($header_array);
-		$cnt_items= count($items);
+		// $cnt_headers = count($header_array);
+		// $cnt_items= count($items);
 	    
 	    $objExcel = new \PHPExcel();
 	    $objExcel -> setActiveSheetIndex(0);

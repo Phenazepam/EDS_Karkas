@@ -870,6 +870,48 @@ class Collection extends \RedCore\Base\Collection
         
         return $documents;
     }
+
+    public static function GetDelayedDocs($fromDate = -100, $dueDate = -7) {    
+        self::setObject("oindoc");
+        $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->add("and")
+            ->add("status", "not in", '(5, 6)')
+            ->parse();
+        
+        $documents = self::getList($where);
+
+        self::setObject("odoclog");
+            $where = Where::Cond()
+            ->add("_deleted", "=", "0")
+            ->parse();
+        $logs = self::getList($where);
+
+        $fromDate = date('Y-m-d', strtotime($fromDate.' day', strtotime(date('Y-m-d'))));
+        $dueDate = date('Y-m-d', strtotime($dueDate.' day', strtotime(date('Y-m-d'))));
+
+        // var_dump($fromDate);
+        // var_dump($dueDate);
+
+        foreach($logs as $item) {
+            $item = $item->object;
+            if (!is_null($documents[$item->doc_id])) {
+                $prepared[$item->doc_id] = -1;
+                $prepared[$item->doc_id] 
+                = $prepared[$item->doc_id] < strtotime($item->_updated) ? strtotime($item->_updated) : 
+                $prepared[$item->doc_id];
+            }
+        }
+        $res=0;
+        foreach ($prepared as $key => $item) {
+            if (date('Y-m-d', $item) >= $fromDate && date('Y-m-d', $item) <= $dueDate) {
+                // var_dump($key);
+                $res++;
+            }
+        }
+
+        return $res;
+    }
 }
 
 
