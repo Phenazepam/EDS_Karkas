@@ -37,7 +37,7 @@ $where = Where::Cond()
 
 $all_docs = count((array)Indoc::getList($where));
 
-var_dump(Indoc::GetDelayedDocs());
+// var_dump(Indoc::GetDelayedDocs());
 ?>
 <div class="container">
 	<div class="row">
@@ -95,7 +95,7 @@ var_dump(Indoc::GetDelayedDocs());
 							"0",
 						],
 						datasets: [{
-							data: [100-days30/all_docs*100, days30/all_docs*100],
+							data: [Math.round(100-days30/all_docs*100), Math.round(days30/all_docs*100)],
 							backgroundColor: [
 								"#BDC3C7",
 								"#9B59B6",
