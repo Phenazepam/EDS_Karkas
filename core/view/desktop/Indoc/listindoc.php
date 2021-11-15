@@ -6,13 +6,19 @@ use RedCore\Where;
 use RedCore\Users\Collection as Users;
 use RedCore\Search\Collection as Search;
 use RedCore\Request as Request;
+use RedCore\Config as Config;
+
 
 $my_doc_status = Request::vars("my_doc_status");
 $indoc_status = Request::vars("indoc_status");
 
+Session::bind("filter_year_id",          "general_filter_year_id", (date("Y") - Config::$begin_year + 1));
+Session::bind("filter_month_id",         "general_filter_month_id", date("m"));
 Session::bind("filter_doc_types_id", "general_filter_doc_types_id", -1);
 Session::bind("filter_doc_step_id", "general_filter_doc_step_id", -1);
 
+$session_year = (int)Session::get("general_filter_year_id");
+$session_month = (int)Session::get("general_filter_month_id");
 $session_doctypes = (int) Session::get("general_filter_doc_types_id");
 $session_doc_step = (int) Session::get("general_filter_doc_step_id");
 
@@ -53,10 +59,11 @@ $read_doc = Users::CanUserReadDocs($DocTypesid);
 Users::setObject("user");
 $user_id = Users::getAuthId();
 $user_role = Users::getAuthRole();
-$fio_user = Users::getList();
+$user_roles = Users::getRolesList();
 
-$user = Users::getRolesList();
-
+/*
+ * Фильтр по "Мои документы" и "Входящие"
+ */
 if (!is_null($my_doc_status)) {
   $documents = Indoc::GetMyDocs($user_id, $my_doc_status);
   if ($my_doc_status == 6 || $my_doc_status == 5) {
@@ -72,42 +79,6 @@ else {
       $documents[] = $item;
     }
   }
-}
-
-if (-1 !== $session_doc_step) {
-  foreach ($items as $document) {
-    if ($doc_steps_name[$doc_steps_ready[$document->object->id]->object->step] == $session_doc_step) {
-      $tmp[] = $document;
-    }
-  }
-  $documents = $tmp;
-}
-if (-1 !== $session_doctypes) {
-  foreach ($items as $document) {
-    if ($document->object->params->doctypes == $session_doctypes) {
-      $tmp[] = $document;
-    }
-  }
-  $documents = $tmp;
-}
-
-//for indocs filtration
-if( !is_null($indoc_status))
-{
-	Indoc::setObject("oindoc");
-	$where = Where::Cond()
-	->add("_deleted", "=", "0")
-	->parse();
-
-	$items = Indoc::getList($where);
-	
-	foreach ($items as $document)
-	   {
-		if ($document->object->status == $indoc_status) {
-			$tmp1[] = $document;
-		}
-	}
-	$items = $tmp1;
 }
 
 Indoc::setObject('odocfile');
@@ -135,6 +106,36 @@ foreach ($documents as $item) {
 }
 Session::set('s_excel_items', $items_for_excel);
 Session::set('s_excel_headers', $headers_for_excel);
+/*
+ * Фильтр по Статусу
+ */
+$tmp = array();
+
+if (-1 !== $session_doc_step) {
+    foreach ($all_docs as $document) {
+        if ($document->object->status == $session_doc_step) {
+            $tmp[] = $document;
+        }
+    }
+    $documents = $tmp;
+}
+/*
+ * Фильтр по Типу документа
+ */
+$tmp = array();
+
+if (-1 !== $session_doctypes) {
+    foreach ($all_docs as $document) {
+        if ($document->object->params->doctypes == $session_doctypes) {
+            $tmp[] = $document;
+        }
+    }
+    $documents = $tmp;
+}
+
+$tmp = array();
+
+
 ?>
 
 
@@ -171,10 +172,23 @@ require 'listindoc.filter.php';
           <td><?= $item->object->reg_number ?></td>
           <td>
             <ul class="list-inline">
-              <li>
-                <img src="<?= ICONS . SEP . 'user.png' ?>" class="avatar" alt="Avatar" title="
-					<?= $user[$doc_steps_ready[$item->object->id]->object->role_id] ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->f ?> <?= $fio_user[$doc_steps_ready[$item->object->id]->object->user_id]->object->params->i ?>">
-              </li>
+            <? $doc_id = $item->object->id;
+            $t = Users::GetDocRoute($item->object->params->doctypes, $doc_id);
+            foreach ($t as $key => $value) :
+            if (1 == $value["iscurrent"]) {
+                $icon = ICONS . SEP . 'user_responsible.png';
+            } 
+            else {
+                $icon = ICONS . SEP . 'user.png';
+            }
+            ?>
+                	<li>
+                		<img src="<?= $icon ?>" class="avatar" alt="Avatar" title="
+                            <?= $user_roles[$value['role']]?> <?= Users::getUserNameById($value['user_id']) ?>">
+					</li>
+           <?
+            endforeach;
+           ?>
             </ul>
           </td>
           <td class="project_progress">
