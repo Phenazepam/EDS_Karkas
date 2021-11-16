@@ -154,6 +154,8 @@ class Collection extends \RedCore\Base\Collection
                 if ($file["tmp_name"]["file"] != "" ) {
                     self::storeFile($file, $params["oindoc"]["id"]);
                 }
+                parent::store($params);
+                Controller::Redirect('/indocitems-form-view?oindoc_id='.$params["oindoc"]["id"].'&view');
             } else {
                 self::setObject("oindoc");
                 $lastId = parent::store($params)->object->id;
@@ -162,7 +164,8 @@ class Collection extends \RedCore\Base\Collection
                 if ($file["tmp_name"]["file"] != "" ) {
                     self::storeFile($file, $lastId);
                 }
-                return;
+                // return;
+                Controller::Redirect('/indocitems-form-view?oindoc_id='.$lastId.'&view');
             }
             self::setObject("oindoc");
         }

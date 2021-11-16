@@ -68,15 +68,11 @@ if (is_null($status_id)) $status_id = "1";
 
 //  disabling form by role
 $disable_form = "disabled";
+$hidden_date = 'hidden';
 
-if( $user_role == "2" ) {
+if( $user_role == "2" || $user_role == "1"|| $user_role == "19") {
 	$disable_form = "";
-}
-if( $user_role == "1" ) {
-	$disable_form = "";
-}
-if( $user_role == "19" ) {
-	$disable_form = "";
+    $hidden_date = 'date';
 }
 
 
@@ -93,6 +89,8 @@ if (is_null($reg_number)) {
 
 	$reg_number = $auto_reg_number;
 }
+if (is_null($oindoc_item->object->reg_date))
+    $oindoc_item->object->reg_date = date('Y-m-d H-i-s');
 
 Indoc::setObject('odocfile');
 $lb_params = array(
@@ -117,7 +115,7 @@ if (!empty($doc_file->object->id)){
 
 $form = Forms::Create()
     ->add("action", "action", "hidden", "action", $html_object . ".store.do", 6, false)
-    ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
+    // ->add("redirect", "redirect", "hidden", "redirect", "indocitems-list", 6, false)
 
     ->add("id", "id", "hidden", $html_object . "[id]", $oindoc_item->object->id)
     ->add("status_id", "status_id", "hidden", $html_object . "[params][status_id]", $status_id)
@@ -126,7 +124,7 @@ $form = Forms::Create()
     ->add("doctypes", "Тип документа", "select", $html_object . "[params][doctypes]", $doc_type, 6, false, $DocTypesResult)
     ->add("name_doc", "Имя документа", "text", $html_object . "[name_doc]", $oindoc_item->object->name_doc)
     ->add("reg_number", "№ Регистрации", "hidden", $html_object . "[reg_number]", $reg_number, "", "", "", $disable_form)
-    ->add("reg_date", "Дата регистрации", "date", $html_object . "[reg_date]", $oindoc_item->object->reg_date, "", "", "", $disable_form)
+    ->add("reg_date", "Дата регистрации", $hidden_date, $html_object . "[reg_date]", $oindoc_item->object->reg_date)
 
     ->add("html", "", "html", "", '<src="' . CMS_TMP . SEP . $oindoc_item->object->params->file_title . '">')
     ->add("file", "Файл", "file", $html_object . "[file]")

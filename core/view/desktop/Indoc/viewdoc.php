@@ -11,6 +11,13 @@ Indoc::setObject("oindoc");
 $action = Indoc::getActionDoc();
 
 
+$fist_page = 'active';
+if (Request::vars("view") !== null) {
+  $view = 'active';
+  $fist_page = '';
+}
+
+
 
 $lb_params = array(
   "id" => Request::vars("oindoc_id")
@@ -94,13 +101,13 @@ $all_files = Indoc::getList($where);
               </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" 
+                    <a class="nav-link <?=$fist_page?>" id="home-tab" 
                       data-toggle="tab" href="#home" role="tab" 
                       aria-controls="home" aria-selected="true">
                     Маршрут документа</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" 
+                    <a class="nav-link <?=$view?>" id="profile-tab" 
                       data-toggle="tab" href="#profile" role="tab" 
                       aria-controls="profile" aria-selected="false"
                       onclick="saveDocViewEvent(<?=$doc_id?>, <?=$user_id?>)">
@@ -116,7 +123,12 @@ $all_files = Indoc::getList($where);
                 <?endif?>
               </ul>
               <div class="tab-content">
-                <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane <?=$fist_page?>" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="alert alert-info alert-dismissible " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    <strong>Подсказка.</strong>  Чтобы направить документ далее перейдите во вкладку "Просмотр".
+                  </div>
                   <div class="row">
                     <div class="col-5">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
@@ -153,7 +165,7 @@ $all_files = Indoc::getList($where);
                     <div class="col-7">
                       <table border=1 id="" class="table table-bordered" style="width: 100%">
                         <thead>
-                         <? if ($user_role == 2 || $user_role == 1) : ?>
+                         <? if (Users::CanUserSeeDocLog($user_role)) : ?>
                           <tr>
                             <th>Резолюция</th>
                           </tr>
@@ -185,7 +197,7 @@ $all_files = Indoc::getList($where);
                   </div>
                   <a class="btn btn-danger" href="/indocitems-list">Отмена</a>
                 </div>
-                <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="tab-pane <?=$view?>" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                   <table border=1 id="datatable1" class="table table-striped table-bordered" style="width: 100%">
                     <tbody>
                       <tr>

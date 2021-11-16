@@ -37,7 +37,30 @@ $where = Where::Cond()
 
 $all_docs = count((array)Indoc::getList($where));
 
-// var_dump(Indoc::GetDelayedDocs());
+$chart_data = array(
+	1 => array(
+		'title' => 'Обработаны за день',
+		'count' => Indoc::GetDelayedDocs(0, 0),
+		'all' => $all_docs
+	),
+	2 => array(
+		'title' => 'Обработаны за 3 дня',
+		'count' => Indoc::GetDelayedDocs(-7, -3),
+		'all' => $all_docs
+	),
+	3 => array(
+		'title' => 'Обработаны за 7 дней',
+		'count' => Indoc::GetDelayedDocs(-30, -7),
+		'all' => $all_docs
+	),
+	4 => array(
+		'title' => 'Обработаны за 30 дней',
+		'count' => Indoc::GetDelayedDocs(-10000, -30),
+		'all' => $all_docs
+	),
+);
+
+// var_dump(Indoc::GetDelayedDocs(-10000, -3));
 ?>
 <div class="container">
 	<div class="row">
@@ -65,82 +88,93 @@ $all_docs = count((array)Indoc::getList($where));
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
-				<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
-				<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
-				<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
-				<canvas style="max-width: 150px;" id="canvasDoughnut1" class="canvasDoughnut1"></canvas>
+				<div class="row">
+					<?php
+						foreach($chart_data as $chart_info): 
+					?>
+					<div class="col">
+						<div class="row">
+							<div class="col">
+								<?=$chart_info["title"]?>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<canvas style="max-width: 150px;" 
+									id="canvasDoughnut1" 
+									class="canvasDoughnut1"
+									data-count="<?=$chart_info["count"]?>"
+									data-all="<?=$chart_info["all"]?>"
+								></canvas>
+							</div>
+						</div>
+					</div>
+					<?endforeach;?>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script>
 			jQuery(document).ready(function() {
-				var all_docs = <?=$all_docs?>;
-				var today = <?=Indoc::GetDelayedDocs(0, 0)?>;
-				var days3 = <?=Indoc::GetDelayedDocs(-10000, -3)?>;
-				var days7 = <?=Indoc::GetDelayedDocs(-10000, -7)?>;
-				var days30 = <?=Indoc::GetDelayedDocs(-10000, -15)?>;
-				<?
-				// $all_docs = 50;
-				// $today = 5;
-				// $days3 = 10;
-				// $days7 = 15;
-				// $days30 = 20;
-				?>
-				var chart_doughnut_settings = {
-					type: 'doughnut',
-					tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-					data: {
-						labels: [
-							"Документы",
-							"0",
-						],
-						datasets: [{
-							data: [Math.round(100-days30/all_docs*100), Math.round(days30/all_docs*100)],
-							backgroundColor: [
-								"#BDC3C7",
-								"#9B59B6",
-							],
-
-							hoverBackgroundColor: [
-
-								"#CFD4D8",
-
-								"#B370CF",
-
-							]
-
-						}]
-					},
-					options: {
-						legend: false,
-						responsive: true
-					},
-					centerText: {
-						display: true,
-						text: "280"
-					}
-				}
 				jQuery('.canvasDoughnut1').each(function() {
+					var count = Number(jQuery(this)[0].dataset.count);
+					var all = Number(jQuery(this)[0].dataset.all);
+
+					var chart_doughnut_settings = {
+						type: 'doughnut',
+						tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+						data: {
+							labels: [
+								"Документы",
+								"0",
+							],
+							datasets: [{
+								data: [Math.round(100-count/all*100), Math.round(count/all*100)],
+								backgroundColor: [
+									"#BDC3C7",
+									"#9B59B6",
+								],
+								hoverBackgroundColor: [
+									"#CFD4D8",
+									"#B370CF",
+								]
+							}]
+						},
+						options: {
+							legend: false,
+							responsive: true
+						},
+						centerText: {
+							display: true,
+							text: "280"
+						},
+						title: {
+							display: true,
+							text: 'Chart.js Doughnut Chart'
+						}
+					}
+					
 					var chart_element = jQuery(this);
 					var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
+					Chart.pluginService.register({
+						beforeDraw: function(chart) {
+							var width = chart.chart.width,
+								height = chart.chart.height,
+								ctx = chart.chart.ctx;
+							ctx.restore();
+							var fontSize = (height / 114).toFixed(2);
+							ctx.font = fontSize + "em sans-serif";
+							ctx.textBaseline = "middle";
+							var text = Math.round(count/all*100) + "%",
+								textX = Math.round((width - ctx.measureText(text).width) / 2),
+								textY = height / 2;
+							ctx.fillText(text, textX, textY);
+							ctx.save();
+							// chart.update();
+						}
+					});
 				});
-				Chart.pluginService.register({
-					beforeDraw: function(chart) {
-						var width = chart.chart.width,
-							height = chart.chart.height,
-							ctx = chart.chart.ctx;
-						ctx.restore();
-						var fontSize = (height / 114).toFixed(2);
-						ctx.font = fontSize + "em sans-serif";
-						ctx.textBaseline = "middle";
-						var text = Math.round(days30/all_docs*100) + "%",
-							textX = Math.round((width - ctx.measureText(text).width) / 2),
-							textY = height / 2;
-						ctx.fillText(text, textX, textY);
-						ctx.save();
-					}
 				});
-			});
 		</script>
 		<style>
 			.count {

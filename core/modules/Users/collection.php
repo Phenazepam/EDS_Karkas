@@ -664,6 +664,23 @@ class Collection extends \RedCore\Base\Collection {
 		return $res;
 	}
 
+	public static function CanUserSeeDocLog($user_role = -1){
+
+		$permission = array(
+			"1" ,
+			"2" ,
+			"5" ,
+			"9" ,
+			"11",
+			"13",
+			"18",
+			"19",
+		);
+		if (in_array($user_role, $permission))
+			return true;
+		
+		return false;
+	}
 
 
 
