@@ -146,9 +146,10 @@ require 'listindoc.filter.php';
 <a class="btn btn-primary" href="/indocitems-form-addupdate">ДОБАВИТЬ</a>
 <a class="btn btn-primary" href="/excel-download">Выгрузка</a>
 
-<table border=1 id="datatable" class="table table-striped table-bordered" style="width: 100%">
+<table border=1 id="datatable1" class="table table-striped table-bordered" style="width: 100%">
   <thead>
     <tr>
+      <th style="display: none;">Дата Регистрации</th>
       <th>Имя документа</th>
       <th>№ Регистрации</th>
       <th>Назначено</th>
@@ -163,6 +164,7 @@ require 'listindoc.filter.php';
     foreach ($documents as $key => $item) :
     ?>
         <tr>
+          <td style="display: none;"><?= date('Y-m-d', strtotime($item->object->reg_date)) /* */?></td>
           <td>
             <a><?= $item->object->name_doc ?></a>
             <br>
@@ -219,3 +221,12 @@ require 'listindoc.filter.php';
     ?>
   </tbody>
 </table>
+<script src="/template/general/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script>
+  jQuery(document).ready(function() {
+    $('#datatable1').dataTable( {
+      "ordering" : true,
+      "order": [ 0, 'desc' ]
+    } );
+  });
+</script>
