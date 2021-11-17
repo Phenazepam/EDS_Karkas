@@ -629,6 +629,32 @@ class Collection extends \RedCore\Base\Collection {
 		}
 		return false;
 	}
+	public static function GetMoveRouteButtonName($doc_type = -1, $current_step_order){
+		if (-1 == $doc_type || -1 == $current_step_order) return;
+
+		self::setObject("doctyperolematrix");
+		$where = Where::Cond()
+			->add("_deleted", "=", "0")
+			->add("and")
+			->add("doctype", "=", $doc_type)
+			->parse();
+		$matrix = self::getList($where);
+		$max_order = -1;
+		foreach ($matrix as $key => $item) {
+			$item=$item->object;
+			$matrix_ready[$item->step_order] = $item;
+			$max_order = $item->step_order > $max_order ? $item->step_order : $max_order;
+		}
+		$last_step = $matrix_ready[$max_order]->step;
+		if ($current_step_order < $max_order) {
+			return "Отправить документ далее";
+		}
+		else {
+			if ($last_step == '3') return 'Утвердить';
+			if ($last_step == '4') return 'Принять';
+		}
+		return false;
+	}
 	public static function IsFirstStep($doc_type = -1, $current_step_order){
 		if (-1 == $doc_type || -1 == $current_step_order) return;
 

@@ -247,16 +247,10 @@ $all_files = Indoc::getList($where);
                   <? endif;?>
                   <?php 
                     if(Users::CanUserMoveRoute($doc_id, $current_role, $current_step)):
-                      if (!Users::IsLastStep($doc_type, $current_step_order)):
                   ?>
                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
-                    Отправить документ далее
+                    <?=Users::GetMoveRouteButtonName($doc_type, $current_step_order)?>
                   </button>
-                  <? else: ?>
-                    <button class="btn btn-primary" onclick="popupMovingRoute(<?= $doc_id ?> )">
-                      Утвердить / Принять
-                    </button>
-                  <? endif; ?>
                   <? endif; ?>
                   <?php if(Users::CanUserMoveRouteBack($doc_id)
                     && !Users::IsFirstStep($doc_type, $current_step_order)):?>
