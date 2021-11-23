@@ -54,6 +54,10 @@ $info_materials = Infodocs::getList($where);
 Infodocs::setObject("oinfodocsstandarts");
 $info_standarts = Infodocs::getList($where);
 
+Users::setObject('user');
+$users = Users::getList($where);
+$user_roles = Users::getRolesList();
+
 ?>
 <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link href="/template/general/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -94,6 +98,11 @@ $info_standarts = Infodocs::getList($where);
     role="tab" aria-controls="standarts" aria-selected="false">
       Нормы</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" 
+    role="tab" aria-controls="users" aria-selected="false">
+      Ответственный</a>
+  </li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -118,7 +127,7 @@ $info_standarts = Infodocs::getList($where);
               <a class="btn btn-secondary" style="cursor: pointer; color: white;" 
                 href="/indocitems-form-addupdate?action=relateddoc.addrelateddoc.do&
                 relateddoc[doc_id]=<?= $doc_id ?>&
-                relateddoc[relateddoc_id]=<?= $item->object->id ?>
+                relateddoc[relateddoc_id]=<?= $item->object->id ?>&
                 relateddoc[type]=1">Связать</a>
             </td>
           </tr>
@@ -236,6 +245,32 @@ $info_standarts = Infodocs::getList($where);
                 relateddoc[doc_id]=<?= $doc_id ?>&
                 relateddoc[relateddoc_id]=<?= $item->object->id ?>&
                 relateddoc[type]=5">Связать</a>
+            </td>
+          </tr>
+        <?endforeach;?>
+      </tbody>
+    </table>
+  </div>
+  <div class="tab-pane" id="users" role="tabpanel" aria-labelledby="users-tab">
+    <table id="datatableForRelatedUsers" class="table table-striped table-bordered" style="width:100%">
+      <thead>
+        <tr>
+          <th>ФИО</th>
+          <th>Роль</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?foreach ($users as $item) :?>
+          <tr>
+            <td><?= $item->object->params->f.' '.$item->object->params->i?></td>
+            <td><?= $user_roles[$item->object->role] ?></td>
+            <td>
+              <a class="btn btn-secondary" style="cursor: pointer; color: white;" 
+                href="/indocitems-form-addupdate?action=relateddoc.addrelateddoc.do&
+                relateddoc[doc_id]=<?= $doc_id ?>&
+                relateddoc[relateddoc_id]=<?= $item->object->id ?>&
+                relateddoc[type]=6">Связать</a>
             </td>
           </tr>
         <?endforeach;?>

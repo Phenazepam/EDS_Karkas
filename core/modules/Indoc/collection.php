@@ -65,24 +65,29 @@ class Collection extends \RedCore\Base\Collection
             'columnName' => 'name_doc',
         ),
         "2" => array(
-            'name' => 'infodocsagents',
+            'name' => 'Контаргент',
             'reference' => '/infodocs-agentsform?oinfodocsagents_id=',
             'columnName' => 'name',
         ),
         "3" => array(
-            'name' => 'infodocsworks',
+            'name' => 'Вид работ',
             'reference' => '/infodocs-worksform?oinfodocsworks_id=',
             'columnName' => 'name',
         ),
         "4" => array(
-            'name' => 'infodocsmaterials',
+            'name' => 'Материал',
             'reference' => '/infodocs-materialsform?oinfodocsmaterials_id=',
             'columnName' => 'gruppa',
         ),
         "5" => array(
-            'name' => 'infodocsstandarts',
+            'name' => 'Норма',
             'reference' => '/infodocs-standartsform?oinfodocsstandarts_id=',
             'columnName' => 'name',
+        ),
+        "6" => array(
+            'name' => 'Ответственный',
+            'reference' => '/users-form?user_id=',
+            'columnName' => '-_-',
         ),
     );
 
