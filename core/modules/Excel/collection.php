@@ -14,6 +14,8 @@ use RedCore\Core as Core;
 use RedCore\Request;
 use RedCore\Files;
 use RedCore\Indoc\Collection as Indoc;
+use RedCore\Infodocs\Collection as Infodoc;
+use PHPExcel_IOFactory;
 
 class Collection extends \RedCore\Base\Collection { 
 
@@ -29,6 +31,23 @@ class Collection extends \RedCore\Base\Collection {
 		}
 
 	}
+
+	static $uploadDictionaryConfig = array(
+		'agents' => array(
+			'object' => 'oinfodocsagents',
+			'class' => 'RedCore\Infodocs\Collection',
+			'fields' =>	array(
+				"name",
+				"inn",
+				"group_ka",
+				"material",
+				"main_worker",
+				"other",
+			)
+		)
+	);
+
+
 
 	public static function export($items, $header_array, $report_name = 'Выгрузка Документы') {
 	    // $items = Indoc::getList();
@@ -106,36 +125,94 @@ class Collection extends \RedCore\Base\Collection {
 					->applyFromArray($border);
 				$column_next++;
 		   }
-	      	    	       
-	    //    $active_sheet
-	    //        ->setCellValueByColumnAndRow(0, $row_next, $DocTypes_list[$val->params->doctypes]->object->title);
-	       
-	    //    $active_sheet
-    	//        ->setCellValueByColumnAndRow(1, $row_next, $val->name_doc)
-    	//        ->getColumnDimension('B')
-    	//        ->setWidth(20);
-	       
-	    //    $active_sheet
-    	//        ->setCellValueByColumnAndRow(2, $row_next, $val->reg_number)
-    	//        ->getColumnDimension('C')
-    	//        ->setWidth(20);
-	       
-	    //    $active_sheet
-    	//        ->setCellValueByColumnAndRow(3, $row_next, $val->reg_date)
-    	//        ->getColumnDimension('D')
-    	//        ->setWidth(20);
-	       
-	      
-	    //    $active_sheet
-    	//        ->setCellValueByColumnAndRow(4, $row_next, $status_list[$val->status])
-    	//        ->getColumnDimension('E')
-    	//        ->setWidth(20);
-
 	       $i++;	       
 	   };
  
 	   $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
 	   $objWriter -> save('php://output');
 	  }
+
+	public static function UploadDictionaryFile()
+	{
+		$response = array(
+			"responseCode" => '',
+			"uploadedCount" => '',
+			"errors" => array(),
+		);
+		$dictionary = $_POST["dictionary"];
+		$object = self::$uploadDictionaryConfig[$dictionary]["object"];
+		$fields = self::$uploadDictionaryConfig[$dictionary]["fields"];
+		$class = self::$uploadDictionaryConfig[$dictionary]["class"];
+
+		$count = 0;
+		if (isset($_FILES["dataFile"])) {
+			$file = $_FILES["dataFile"];
+			$data = self::readExcel($file["tmp_name"]);
+			foreach ($data as $key => $value) {
+				foreach ($value as $k => $v)
+				$params[$object][$fields[$k]] = $v;
+
+				$class::setObject($object);	
+				self::store($params);
+				// var_dump(self::$object);
+				$count++;
+			}
+			if ($count > 0) {
+				$response["responseCode"] = 'success';
+				$response["uploadedCount"] = $count;
+			} else {
+				$response["responseCode"] = 'error';
+				$response["uploadedCount"] = $count;
+			}
+			// var_dump($response);
+			echo json_encode($response);
+		} else {
+			$response = array(
+				"responseCode" => 'error',
+				"uploadedCount" => '0',
+				"errors" => 'File is not uploaded'
+			);
+
+			echo json_encode($response);
+		}
+
+		exit();
+	}
+
+	public static function readExcel($filename)
+	{	
+		$excel = PHPExcel_IOFactory::load($filename);
+		foreach ($excel->getWorksheetIterator() as $worksheet) {
+			$lists[] = $worksheet->toArray();
+		}
+		$header = NULL;
+		$data = array();
+		$keys = array();
+		foreach ($lists as $list) {
+			foreach ($list as $row) {
+				$values=array();
+				if (empty($keys)) {
+					$i=0;
+					foreach ($row as $col) {
+						// $keys[] = $col;
+						$keys[] = $i++;
+					}	
+				} else {
+					foreach ($row as $col) {
+						$values[] = $col;
+					}	
+					// var_dump($keys);
+					// echo PHP_EOL;
+					// var_dump($values);
+					// echo '===================================================='.PHP_EOL;
+					$tmp = array_combine($keys, $values);
+					// var_dump($tmp);
+					// $data[] = array_combine($header, $row);
+					$data[] = $tmp;
+				}
+			}
+		}
+		return $data;
+	}
 	  
  }

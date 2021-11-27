@@ -687,6 +687,16 @@ class Controller
 		            "oseacrh",
 		        ),
 		    ),
+
+	 	    //Excel actions
+		    array(
+		        "name"   => "oexcel.uploadfile.do",
+		        "module" => "RedCore\Excel\Collection",
+		        "method" => "UploadDictionaryFile",
+		        "params" => array(
+		            "oexcel",
+		        ),
+		    ),
 	    )
 	);
 
