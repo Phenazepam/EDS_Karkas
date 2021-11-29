@@ -10,12 +10,13 @@ $where = Where::Cond()
 $items = Materials::getList($where);
 
 ?>
+<script src="/core/view/desktop/Excel/UploadFile.js"></script>
 	<div class="x_title">
         <h2>НОРМАТИВНО-СПРАВОЧНАЯ ДОКУМЕНТАЦИЯ<small>перечень материалов</small></h2>
         <div class="clearfix"></div>
      </div>
 <a class="btn btn-primary" href="/infodocs-materialsform">Добавить</a>
-
+<button class="btn btn-primary" onclick="ShowModalForUpload('materials')">Загрузить данные из файла</button>
 <table border=1 id="datatable" class="table table-striped table-bordered" style="width:100%">
 	<thead>
 		<tr>

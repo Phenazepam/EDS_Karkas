@@ -44,6 +44,54 @@ class Collection extends \RedCore\Base\Collection {
 				"main_worker",
 				"other",
 			)
+		),
+		'works' => array(
+			'object' => 'oinfodocsworks',
+			'class' => 'RedCore\Infodocs\Collection',
+			'fields' =>	array(
+				"gruppa",
+				"name",
+				"izm",
+				"krd",
+				"rnd",
+				"vldvstk",
+				"obj1",
+				"obj2",
+				"obj3",
+				"obj4"
+			)
+		),
+		'materials' => array(
+			'object' => 'oinfodocsmaterials',
+			'class' => 'RedCore\Infodocs\Collection',
+			'fields' =>	array(
+				"su",
+				"code",
+				"gruppa",
+				"material",
+				"izm",
+			)
+		),
+		'standarts' => array(
+			'object' => 'oinfodocsstandarts',
+			'class' => 'RedCore\Infodocs\Collection',
+			'fields' =>	array(
+				"name",
+				"izm",
+				"ku",
+				"bp",
+				"fp",
+				"rostverk",
+				"walls",
+				"kolon",
+				"perekryt",
+				"balki",
+				"rigel",
+				"smallconstr",
+				"decor",
+				"pryamlest",
+				"krivlest",
+			)
 		)
 	);
 
@@ -153,8 +201,9 @@ class Collection extends \RedCore\Base\Collection {
 				$params[$object][$fields[$k]] = $v;
 
 				$class::setObject($object);	
-				self::store($params);
-				// var_dump(self::$object);
+				$class::store($params);
+				// var_dump($params);
+				// exit();
 				$count++;
 			}
 			if ($count > 0) {

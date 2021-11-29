@@ -125,7 +125,7 @@ $all_files = Indoc::getList($where);
               <div class="tab-content">
                 <div class="tab-pane <?=$fist_page?>" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="alert alert-info alert-dismissible " role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                     </button>
                     <strong>Подсказка.</strong>  Чтобы направить документ далее перейдите во вкладку "Просмотр".
                   </div>
