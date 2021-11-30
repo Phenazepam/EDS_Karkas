@@ -309,6 +309,14 @@ class Controller
 		        "default"  => false,
 		        "tag"      => array("top", ""),
 		    ),
+			array(
+		        "title"    => "Инструкция для импорта",
+		        "url"      => "excel-tutorial",
+				"view"     => "desktop/page.php",
+		        "content"  => "desktop/Excel/instructionForImport.php",
+		        "default"  => false,
+		        "tag"      => array("top", ""),
+		    ),
 
 			//Information documents module
 			/*

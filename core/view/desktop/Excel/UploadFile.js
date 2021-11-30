@@ -6,7 +6,7 @@ function ShowModalForUpload(dictionary) {
         html:
         `<form id="formElem" enctype="multipart/form-data">
             <hr>
-            <a href="/flats-instruction?building_id=" target="_blank">Инструкция по импорту помещений</a>
+            <a href="/excel-tutorial" target="_blank">Инструкция по импорту</a>
             <hr>
             <input type="file" name="dataFile">
         </form>`,
