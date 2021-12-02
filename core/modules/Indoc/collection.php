@@ -492,7 +492,7 @@ class Collection extends \RedCore\Base\Collection
             'status' => $status,
         );
         self::setObject("oindoc");
-        self::store($params);
+        parent::store($params);
     }
 
     protected static function UnsetCurrentStep($doc_id = - 1)
