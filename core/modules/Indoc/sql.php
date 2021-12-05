@@ -89,10 +89,24 @@ class Sql {
 				 doc_id,
 				 iscurrent,
 				 uploadedbyuser,
+				 for_recognition,
 				 _updated,
 				 _deleted
 			 FROM
 				 eds_karkas__docfile
+		 ';
+		public static
+		$sqlRecognition = '
+			 SELECT
+				id,
+				doc_id,
+				file_id,
+				rec_text,
+				params,
+				_updated,
+				_deleted
+			 FROM
+				 eds_karkas__recognition
 		 ';
 		
 

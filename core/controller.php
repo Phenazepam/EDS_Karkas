@@ -408,6 +408,22 @@ class Controller
 		        "tag"      => array("top", ""),
 		    ),*/
 			
+			// Recognition
+			array(
+				"title"    => "recognition-popup",
+				"url"      => "recognition-popup",
+				"view"     => "desktop/Indoc/ajax/choosingFileForRecognize.php",
+				"content"  => "",
+				"tag"      => array(),
+			),
+			array(
+				"title"    => "recognition-popup-show",
+				"url"      => "recognition-popup-show",
+				"view"     => "desktop/Indoc/ajax/showRecognition.php",
+				"content"  => "",
+				"tag"      => array(),
+			),
+
 
 			/**
 			 * INSTALL
@@ -703,6 +719,32 @@ class Controller
 		        "method" => "UploadDictionaryFile",
 		        "params" => array(
 		            "oexcel",
+		        ),
+		    ),
+
+			// Recognition actions
+			array(
+		        "name"   => "orecognition.storefile.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxRecStoreFile",
+		        "params" => array(
+		            "orecognition",
+		        ),
+		    ),
+			array(
+		        "name"   => "orecognition.ajaxGetBase64.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxGetBase64",
+		        "params" => array(
+		            "orecognition",
+		        ),
+		    ),
+			array(
+		        "name"   => "orecognition.ajaxStoreRecognition.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxStoreRecognition",
+		        "params" => array(
+		            "orecognition",
 		        ),
 		    ),
 	    )

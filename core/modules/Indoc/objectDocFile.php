@@ -26,6 +26,7 @@ class ObjectDocFile extends \RedCore\Base\ObjectBase {
 			"doc_id"   => "Number",
 			"iscurrent"   => "Number",
 			"uploadedbyuser"   => "Number",
+			"for_recognition"   => "Number",
 			"_updated" => "Timestamp",
 		    "_deleted" => "Number",
 		);

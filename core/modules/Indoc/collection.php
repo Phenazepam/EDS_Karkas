@@ -22,6 +22,7 @@ require_once ('objectDocLog.php');
 require_once ('objectDocRoute.php');
 require_once ('objectRelatedDocs.php');
 require_once ('objectDocFile.php');
+require_once ('objectRecognition.php');
 
 class Collection extends \RedCore\Base\Collection
 {
@@ -122,6 +123,11 @@ class Collection extends \RedCore\Base\Collection
             self::$sql = Sql::$sqlDocFile;
             self::$class = "RedCore\Indoc\objectDocFile";
         }
+        elseif ("orecognition" == $obj) {
+            self::$object = "orecognition";
+            self::$sql = Sql::$sqlRecognition;
+            self::$class = "RedCore\Indoc\objectRecognition";
+        }
     }
 
     /**
@@ -174,7 +180,7 @@ class Collection extends \RedCore\Base\Collection
             }
             self::setObject("oindoc");
         }
-        parent::store($params);
+        return parent::store($params);
     }
 
     public static function delete($params = array())
@@ -205,7 +211,7 @@ class Collection extends \RedCore\Base\Collection
 
     }
 
-    public static function storeFile($file = -1, $doc_id = -1) {
+    public static function storeFile($file = -1, $doc_id = -1, $isForRecognition = 0, &$file_id = -1) {
         $out = array(
             'errorCode' => '0',
             'errorText' => ''
@@ -225,7 +231,9 @@ class Collection extends \RedCore\Base\Collection
             'pdf',
             'xls',
             'xlsx',
-            'txt'
+            'txt',
+            'jpeg',
+            'jpg'
         );
         $filename = $file["tmp_name"]["file"];
         # Допустимый размер загружаемого файла
@@ -260,15 +268,28 @@ class Collection extends \RedCore\Base\Collection
             $user_id = Users::getAuthId();
             if(move_uploaded_file($filename, $destination)) {
                 self::setObject('odocfile');
-                self::UnsetCurrentDocFile($doc_id);
-                $params["odocfile"] = array(
-                    'name' => $file['name']['file'],
-                    'directory' => $destination,
-                    'doc_id' => $doc_id,
-                    'iscurrent' => 1,
-                    'uploadedbyuser' => $user_id
-                );
-                self::store($params);
+                if (0 == $isForRecognition) {
+                    self::UnsetCurrentDocFile($doc_id);
+                    $params["odocfile"] = array(
+                        'name' => $file['name']['file'],
+                        'directory' => $destination,
+                        'doc_id' => $doc_id,
+                        'iscurrent' => 1,
+                        'uploadedbyuser' => $user_id,
+                        'for_recognition' => $isForRecognition,
+                    );
+                }
+                else {
+                    $params["odocfile"] = array(
+                        'name' => $file['name']['file'],
+                        'directory' => $destination,
+                        'doc_id' => $doc_id,
+                        'iscurrent' => 0,
+                        'uploadedbyuser' => $user_id,
+                        'for_recognition' => $isForRecognition,
+                    );
+                }
+                $file_id = parent::store($params)->object->id;
             }
 		}
         return $out;
@@ -920,8 +941,89 @@ class Collection extends \RedCore\Base\Collection
 
         return $res;
     }
+
+
+    /**
+     * --------------------------
+     * Recoginition
+     * ----------------------------
+     */
+
+    public static function ajaxRecStoreFile($params){
+        $file = $_FILES["orecognition"];
+        $params = $params["orecognition"];
+        $doc_id = $params["doc_id"];
+        $file_id = -1;
+
+        self::storeFile($file, $doc_id, 1, $file_id);
+        $out = array(
+           "file_id" => $file_id
+        );
+        echo json_encode($out); 
+        exit();
+    }
+
+    public static function ajaxGetBase64($params){
+        $file_id = $params['orecognition']['file_id'];
+        self::setObject("odocfile");
+        $lb_params = array(
+            "id" => $file_id
+        );
+        
+        $item = self::loadBy($lb_params);
+        
+        $directory = $item->object->directory;
+        
+        $file = file_get_contents($directory);
+        // var_dump($file);
+        $out = array(
+            'file' => base64_encode($file)
+        );
+        echo json_encode($out);
+        // $myCurl = curl_init();
+        // curl_setopt_array($myCurl, array(
+        //     CURLOPT_URL => 'http://176.119.159.70/recognaize',
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_POST => true,
+        //     CURLOPT_POSTFIELDS => json_encode(array(array(
+        //         "file"=> base64_encode($file),
+        //         "id" => "1",
+        //         "extension"=> "JPG",
+        //         "id_file"=> "1")))
+        // ));
+        // print_r(json_encode(array(array(
+        //     "file"=> base64_encode($file),
+        //     "id" => "1",
+        //     "extension"=> "JPG",
+        //     "id_file"=> "1"))));
+        // $response = curl_exec($myCurl);
+        // curl_close($myCurl);
+        // var_dump($response);
+        exit();
+    }
+
+    public static function ajaxStoreRecognition($params) {
+        
+        $params = $params["orecognition"];
+        $doc_id = $params['doc_id'];
+        $file_id = $params['file_id'];
+        $rec_text = $params['rec_text'];
+
+        self::setObject("orecognition");
+        $params['orecognition'] = array(
+            'doc_id' => $doc_id,
+            'file_id' => $file_id,
+            'rec_text' => $rec_text
+        );
+        $res = self::store($params);
+        if(!is_null($res)) {
+            echo json_encode(array('result' => '0'));
+        }
+        else {
+            echo json_encode(array('result' => '-1'));
+        }
+        exit();
+    }
 }
-
-
 
 ?>
