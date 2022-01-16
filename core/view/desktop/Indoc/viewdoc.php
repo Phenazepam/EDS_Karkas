@@ -82,6 +82,19 @@ Indoc::setObject("orecognition");
 $recognitions = Indoc::getList($where);
 // var_dump($recognitions);
 
+foreach ($recognitions as $rec){
+  $rec = $rec->object;
+  // var_dump($rec);
+  $rec_ready[$rec->file_id]['file_id'] = $rec->file_id;
+  $rec_ready[$rec->file_id]['rec_file_id'][] = $rec->recognized_file_id;
+  $rec_ready[$rec->file_id]['_updated'] = $rec->_updated;
+  if ($rec->rec_text != "") {
+    $rec_ready[$rec->file_id]['rec_text'] = $rec->id;
+  }
+
+}
+// var_dump($rec_ready);
+
 ?>
 <script src="/core/view/desktop/Indoc/js/popupMovingRoute.js"></script>
 <script src="/core/view/desktop/Indoc/js/saveDocViewEvent.js"></script>
@@ -309,24 +322,37 @@ $recognitions = Indoc::getList($where);
                         <thead>
                           <tr>
                             <th>Исходный файл</th>
-                            <th>Распознанный файл</th>
+                            <th>Распознанный текст</th>
+                            <th>Распознанные файлы Word и PDF</th>
                             <th>Дата распознавания</th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php
-                          foreach ($recognitions as $key => $value) :
-                            $value = $value->object;
-                            if (1 == $all_files[$value->file_id]->object->for_recognition) :
+                          foreach ($rec_ready as $key => $value) :
+                            // $value = $value->object;
+                            if (1 == $all_files[$value["file_id"]]->object->for_recognition) :
                           ?>
                             <tr>
                               <td>
-                                <a href="/docs-download?file_id=<?= $all_files[$value->file_id]->object->id ?>">
-                                  <?= $all_files[$value->file_id]->object->name ?>
+                                <a href="/docs-download?file_id=<?= $all_files[$value["file_id"]]->object->id ?>">
+                                  <?= $all_files[$value["file_id"]]->object->name ?>
                                 </a>
                               </td>
-                              <td><button class="btn btn-primary btn-sm" onclick="ShowRecognition(<?=$value->id?>)">Просмотреть</button></td>
-                              <td><?= $value->_updated ?></td>
+                              <td><button class="btn btn-primary btn-sm" onclick="ShowRecognition(<?=$value["rec_text"]?>)">Просмотреть</button></td>
+                              <td>
+                                <?php
+                                  foreach($value["rec_file_id"] as $rec_file):
+                                    if ($rec_file != 0) :
+                                ?>
+                                <p>
+                                  <a href="/docs-download?file_id=<?= $all_files[$rec_file]->object->id ?>">
+                                    <?= $all_files[$rec_file]->object->name ?>
+                                  </a>
+                                </p>
+                                <?php endif; endforeach;?>
+                              </td>
+                              <td><?= $value["_updated"] ?></td>
                             </tr>
                           <?php endif; endforeach; ?>
                         </tbody>

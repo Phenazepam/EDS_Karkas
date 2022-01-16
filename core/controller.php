@@ -747,6 +747,14 @@ class Controller
 		            "orecognition",
 		        ),
 		    ),
+			array(
+		        "name"   => "orecognition.ajaxStoreRecognitionFromBase64.do",
+		        "module" => "RedCore\Indoc\Collection",
+		        "method" => "ajaxStoreRecognitionFromBase64",
+		        "params" => array(
+		            "orecognition",
+		        ),
+		    ),
 	    )
 	);
 

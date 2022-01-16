@@ -73,20 +73,12 @@ async function popupRecognition(oindocId) {
                     referrerPolicy: "unsafe-url",
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': '*/*', 
-						'access-control-allow-headers': '*',
-						'access-control-allow-methods': '*',
-						'access-control-allow-origin': '*',
-						'access-control-expose-headers': '*',
+                        'Accept': '*/*' 
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     body: payload,
                 };
-                // *old
-				//let response1 = await fetch("http://176.119.159.70/recognaize", option1);
-				let response1 = await fetch("http://5.63.153.163:32029/recognaize", option1);
-				let response_word = await fetch("http://5.63.153.163:32030/recognaize", option1);
-				let response_pdf = await fetch("http://5.63.153.163:32031/recognaize", option1);
+                let response1 = await fetch("http://176.119.159.70/recognaize", option1);
                 res = await response1.json();
 
                 if (typeof(res[0].error) != "undefined") {
@@ -99,57 +91,18 @@ async function popupRecognition(oindocId) {
                 }
 
                 let text = res[0].result[0].result.data[0][1].text;
-
                 // let text = 'res[0].result[0].result.data[0][1].text';
 
                 fm = new FormData();
-				let json_string = JSON.stringify(text);
                 fm.append('orecognition[doc_id]', oindocId)
                 fm.append('orecognition[file_id]', file_id)
-                fm.append('orecognition[rec_text]', '"' + json_string + '"')
+                fm.append('orecognition[rec_text]', text)
                 const option_store = {
                     method: "POST",
                     body: fm,
                 };
                 const response_store = await fetch("/recognition-popup?action=orecognition.ajaxStoreRecognition.do", option_store);
                 res =  await response_store.json();
-
-                res = await response_word.json();
-                let text_w = res[0].result[0];
-
-                fm_w = new FormData();
-                fm_w.append('orecognition[doc_id]', oindocId)
-                fm_w.append('orecognition[base_text]', text_w)
-                fm_w.append('orecognition[extension]', 'docx')
-                fm_w.append('orecognition[source_file_id]', file_id)
-
-                const option_store_w = {
-                    method: "POST",
-                    body: fm_w,
-                };
-
-                const response_store_w = await fetch("/recognition-popup?action=orecognition.ajaxStoreRecognitionFromBase64.do", option_store_w);
-                res = await response_store_w.json();
-
-                res = await response_pdf.json();
-                let text_p = res[0].result[0];
-
-                fm_p = new FormData();
-                fm_p.append('orecognition[doc_id]', oindocId)
-                fm_p.append('orecognition[base_text]', text_p)
-                fm_p.append('orecognition[extension]', 'pdf')
-                fm_p.append('orecognition[source_file_id]', file_id)
-
-                const option_store_p = {
-                    method: "POST",
-                    body: fm_p,
-                };
-
-                const response_store_p = await fetch("/recognition-popup?action=orecognition.ajaxStoreRecognitionFromBase64.do", option_store_p);
-                res = await response_store_p.json();
-                
-                console.log(res);
-
                 if (res.result == 0){
                     Swal.fire(
                         'Распознавание',
@@ -190,6 +143,6 @@ async function ShowRecognition(rec_id){
         showCancelButton: true,
         confirmButtonText: 'ОК',
         cancelButtonText: 'Отмена',
-        width: '95%'
+        width: '85%'
     })
 }

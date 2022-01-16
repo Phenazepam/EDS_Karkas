@@ -101,6 +101,7 @@ class Sql {
 				id,
 				doc_id,
 				file_id,
+				recognized_file_id,
 				rec_text,
 				params,
 				_updated,

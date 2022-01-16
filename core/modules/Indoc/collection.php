@@ -237,7 +237,7 @@ class Collection extends \RedCore\Base\Collection
         );
         $filename = $file["tmp_name"]["file"];
         # Допустимый размер загружаемого файла
-        $max_filesize = 1382288;
+        $max_filesize = 13822880;
         # Директория для загрузки
         $upload_path = '../doc_files/';
         # Получаем расширение файла
@@ -1023,6 +1023,59 @@ class Collection extends \RedCore\Base\Collection
             echo json_encode(array('result' => '-1'));
         }
         exit();
+    }
+
+    public static function ajaxStoreRecognitionFromBase64($params = null) {
+        
+        $params = $params["orecognition"];
+        $doc_id = $params['doc_id'];
+        $base_text = $params['base_text'];
+        $extension = $params['extension'];
+        $source_file_id = $params['source_file_id'];
+        $upload_path = '../doc_files/';
+
+        $filename = $doc_id.'_rec.'.$extension;
+
+        $data = base64_decode($base_text);
+
+        $rand = $upload_path.$doc_id.'_'.self::getRandomFileName($filename, $extension) .
+        '.'. $extension;
+        
+        $ifp = fopen($rand, "w+" ); 
+        fwrite( $ifp,  $data ); 
+        fclose( $ifp ); 
+
+        Users::setObject('user');
+        $user_id = Users::getAuthId();
+
+        $params["odocfile"] = array(
+            'name' => $filename,
+            'directory' => $rand,
+            'doc_id' => $doc_id,
+            'iscurrent' => 0,
+            'uploadedbyuser' => $user_id,
+            'for_recognition' => 2,
+        );
+    
+        self::setObject('odocfile');
+        $file_id = parent::store($params)->object->id;
+
+        $params['orecognition'] = array(
+            'doc_id' => $doc_id,
+            'file_id' => $source_file_id,
+            'rec_text' => '',
+            'recognized_file_id' => $file_id
+        );
+        self::setObject("orecognition");
+        $res = self::store($params);
+        if(!is_null($res)) {
+            echo json_encode(array('result' => '0'));
+        }
+        else {
+            echo json_encode(array('result' => '-1'));
+        }
+        exit();
+        
     }
 }
 

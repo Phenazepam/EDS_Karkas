@@ -22,7 +22,8 @@ class objectRecognition extends \RedCore\Base\ObjectBase {
 
 			"id"         => "Number",
 			"doc_id"   => "Number",
-			"file_id"   => "String",
+			"file_id"   => "Number",
+			"recognized_file_id"   => "Number",
 			"rec_text"   => "String",
             "params" => "String",
 			"_updated"   => "Timestamp",
